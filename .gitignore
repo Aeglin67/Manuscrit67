@@ -1,0 +1,17 @@
+*.aux
+*.tex~
+*.backup
+tex/*.aux
+tex/*~
+tex/*backup
+*.bbl
+*.blg
+*.dvi
+*.log
+*.maf
+*.mtc*
+*.nlo
+*.ps
+*.pdf
+*.toc
+
