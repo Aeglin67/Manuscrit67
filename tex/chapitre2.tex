@@ -245,7 +245,10 @@ Cette méthode est intéressante car elle utilise le même principe que la segmenta
 \subsection{Modélisation du biais en intensité}
 \label{subsec:fcm:bias}
 
-\cite{Ahmed:TMI:2002} : biais additif.
+La prise en compte du biais en intensité introduit par les imageurs est un problème qui a eu des réponses spécifiques et adaptées à la formulation de l'algorithme FCM.
+De manière générale, le signal reçu est modélisé comme le produit du \og vrai \fg{} signal et d'un champ de biais.
+Cependant, l'application d'une transformée logarithmic à l'espace des intensités  permet de modéliser le signal comme l'addition du vrai signal et du champ de biais, comme dans les travaux de~\cite{Ahmed:TMI:2002}.
+L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + \gamma_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $\gamma_j$ représente l'intensité du biais au voxel $j$.
 
 \cite{Li:IPMI:2009} : estimation du biais par clustering local.
 
