@@ -1,0 +1,322 @@
+\chapter{Segmentation des tissus cérébraux en IRM : État de l'art}
+\label{chap:art}
+\minitoc
+
+État de l'art en segmentation des tissus cérébraux avec une dernière partie consacrée à l'étude de la maturation cérébrale (jeunes enfants, nouveaux nés et f\oe tus).
+
+%------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
+
+\section{Vue d'ensemble}
+\label{sec:overview}
+
+\subsection{Modèles déformables}
+\label{subsec:snake}
+
+\cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
+
+\cite{Baillard:MIA:2001} : deux étapes, recalage d'un modèle puis évolution des level-sets multigrille et multi-résolution.
+
+\cite{Han:TPAMI:2003} : Levels sets introduisant une contrainte topologique.
+
+\cite{Yang:TMI:2004} : Évolution de levels sets via estimation du MAP et contraintes de voisinages $\rightarrow$ structures internes.
+
+\cite{Duncan:NeuroImage:2004} : deux level-sets (LCR/MG et MG/MB) évoluent en parallèle dans la cadre d'une estimation du MAP et de contraintes de voisinage $\rightarrow$ cortex.
+
+\cite{Colliot:PR:2006} : Modèle déformable intégrant des contraintes de localisation (angle et distance) sous forme floue par rapport à une structure de référence $\rightarrow$ segmentation des noyaux gris autour des ventricules.
+
+\cite{Ciofolo:MIA:2009} : Level sets concurrents évoluant selon un système de décision flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels et la position du contour dans l'image.
+
+\subsection{Croissance de régions}
+\label{subsec:regionGrowing}
+
+\subsection{Approches topologiques}
+\label{subsec:topologie}
+
+\cite{Mangin:JMIV:1995} : Représentation du cortex à partir de la squelettisation de l'ensemble LCR/Cortex.
+
+\cite{MacDonald:NeuroImage:2000} : Segmentation du cortex par level-sets concurrents avec les contraintes suivantes : les deux surfaces ne peuvent pas se croiser + épaisseur max du cortex.
+
+\cite{Han:TMI:2002} : Correction de la topologie par un graphe et un approche multi-échelle (représentée par une série d'ouvertures morphologiques avec une élément structurant de taille croissante).
+
+\cite{Dokladal:PR:2003} : Segmentation des structures cérébrales une à une par une série d'opérations de morpho-maths supervisées par des contraintes topologiques.
+
+\cite{Bazin:TMI:2007} : Utilisation d'un atlas anatomique topologique et de l'algorithme FCM avec érosions et dilatations successives des différents labels. Contraintes topologiques par point simple.
+
+\cite{Bazin:MIA:2008} : Ajout d'un atlas statistique et de contraintes homéomorphiques digitales par rapport à \cite{Bazin:TMI:2007}
+
+\cite{Pham:SPM:2010} : État de l'art sur l'utilisation de la topologie pour la segmentation des tissus.
+
+\subsection{Utilisation d'atlas}
+\label{subsec:atlas}
+
+\cite{Ashburner:NeuroImage:2005} : Méthode reposant quasi complètement sur le recalage d'un atlas et introduisant un \emph{a priori} sur les tissus combinant l'\emph{a priori} de l'atlas pondéré par la quantité de tissus présent dans un petit volume $\rightarrow$ résistance au bruit.
+
+\subsection{Classification}
+\label{subsec:classif}
+
+On précise que FCM est présenté à la section suivante.
+
+\subsubsection{Méthodes non paramétriques}
+\label{subsubsec:nonParam}
+
+\cite{Warfield:MIA:2000} : Classification par kPPV supervisée par un ensemble de prototypes désignés par un expert et contrainte par un modèle anatomique.
+
+\cite{Cocosco:MIA:2003} : Deux étapes : sélection automatique de l'ensemble d'apprentissage par élagage d'un arbre couvrant minimale d'un ensemble de voxels (première sélection à partir d'un atlas) + kPPV supervisé par l'ensemble d'apprentissage.
+
+\cite{Jimenez-Alaniz:TMI:2006} : Estimation de la densité de probabilité par Mean-Shift et segmentation par a priori sur les tissus et carte de confiance des bords. Non-supervisée.
+
+\cite{Mayer:TMI:2009} : Mean-Shift basé sur l'intensité et les coordonnées spatiales (inclue ainsi un \emph{a priori} spatial) puis réduction par fusion des différents modes obtenus puis $k$-means pondérés par le nombre de voxels de chaque cluster pour obtenir la segmentation finale. Non supervisée.
+
+
+\subsubsection{Mixtures de gaussienne}
+\label{subsubsec:gaussianMix}
+
+Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{Dempster:JRSS:1977} et ajout des champs (\cite{Geman:PAMI:1984}) ou chaînes de Markov pour la régularisation.
+
+\cite{VanLeemput1:TMI:1999, VanLeemput2:TMI:1999} : EM avec estimation du biais et régularisation par champs de Markov.
+
+\cite{Zhang:TMI:2001} : EM avec régularisation par champs de Markov cachés.
+
+\cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
+
+\cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
+
+\cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
+
+\cite{Scherrer:TMI:2009} : Segmentation conjointe des tissus et des structures cérébrales par un modèle de champs de Markov locaux distribués.
+
+\subsubsection{$K$-Moyennes}
+\label{subsubsec:kMeans}
+
+Définition des K-Moyennes.
+Utilisation en segmentation des tissus : \cite{Vemuri:IAACG:1995}.
+
+%------------------------------------------------------------------------État de l'art FCM----------------------------------------------------------------------------------------
+
+\section{Utilisation des $C$-Moyennes floues (FCM) en segmentation des tissus cérébraux}
+\label{sec:fcm}
+
+Par définition, l'algorithme des $C$-moyennes floues (FCM) donne une solution native au problème du volume partiel car il fournit des cartes de segmentation indiquant la proportion de chaque classe dans chaque élément de l'image.
+Cependant, sa définition classique (voir la section~\ref{subsec:fcm:def}) ne permet pas d'apporter de réponse au problème du biais en intensité, ni à celui du bruit comme illustré par les figures~\ref{FIG:EX:FCM:PVE}, \ref{FIG:EX:FCM:NOISE} et \ref{FIG:EX:FCM:BIAS}.
+Malgré ces handicaps, cet algorithme se révèle suffisamment souple pour y intégrer de multiples extensions permettant de prendre en compte les spécificités de l'imagerie anatomique et d'obtenir une segmentation fiable des tissus cérébraux.
+La suite de cette section est une discussion des différentes options considérées ces dix dernières années pour améliorer l'algorithme FCM et permettre son utilisation en segmentation des tissus cérébraux.
+
+\subsection{Définition de FCM}
+\label{subsec:fcm:def}
+
+\begin{figure*}[!htb]
+\centering
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/original.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/gm_classic.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/wm_classic.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/csf_classic.eps}}
+\caption{\emph{
+Segmentation par FCM illustrant l'effet de volume partiel.
+(a) Une coupe d'IRM cérébrale.
+(b--d) Segmentation de (a): (b) matière grise, (c) matière blanche, (d) LCR.
+\label{FIG:EX:FCM:PVE}}}
+%\end{figure}
+\vspace{3mm}
+%\begin{figure}[!htp]
+\centering
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/original_noise.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/gm_noise.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/wm_noise.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/csf_noise.eps}}
+\caption{\emph{
+Segmentation par FCM d'une image bruitée.
+(a) Une coupe d'IRM cérébrale (similaire à celle de la Figure~\ref{FIG:EX:FCM:PVE}(a)) altérée par un bruit.
+(b--d) Segmentation de (a): (b) matière grise, (c) matière blanche, (d) LCR.
+\label{FIG:EX:FCM:NOISE}}}
+%\end{figure}
+\vspace{3mm}
+%\begin{figure}[!htp]
+\centering
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/original_bias.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/gm_bias.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/wm_bias.eps}}
+\hspace{1mm}
+\subfigure[]{\includegraphics[width=32mm]{eps/chapitre2/csf_bias.eps}}
+\caption{\emph{
+Segmentation par FCM d'une image présentant un biais en intensité.
+(a) Une coupe d'IRM cérébrale (similaire à celle de la Figure~\ref{FIG:EX:FCM:PVE}(a)) altérée par un biais.
+(b--d) Segmentation de (a): (b) matière grise, (c) matière blanche, (d) LCR.
+\label{FIG:EX:FCM:BIAS}}}
+\end{figure*}
+
+La première définition de l'algorithme FCM remonte à l'article de \cite{Zadeh:IC:1965} et s'appuie sur la notion d'ensembles flous.
+Très vite, cet algorithme a trouvé des applications, notamment dans le cadre médicale, comme en témoignent les publications de : \cite{Adey:IJN:1972}, \cite{Bezdek:NCC:1976} et \cite{Kalmanson:AJC:1975}.
+Il part du principe qu'une donnée n'a pas à être classée dans une classe en particulier, mais à plusieurs avec un certain degré d'appartenance.
+
+L'algorithme FCM calcule une mesure de cette appartenance, via une fonction d'appartenance floue~\cite{Pham:IJPRAI:1996}, en chaque voxel de l'image et pour un nombre donné de classes.
+Soit une image $I : \Omega \rightarrow \mathbf{Y}$, où $\Omega$ est le support de l'image et $\mathbf{Y}$ l'espace des intensités.
+Il contient $N$ voxels, $\mathbf{x}_{j}$ et $\mathbf{y}_{j}$ représentent respectivement les coordonnées spatiales et l'intensité du voxel $j$.
+
+L'algorithme FCM effectue une série d'itération entre l'évaluation de la fonction d'appartenance floue $u_{jk}$ et le calcul des centroïdes des classes $\mathbf{v}_k$.
+La fonction d'appartenance est calculée en chaque voxel et pour chaque classe.
+Elle est contrainte de manière que $0 \leq u_{jk} \leq 1$ et que $\sum_{k=1}^{C} u_{jk} = 1$, où $C$ est le nombre de classes.
+Cette donnée est supposée connue.
+Un fort degré d'appartenance (proche de $1$) signifie que l'intensité du voxel considéré est proche du centroïde de la classe, ce dernier étant considéré comme un prototype représentatif de l'intensité de la classe considérée.
+
+Mathématiquement, l'algorithme FCM se déroule de la façon suivante : 
+\begin{enumerate}
+        \item Initialisation des centroïdes (peut-être faite par un algorithme $k$-means, où grâce à un atlas).
+        \item Calcul de la fonction d'appartenance floue par $u_{jk} = \frac{D^{2}(\mathbf{y}_j, \mathbf{v}_k)}{\sum_{k=1}^{C} D^{2}(\mathbf{y}_j, \mathbf{v}_k)}$, où $D^{2}(\mathbf{y}_j, \mathbf{v}_k)$ représente une mesure de la similarité entre l'intensité au voxel $j$ et le centroïde de la classe $k$.
+        \item Calcul des nouveaux centroïdes : $\mathbf{v}_k = \frac{\sum_{i \in \Omega}u_{jk}\mathbf{y}_j}{\sum_{i \in \Omega}u_{jk}}$.
+        \item Si il y'a convergence, arrêt de l'algorithme, sinon retour au point 2.
+\end{enumerate}
+
+Ces itérations reviennent à effectuer un processus de minimisation de la fonction de coût suivante : 
+\begin{equation}
+J_{FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) \label{eq:fcm},
+\end{equation}
+où $q$ est le degré de flou de la segmentation, habituellement fixé à $2$ dans la littérature.
+La convergence est atteinte lorsqu'un minimum local de cette fonction est détectée.
+De manière générale, le calcul de la similarité entre l'intensité des voxels et les centroïdes des classes est réalisé par la norme euclidienne, ce qui se traduit mathématiquement par : $D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2}$.
+
+\subsection{Autres mesures de similarité}
+\label{subsec:fcm:dd}
+
+Certains auteurs ont cherché à évaluer l'impact d'une définition alternative de la mesure de similarité entre l'intensité des voxels et les centroïdes des classes.
+Deux grandes voies ont été suivies, la première utilisant la distance de Mahalanobis (utile en cas d'utilisation de données multi-spectrales) et la deuxième utilisant des opérateurs noyaux de manière à projeter les données dans un autre espace où la segmentation serait plus aisée.
+
+Concernant l'utilisation des opérateurs noyaux, un état de l'art générale de leur utilisation en clustering est fournit par~\cite{Filippone:PR:2008}.
+L'intêret des opérateurs noyaux est leur capacité à séparer des données non-linéaires en projetant les données dans un espace où une séparation linéaire serait possible.
+Une exemple de l'utilisation de ces opérateurs est le \emph{Support Vector Machine} (SVM) qui est un algorithme de classification supervisé.
+
+Formellement, les fonctions noyaux sont définis de la façon suivante.
+Soit $X=\{\mathbf{x}_1,\ldots,\mathbf{x}_n\}$ un ensemble non vide avec $\mathbf{x}_i \in R^d$.
+Une fonction $K : X \times X \rightarrow \mathbb{R}$ est un \emph{noyau défini positif} si et seulement si $K$ est symétrique ($K(\mathbf{x}_i,\mathbf{x}_j) = K(\mathbf{x}_j,\mathbf{x}_i)$) et respecte l'équation suivante :
+$$
+\sum_{i=1}^n\sum_{j=1}^n c_i c_j K(\mathbf{x}_i,\mathbf{x}_j) \geq 0 \ \forall n \geq 2,
+$$
+où $c_r \in \mathbb{R}$, $\forall r = 1,\ldots,n.$
+
+Chaque noyau peut être exprimé de la manière suivante :
+$$
+K(\mathbf{x}_i,\mathbf{x}_j) = \varPhi(\mathbf{x}_i)\cdotp\varPhi(\mathbf{x}_j),
+$$
+où $\varPhi : X \rightarrow \mathcal{F}$ réalise une transformation de l'espace de départ $X$ vers un espace d'arrivée $\mathcal{F}$ de plus grande dimension.
+Cependant, un des aspects les plus intéressants de cette transformation est qu'il est possible de calculer la distance euclidienne dans $\mathcal{F}$ sans pour autant connaitre explicitement la transformation $\varPhi$.
+En effet, cette distance est donnée par :
+$$
+\lVert \varPhi(\mathbf{x}_i) - \varPhi(\mathbf{x}_j) \rVert^2 = K(\mathbf{x}_i,\mathbf{x}_i) + K(\mathbf{x}_j,\mathbf{x}_j) - 2K(\mathbf{x}_i,\mathbf{x}_j).
+$$
+
+Cette propriété des noyaux permet de définir deux versions de FCM.
+La première utilise une méthode de \og kernalisation \fg{} de la métrique~\cite{Zhang:AIM:2004}.
+La fonction de coût à minimiser devient alors : 
+\begin{equation}
+J_{FCM}^{\varPhi} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \varPhi(\mathbf{y}_{j}) - \varPhi(\mathbf{v}_{k}) \rVert_{2}^{2} \label{eq:fcm:kernel}.
+\end{equation}
+La fonction d'appartenance est alors calculée par $\frac{1}{u_{jk}} = \sum_{l=1}^{C} \left( \frac{1-K(\mathbf{y}_{j},\mathbf{v}_{k})}{1-K(\mathbf{y}_{j},\mathbf{v}_{l})} \right)$ et les centroïdes par : $\mathbf{v}_k = \frac{\sum_{j \in \Omega} u_{jk}^q K(\mathbf{y}_j,\mathbf{v}_k)\mathbf{y}_j}{\sum_{j \in \Omega} u_{jk}^q K(\mathbf{y}_j,\mathbf{v}_k)}$.
+La deuxième possibilité est d'appliquer l'algorithme FCM directement dans l'espace d'arrivée de la transformation $\varPhi$~\cite{Graepel:WFNS:1998}.
+
+Une autre façon de modifier la mesure de similarité et de trouver des frontières entre les classes plus pertinente est d'introduire la distance de Mahalanobis à la place de la distance euclidienne, ce qui revient à définir la mesure de similarité comme~\cite{Gustafson:CDC:1978, He:CMIG:2008} :
+$$
+\Vert \mathbf{y}_{j} - \mathbf{v}_k \Vert^{2} = (\mathbf{y}_{j} - \mathbf{v}_k)^T T_k (\mathbf{y}_{j} - \mathbf{v}_k),
+$$
+où $T_k$ est une matrice calculée à partir d'une matrice de covariance floue $S_k$ calculée de la façon suivante : 
+$$
+S_k = \frac{\sum_{j \in \Omega}u_{jk}^{q}(\mathbf{y}_j - \mathbf{v}_k)(\mathbf{y}_j - \mathbf{v}_k)^T}{\sum_{j \in \Omega}u_{jk}^{q}}.
+$$
+La matrice $T_k$ est déduite de $S_k$ selon : $T_k = \sqrt{\lvert S_k \rvert} S_{k}^{-1}$.
+Cette formulation a l'avantage de tenir compte d'une répartition des données autre qu'une répartition sphérique, comme l'hypothèse est faite avec l'utilisation de la norme euclidienne.
+
+Cependant, les formulations décrites cherchent à obtenir une séparation fiable des données par l'utilisation d'un espace plus approprié, mais ne prennent pas en compte la présence de bruit dans l'image.
+Deux approches sont intéressantes car elles apportent une réponse à cette problématique par une définition de la similarité.
+Nous pouvons citer l'article de~\cite{Shen:TITB:2005}, qui inclue un mécanisme d'attraction du voisinage dans la définition de la similarité en fonction du niveau de gris et de la distance au voxel courant. 
+Afin de régler au mieux les paramètres contrôlant les poids respectifs de ces deux termes, une optimisation par un réseau de neurones a également été mise en place.
+
+La deuxième approche est un article de~\cite{Wang:MIA:2009}.
+Elle consiste à réaliser une analyse multi-échelle de l'image.
+Toute d'abord, un filtre de diffusion est appliqué plusieurs fois à l'image à traité, ce qui a pour effet d'obtenir une image avec un niveau de détails très réduit.
+Par la suite, une segmentation de l'image la plus grossière est réalisée par FCM, et ce résultat est utilisé pour réaliser la segmentation à un niveau de détails plus élevé jusqu'à l'image originale.
+Cette méthode est intéressante car elle utilise le même principe que la segmentation à l'aide d'un atlas statistique, mais évite les problèmes d'utilisation que peuvent poser un atlas comme le recalage et la construction de l'atlas lui-même.
+
+\subsection{Modélisation du biais en intensité}
+\label{subsec:fcm:bias}
+
+\cite{Ahmed:TMI:2002} : biais additif.
+
+\cite{Li:IPMI:2009} : estimation du biais par clustering local.
+
+\cite{Liew:TMI:2003} : modélisation par des splines.
+
+\cite{Richard:AIM:2004} : Approche multi-agents.
+
+
+\subsection{Prise en compte du bruit}
+\label{subsec:fcm:noise}
+
+\cite{Pham:CVIU:2001} : Régularisation prenant en compte la classification floue.
+\begin{equation}
+J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} \label{eq:rfcm}
+\end{equation}
+
+\cite{Ahmed:TMI:2002} : Autre forme de régularisation prenant en compte la distance entre le cluster et l'élément considéré.
+
+\cite{Szilagyi:AICIEEE:2003} : Calcul une image comprenant en chaque voxel une moyenne pondérée des voisins puis applique FCM sur cette dernière.
+
+\cite{Chen:TSMC:2004} : Régularisation comme \cite{Ahmed:TMI:2002} mais l'élément considéré est une moyenne ou la médiane de son voisinage.
+
+\cite{Cai:PR:2007} : FCM généralisé et rapide.
+
+\cite{Krinidis:TIP:2010} : Introduction d'un facteur de flou pour la régularisation. Cependant, pas appliqué à la segmentation cérébrale.
+
+%------------------------------------------------------------------------Maturation cérébrale----------------------------------------------------------------------------------------
+
+
+\section{Segmentation cérébrale pré et post-natales}
+
+\subsection{Post-natal}
+
+\cite{Matsuzawa:CC:2001} : Étude volumétrique avec classification ne distinguant pas les tissus myélinisés des non-myélinisés.
+
+\cite{Prastawa:MIA:2005} : Principal challenge : séparer matière blanche myélinisée et non-myélinisée par élagage d'un arbre. Incorpore un atlas.
+
+\cite{Xue:NeuroImage:2007} : Segmentation des tissus en excluant les noyaux gris + Champs de Markov adaptatifs localement + atlas. Extraction du cerveau par level-set.
+
+\cite{Weisenfeld:NeuroImage:2009} : Segmentation des nouveaux nés par une phase d'apprentissage automatique conduite par une sélection de prototypes et une estimation des distributions d'intensités non-paramétrique. Ils disposent pour ce faire d'une bibliothèque de cas typiques fournissant ces prototypes pour chaque tissus.
+
+\cite{Merisaari:JNM:2009} : Segmentation en deux étapes : watershed et classification des régions obtenus + utilisation de cette première classification comme \emph{a priori} pour une classification voxel à voxel.
+
+\cite{Shi:NeuroImage:2010} : Utilisation d'une segmentation à un temps t comme atlas pour une segmentation d'un même patient à un temps t-1.
+
+\cite{Shi:HBM:2011} : Utilisation d'un atlas pondéré par une carte de confiance corticale issue d'un filtre hessien dont la zone autour des ventricules a été exclue à l'aide d'un template.
+
+Idée principale : une atlas ou une classification supervisée est nécessaire.
+
+Exception : (pas encore paru, mais je le cite ici pour éviter de l'oublier) \cite{Gui:ISBI:2011}, segmentation par une série d'opérations morphologiques, croissance de région et \emph{a priori} anatomiques.
+
+\subsection{Prénatal}
+\label{prenatal}
+
+\cite{Claude:TBE:2004} : Segmentation semi-automatique.
+
+\cite{Ferrario:ESPC:2008} : Segmentation du volume intracrânien avec une étape de classification par mixture de gaussienne et une étape de reclassification à l'aide de champs de Markov.
+
+\cite{Anquez:ISBI:2009} : Segmentation du volume intracrânien par détection des yeux, \emph{a priori} anatomiques et opérateurs de morphologie mathématique.
+
+\cite{BachCuedra:MICCAI:2009} : Segmentation avec une étape de classification par mixture de gaussienne et une étape de régularisation déconnectée des données avec des \emph{a priori} anatomiques.
+
+\cite{Habas:SPIE:2009} : Segmentation à l'aide d'un atlas incluant un modèle de structures laminaires à partir des ventricules.
+
+\cite{Gholipour:IJCARS:2010} : Étude sur le volume intracrânien à l'aide d'une segmentation combinant level-sets, composantes connexes et opérateurs de morpho-maths.
+
+\cite{Habas:NeuroImage:2010} : Segmentation à l'aide d'un atlas spatio-temporel.
+
+Pour la reconstruction de volumes 3D : \cite{Kim:TMI:2010,Rousseau:AR:2006}.
+
+%------------------------------------------------------------------------Bilan----------------------------------------------------------------------------------------
+
+\section{Bilan}
+Positionnement des travaux.
