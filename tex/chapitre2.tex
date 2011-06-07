@@ -67,6 +67,8 @@ On précise que FCM est présenté à la section suivante.
 
 \cite{Mayer:TMI:2009} : Mean-Shift basé sur l'intensité et les coordonnées spatiales (inclue ainsi un \emph{a priori} spatial) puis réduction par fusion des différents modes obtenus puis $k$-means pondérés par le nombre de voxels de chaque cluster pour obtenir la segmentation finale. Non supervisée.
 
+\cite{Richard:AIM:2004} : Approche multi-agents.
+
 
 \subsubsection{Mixtures de gaussienne}
 \label{subsubsec:gaussianMix}
@@ -182,7 +184,7 @@ où $q$ est le degré de flou de la segmentation, habituellement fixé à $2$ dans l
 La convergence est atteinte lorsqu'un minimum local de cette fonction est détectée.
 De manière générale, le calcul de la similarité entre l'intensité des voxels et les centroïdes des classes est réalisé par la norme euclidienne, ce qui se traduit mathématiquement par : $D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2}$.
 
-\subsection{Autres mesures de similarité}
+\subsection{Autres métriques utilisées}
 \label{subsec:fcm:dd}
 
 Certains auteurs ont cherché à évaluer l'impact d'une définition alternative de la mesure de similarité entre l'intensité des voxels et les centroïdes des classes.
@@ -246,16 +248,35 @@ Cette méthode est intéressante car elle utilise le même principe que la segmenta
 \label{subsec:fcm:bias}
 
 La prise en compte du biais en intensité introduit par les imageurs est un problème qui a eu des réponses spécifiques et adaptées à la formulation de l'algorithme FCM.
-De manière générale, le signal reçu est modélisé comme le produit du \og vrai \fg{} signal et d'un champ de biais.
+De manière générale, le signal reçu est modélisé comme le produit du \og vrai \fg{} signal et d'un champ de biais, suposé varier lentement le long du support de l'image.
 Cependant, l'application d'une transformée logarithmic à l'espace des intensités  permet de modéliser le signal comme l'addition du vrai signal et du champ de biais, comme dans les travaux de~\cite{Ahmed:TMI:2002}.
-L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + b_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $b_j$ représente l'intensité du biais au voxel $j$.
+L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + b_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $b_j$ représente le biais au voxel $j$.
 L'évaluation du biais représente alors une étape supplémentaire de l'algorithme FCM, après l'évaluation des fonctions d'appartenance et des centroïdes, et est faite de la façon suivante : $b_j = \mathbf{y}_{j} - \frac{\sum_{k=1}^{C}u^q_{jk}\mathbf{v}_k}{\sum_{k=1}^{C}u^q_{jk}}$.
 
-\cite{Liew:TMI:2003} : modélisation par des splines.
+Les travaux de~\cite{Liew:TMI:2003} exploite d'une manière différente l'hypothèse de faible variabilité du biais.
+Ce dernier est modélisé comme une pile de surfaces B-Splines.
+Ainsi, le biais est évalué par une surface par coupe de l'image avec une régularisation imposant une continuité entre les différentes coupes.
+L'évaluation du biais est ainsi réduite au calcul des coefficients contrôlant les différentes surfaces.
 
-\cite{Richard:AIM:2004} : Approche multi-agents.
+Un autre exemple d'estimation du biais est donné par les travaux de~\cite{Li:IPMI:2009}.
+Ils introduisent un modèle appelé un clustering des intensité local et cohérent (en anglais : \emph{coherent local intensity clustering} ou \emph{CLIC}) destiné à prendre en compte la similarité des intensité d'un voisinage.
+Les voxels de ce voisinage sont pondérés à l'aide d'un noyau gaussien $K(\cdot)$ tronqué de la forme : 
+\begin{equation}
+K(\mathbf{u}) = 
+        \left\{
+	\begin{array}{r c}
+	        \exp{\frac{-\lvert \mathbf{u} \rvert^2}{2\sigma^2}} & \mbox{ pour } \lvert \mathbf{u} \rvert < \rho \\
+	        0 & \mbox{sinon}
+	\end{array}
+        \right.
+\end{equation}
+où $\rho$ est le rayon du voisinage pris en compte.
+La fonction d'énergie à minimiser devient donc : 
+\begin{equation}
+J = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x}_j - \mathbf{x}_l) \lVert \mathbf{y}_{j} - b_{l}\mathbf{v}_{k} \rVert^2
+\end{equation}
 
-\cite{Li:IPMI:2009} : estimation du biais par clustering local.
+
 
 
 \subsection{Prise en compte du bruit}
