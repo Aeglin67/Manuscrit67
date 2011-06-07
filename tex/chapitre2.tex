@@ -2,8 +2,6 @@
 \label{chap:art}
 \minitoc
 
-C
-
 État de l'art en segmentation des tissus cérébraux avec une dernière partie consacrée à l'étude de la maturation cérébrale (jeunes enfants, nouveaux nés et f\oe tus).
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
@@ -250,13 +248,14 @@ Cette méthode est intéressante car elle utilise le même principe que la segmenta
 La prise en compte du biais en intensité introduit par les imageurs est un problème qui a eu des réponses spécifiques et adaptées à la formulation de l'algorithme FCM.
 De manière générale, le signal reçu est modélisé comme le produit du \og vrai \fg{} signal et d'un champ de biais.
 Cependant, l'application d'une transformée logarithmic à l'espace des intensités  permet de modéliser le signal comme l'addition du vrai signal et du champ de biais, comme dans les travaux de~\cite{Ahmed:TMI:2002}.
-L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + \gamma_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $\gamma_j$ représente l'intensité du biais au voxel $j$.
-
-\cite{Li:IPMI:2009} : estimation du biais par clustering local.
+L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + b_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $b_j$ représente l'intensité du biais au voxel $j$.
+L'évaluation du biais représente alors une étape supplémentaire de l'algorithme FCM, après l'évaluation des fonctions d'appartenance et des centroïdes, et est faite de la façon suivante : $b_j = \mathbf{y}_{j} - \frac{\sum_{k=1}^{C}u^q_{jk}\mathbf{v}_k}{\sum_{k=1}^{C}u^q_{jk}}$.
 
 \cite{Liew:TMI:2003} : modélisation par des splines.
 
 \cite{Richard:AIM:2004} : Approche multi-agents.
+
+\cite{Li:IPMI:2009} : estimation du biais par clustering local.
 
 
 \subsection{Prise en compte du bruit}
