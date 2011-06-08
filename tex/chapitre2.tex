@@ -184,6 +184,10 @@ où $q$ est le degré de flou de la segmentation, habituellement fixé à $2$ dans l
 La convergence est atteinte lorsqu'un minimum local de cette fonction est détectée.
 De manière générale, le calcul de la similarité entre l'intensité des voxels et les centroïdes des classes est réalisé par la norme euclidienne, ce qui se traduit mathématiquement par : $D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2}$.
 
+L'hypothèse fondamentale faite lors de l'utilisation de l'algorithme FCM en segmentation anatomique est que chaque tissu peut-être représenté par une unique valeure $\mathbf{v}_k$, qui serait uniforme sur l'ensemble du domaine de l'image.
+Les variations de cette \og vraie \fg{} valeur sont alors imputés au biais de l'image, au bruit et à l'effet de volume partiel (mélange de plusieurs tissus au sein d'un même voxel dont les proportions déterminent l'intensité du voxel).
+Dans le cas de la segmentation anatomique adulte, cette hypothèse est suffisante pour effectuée la segmentation d'une IRM adulte, mais nécessite l'intégration de nouvelles données de manière à prendre en compte le biais et le bruit.
+
 \subsection{Autres métriques utilisées}
 \label{subsec:fcm:dd}
 
@@ -224,7 +228,7 @@ La deuxième possibilité est d'appliquer l'algorithme FCM directement dans l'espa
 
 Une autre façon de modifier la mesure de similarité et de trouver des frontières entre les classes plus pertinente est d'introduire la distance de Mahalanobis à la place de la distance euclidienne, ce qui revient à définir la mesure de similarité comme~\cite{Gustafson:CDC:1978, He:CMIG:2008} :
 $$
-\Vert \mathbf{y}_{j} - \mathbf{v}_k \Vert^{2} = (\mathbf{y}_{j} - \mathbf{v}_k)^T T_k (\mathbf{y}_{j} - \mathbf{v}_k),
+D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = (\mathbf{y}_{j} - \mathbf{v}_k)^T T_k (\mathbf{y}_{j} - \mathbf{v}_k),
 $$
 où $T_k$ est une matrice calculée à partir d'une matrice de covariance floue $S_k$ calculée de la façon suivante : 
 $$
@@ -273,21 +277,35 @@ K(\mathbf{u}) =
 où $\rho$ est le rayon du voisinage pris en compte.
 La fonction d'énergie à minimiser devient donc : 
 \begin{equation}
-J = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x}_j - \mathbf{x}_l) \lVert \mathbf{y}_{j} - b_{l}\mathbf{v}_{k} \rVert^2
+J = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x}_j - \mathbf{x}_l) \lVert \mathbf{y}_{j} - b_{l}\mathbf{v}_{k} \rVert^2.
 \end{equation}
+L'avantage de cette formulation est que la prise en compte des intensités d'un voisinage autour du voxel courant permet également la correction du bruit de l'image, tout en ajoutant une pondération en fonction de la distance par rapport au voxel courant, partant du principe que seul les voxels les plus proches sont les plus pertinents à prendre en compte.
 
-
-
+Tous ces modèles utilisent une modélisation explicite du biais en intensité, ajoutant une étape supplémentaire d'estimation du biais en plus de l'estimation des centroïdes et des fonctions d'appartenance.
+De plus, les hypothèses sur la nature multiplicative du biais, ainsi que les faibles variations d'intensité dues à ce phénomène restreignent sa prise en compte.
 
 \subsection{Prise en compte du bruit}
 \label{subsec:fcm:noise}
 
-\cite{Pham:CVIU:2001} : Régularisation prenant en compte la classification floue.
+Au début des années 2000, la nécessité d'une prise en compte du bruit produit par les imageurs a conduit à l'introduction de termes de régularisation dans la fonction d'énergie de l'algorithme FCM.
+L'idée commune à ces méthodes est l'utilisation de l'environnement autour d'un voxel pour contraindre sa segmentation.
+Par exemple, si un voxel est au milieu d'une zone de matière blanche, le processus de segmentation va favoriser sa classification en matière blanche de manière à obtenir une continuité des lables des tissus.
+
+Dans cette optique, deux fonctions d'énergie ont été définies de manière indépendante.
+Elles définissent la fonction d'énergie comme la somme d'un terme d'attache aux données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation tenant compte des fonctions d'appartenance des voxels voisins destiné à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
+La première, appelée FCM robuste (en anglais : \emph{Robust FCM} ou \emph{RFCM})~\cite{Pham:CVIU:2001} ne prend en compte que les fonctions d'appartenance des voxels voisins pour contraindre la segmentation : 
 \begin{equation}
-J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} \label{eq:rfcm}
+J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \sum_{m \in M_k} u^q_{lm}  \label{eq:rfcm},
+\end{equation}
+où $N_j$ représente un voisinage du voxel courant $j$, $M_k = \{1,\ldots,C\} \backslash \{k\}$ et où $\beta$ contrôle les poids respectifs du terme d'attache aux données et du terme de régularisation.
+La deuxième méthodologie, appelée un FCM modifié (en anglais : \emph{Modified FCM} ou \emph{MFCM})~\cite{Ahmed:TMI:2002},  définie la fonction d'énergie de la façon suivante : 
+\begin{equation}
+J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{\lvert N_j \rvert} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2}  \label{eq:mfcm}. 
 \end{equation}
 
-\cite{Ahmed:TMI:2002} : Autre forme de régularisation prenant en compte la distance entre le cluster et l'élément considéré.
+La principale différence entre ces deux formulations de la régularisation réside dans l'exploitation du voisinage.
+L'algorithme RFCM effectue une régularisation entièrement fondée sur les fonctions d'appartenance, encourageant d'autant plus le lissage de ces fonctions au dur et à mesure des itérations du l'algorithme.
+De plus, le lissage de la fonction d'appartenance d'une classe $k$ ne tient compte que des fonctions des autres classes, la logique étant que plus la proportion d'autre classes dans l'environnement est importante, plus la régularisation doit l'être.
 
 \cite{Szilagyi:AICIEEE:2003} : Calcul une image comprenant en chaque voxel une moyenne pondérée des voisins puis applique FCM sur cette dernière.
 

@@ -13,8 +13,10 @@ Dans un premier temps, les moyennes non-locales sont définies et une synthèse de
 Par la suite, l'intégration de ce paradigme dans l'algorithme FCM est discutée en distinguant l'apport au terme d'attache aux données de celui au terme de régularisation.
 Enfin, des validations, ainsi qu'une évaluation des performances de ce FCM non-local par rapport à d'autres méthodes (inspirées de FCM ou fondées sur les champs et chaînes de Markov) sont réalisées.
 
-\section{Définition de l'approche non-locale}
+\section{L'approche non-locale}
 \label{sec:nl:def}
+
+\subsection{Définition}
 
 Les notations utilisées dans le cadre des moyennes non-locales sont définies ici.
 On rappelle que l'image $I$ est considérée comme une fonction $I : \Omega \rightarrow Y$, où $\Omega$ est le support de l'image contenant $N$ voxels et $Y$ est l'espace des intensités.
@@ -57,6 +59,8 @@ Ce terme est défini par :
 \end{equation}
 et est donc directement liée au calcul de la similarité entre les voxels de la zone de recherche.
 
+\subsection{Paramètres}
+
 Pour des raisons pratiques, notamment le temps d'exécution et l'efficacité du filtre, le calcul des poids non-locaux a été restreint à une zone de recherche $\Omega_{j}^{R}$ autour du voxel $j$.
 Ce fait fût entériné dès l'article fondateur de \cite{Buades:MMS:2005}.
 Cependant, l'influence de la taille de cette zone est un paramètre qui a peu été étudié et qui est assez difficile à évaluer.
@@ -92,6 +96,8 @@ Enfin, à un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assim
 Depuis son apparition en 2005, la paradigme non-locale a été utilisé dans d'autres domaines que le débruitage d'images.
 Des domaines aussi divers que la déconvolution \cite{Mignotte:PRL:2008}, les problèmes inverses \cite{Bougleux:ECCV:2008} et la reconstruction de volumes \cite{Rousseau:MIA:2010} ont bénéficié des apports de ce paradigme.
 Pour en savoir plus, le lecteur est invité à lire la thèse de Salmon \cite{Salmon:2010}, portant justement sur le paradigme en lui même.
+
+\subsection{Segmentation non-locale}
 
 Une première utilisation des moyennes non-locales dans l'algorithme FCM a été définie par~\cite{Wang:CMIG:2008} avec une application à la segmentation cérébrale.
 Les auteurs utilisent une pondération entre information locale et information non-locale en redéfinissant la distance entre l'intensité d'un voxel et le centroïde d'une classe de la façon suivante :
