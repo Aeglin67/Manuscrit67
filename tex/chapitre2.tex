@@ -305,7 +305,21 @@ J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} -
 
 La principale différence entre ces deux formulations de la régularisation réside dans l'exploitation du voisinage.
 L'algorithme RFCM effectue une régularisation entièrement fondée sur les fonctions d'appartenance, encourageant d'autant plus le lissage de ces fonctions au dur et à mesure des itérations du l'algorithme.
-De plus, le lissage de la fonction d'appartenance d'une classe $k$ ne tient compte que des fonctions des autres classes, la logique étant que plus la proportion d'autre classes dans l'environnement est importante, plus la régularisation doit l'être.
+De plus, le lissage de la fonction d'appartenance d'une classe $k$ ne tient compte que des fonctions des autres classes, la logique étant que plus la proportion d'autre classes dans l'environnement est importante, plus la classe courante doit être pénalisée de manière à favoriser les autres classes.
+Ceci est illustré par le calcul de la fonction d'appartenance qui s'exprime de la façon suivante : 
+\begin{equation}
+u_{jk} = \frac{(\lVert \mathbf{y}_{j} - \mathbf{v}_k \rVert_{2}^{2} + \beta \sum_{l \in N_j} \sum_{m \in M_k} u^{q}_{lm})^{-1}}{\sum_{i = 1}^{C}(\lVert \mathbf{y}_{j} - \mathbf{v}_i \rVert_{2}^{2} + \beta \sum_{l \in N_j} \sum_{m \in M_i}u^{q}_{lm})^{-1}}.\label{eq:rfcm:u}
+\end{equation}
+La forte présence d'autres classes dans le voisinage autour du voxel $j$ entraine une diminution du dénominateur, diminuant d'autant l'appartenance à la classe courante.
+A l'inverse, si une forte proportion de la classe courante est présente dans le voisinage, alors seul le terme d'attache aux données est considéré.
+
+L'algorithme MFCM effectue une régularisation par rapport à la similarité entre l'intensité des voxels voisins et le centroïde de la classe courante.
+L'analyse de l'expression des fonctions d'appartenance donnée par l'équation \ref{eq:mfcm:u} :
+\begin{equation}
+u_{jk} = \frac{(\lVert \mathbf{y}_{j} - \mathbf{v}_k \rVert_{2}^{2} + \beta \sum_{l \in N_j} \lVert \mathbf{y}_{l} - \mathbf{v}_{k} \rVert_{2}^{2})^{-1}}{\sum_{i = 1}^{C}(\lVert \mathbf{y}_{j} - \mathbf{v}_i \rVert_{2}^{2} + \beta \sum_{l \in N_j} \lVert \mathbf{y}_{l} - \mathbf{v}_{i} \rVert_{2}^{2})^{-1}} \label{eq:mfcm:u},
+\end{equation}
+montre que l'ajout de ce terme de régularisation entraine une diminution du dénominateur si l'intensité des voxels voisins est trop dissemblables de la valeur du centroïde.
+
 
 \cite{Szilagyi:AICIEEE:2003} : Calcul une image comprenant en chaque voxel une moyenne pondérée des voisins puis applique FCM sur cette dernière.
 
