@@ -319,13 +319,55 @@ L'analyse de l'expression des fonctions d'appartenance donnée par l'équation \re
 u_{jk} = \frac{(\lVert \mathbf{y}_{j} - \mathbf{v}_k \rVert_{2}^{2} + \beta \sum_{l \in N_j} \lVert \mathbf{y}_{l} - \mathbf{v}_{k} \rVert_{2}^{2})^{-1}}{\sum_{i = 1}^{C}(\lVert \mathbf{y}_{j} - \mathbf{v}_i \rVert_{2}^{2} + \beta \sum_{l \in N_j} \lVert \mathbf{y}_{l} - \mathbf{v}_{i} \rVert_{2}^{2})^{-1}} \label{eq:mfcm:u},
 \end{equation}
 montre que l'ajout de ce terme de régularisation entraine une diminution du dénominateur si l'intensité des voxels voisins est trop dissemblables de la valeur du centroïde.
+Le calcul des centroïdes doit prendre en compte le voisinage défini et est donc exprimé de la façon suivante : 
+\begin{equation}
+\mathbf{v}_k = \frac{\sum_{k=1}^{C} u_{jk}^{q} \left( \mathbf{y}_{j} + \frac{\beta}{\lvert N_j \rvert} \sum_{l \in N_j} \mathbf{y}_l \right)}{(1+\beta) \sum_{k=1}^{C} u_{jk}^{q}}
+\end{equation}
 
 
-\cite{Szilagyi:AICIEEE:2003} : Calcul une image comprenant en chaque voxel une moyenne pondérée des voisins puis applique FCM sur cette dernière.
+L'exploration des différents voisinage étant couteuse en temps de calcul, des améliorations visant l'accélération de l'exécution ont été mise en place.
+Les travaux de~\cite{Szilagyi:AICIEEE:2003} parviennent à ce but en définissant une image intermédiaire $\zeta$ définie de la manière suivante : 
+\begin{equation}
+\mathbf{\zeta}_{j} = \frac{1}{1+\beta} \left( \mathbf{y}_{j} + \frac{\beta}{\lvert N_j \rvert} \sum_{l \in N_j} \mathbf{y}_{l} \right) \label{eq:Szilagyi:Image}.
+\end{equation}
+De plus, afin de ne pas explorer l'image plusieurs fois au cours des itérations de l'algorithme, un paramètre $\gamma_{p}$ est introduit indiquant le nombre de voxels de l'image à une intensité $p$ donnée (par conséquent, on a bien $\sum_{p = 0}^{p_{max}} \gamma_{p} = N$).
+La fonction d'énergie à minimiser s'exprime donc de la façon suivante : 
+\begin{equation}
+J_{EnFCM} = \sum_{p=0}^{p_{max}} \sum_{k=1}^{C} \gamma_{p} u_{pk}^{q} \lVert \mathbf{\zeta}_{p} - \mathbf{v}_{k} \rVert_{2}^{2} \label{eq:Szilagyi:Cost}.
+\end{equation}
+Le calcul des fonctions d'appartenance est le même que pour l'algorithme FCM classique, la différence se situant lors du calcul des centroïdes, devant tenir compte du nombre de voxel à une intensité donnée.
+Les centroïdes sont donc exprimés selon : 
+\begin{equation}
+\mathbf{v}_{k} = \frac{\sum_{p = 0}^{p_{max}} \gamma_{p} u_{pk}^{q} \zeta_{p}}{\sum_{p = 0}^{p_{max}} \gamma_{p} u_{pk}^{q}} \label{eq:Szilagyi:centroid}.
+\end{equation}
+Les avantages de cette méthodologie sont donc un traitement accéléré ainsi qu'une approche beaucoup plus similaire au FCM classique.
+De plus, les auteurs montrent que leur algorithme converge plus vite (en moins d'itérations) que la version MFCM.
 
-\cite{Chen:TSMC:2004} : Régularisation comme \cite{Ahmed:TMI:2002} mais l'élément considéré est une moyenne ou la médiane de son voisinage.
+Toujours en suivant la même idée d'accélérer l'exécution d'un algorithme FCM ayant un terme de régularisation, les travaux de~\cite{Chen:TSMC:2004} introduisent la moyenne ou la médiane du voisinage plutôt que le calcul d'une image complète pour se ramener au cas de l'algorithme FCM classique.
+De plus, ils ajoutent l'utilisation d'un noyau gaussien de manière à ajouter une robustesse au bruit et aux \emph{outliers}.
+Cet algorithme est appelé le KFCM\_S est la fonction coût à minimiser devient : 
+\begin{equation}
+J_{KFCM\_S} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{y}_j, \mathbf{v}_k)) + \beta \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{\overline{y}}_j, \mathbf{v}_k)),
+\end{equation}
+où $\mathbf{\overline{y}}_j$ représente la moyenne ou la médiane des intensités dans le voisinage $N_j$.
+L'expression des fonctions d'appartenance et des centroïdes est similaire à celle de~\cite{Ahmed:TMI:2002}.
+Il existe également une version de cet algorithme n'utilisant pas les opérateurs noyaux, appelé FCM\_S.
+% Il suffit de remplacer le terme $\lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2}$ par $(1-K(\mathbf{y}_j, \mathbf{v}_k))$ dans le calcul de la fonction d'appartenance.
 
-\cite{Cai:PR:2007} : FCM généralisé et rapide.
+Cependant, les deux méthodes précédentes, tout comme les méthodes de~\cite{Ahmed:TMI:2002} et \cite{Pham:CVIU:2001}, ont le désavantage de reposer sur un paramètre $\beta$ contrôlant les poids respectifs entre les termes d'attache aux données et le terme de régularisation.
+Ce paramètre est choisi la plupart du temps par expérimentation et ce choix est loin d'être intuitif.
+De plus, comme dit précédemment, ces algorithmes peuvent devenir très gourmand en temps de calcul à cause de l'exploration des voisinages.
+Les travaux de~\cite{Cai:PR:2007} définissent un algorithme FCM généralisé (FGFCM) définissant une image intermédiaire comme décrit dans l'article de~\cite{Szilagyi:AICIEEE:2003} de manière à diminuer les temps de calcul et introduisent une façon d'évaluer localement le poid à attribuer au terme de régularisation en fonction de la position spatiale des voxels et de la similarité des intensités.
+Ce paramètre de régularisation locale $S_{jl}$ est défini de la façon suivante : 
+\begin{equation}
+S_{jl} = \left\{
+        \begin{array}{l r}
+	S_{s\_jl} \times S_{g\_jl}, & j \neq l, \\
+	0, & j = l,
+        \end{array}
+\right.
+\end{equation}
+
 
 \cite{Krinidis:TIP:2010} : Introduction d'un facteur de flou pour la régularisation. Cependant, pas appliqué à la segmentation cérébrale.
 
