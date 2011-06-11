@@ -211,7 +211,7 @@ $$
 K(\mathbf{x}_i,\mathbf{x}_j) = \varPhi(\mathbf{x}_i)\cdotp\varPhi(\mathbf{x}_j),
 $$
 où $\varPhi : X \rightarrow \mathcal{F}$ réalise une transformation de l'espace de départ $X$ vers un espace d'arrivée $\mathcal{F}$ de plus grande dimension.
-Cependant, un des aspects les plus intéressants de cette transformation est qu'il est possible de calculer la distance euclidienne dans $\mathcal{F}$ sans pour autant connaitre explicitement la transformation $\varPhi$.
+Cependant, un des aspects les plus intéressants de cette transformation est qu'il est possible de calculer la distance euclidienne dans $\mathcal{F}$ sans pour autant connaître explicitement la transformation $\varPhi$.
 En effet, cette distance est donnée par :
 $$
 \lVert \varPhi(\mathbf{x}_i) - \varPhi(\mathbf{x}_j) \rVert^2 = K(\mathbf{x}_i,\mathbf{x}_i) + K(\mathbf{x}_j,\mathbf{x}_j) - 2K(\mathbf{x}_i,\mathbf{x}_j).
@@ -367,9 +367,42 @@ S_{jl} = \left\{
         \end{array}
 \right.
 \end{equation}
+où $S_{s\_jl}$ contrôle la relation spatiale entre les voxels $j$ et $l$ et $S_{g\_jl}$ est fonction de la similarité entre ces deux voxels.
+Le paramètre $S_{s\_jl}$ est défini de la façon suivante : 
+\begin{equation}
+S_{s\_jl} = \exp \left( \frac{-\lVert \mathbf{x}_i - \mathbf{x}_l \rVert}{\lambda_s} \right),
+\end{equation}
+et le paramètre $S_{g\_jl}$ de la façon suivante : 
+\begin{equation}
+S_{g\_jl} = \exp \left( \frac{-\lVert \mathbf{y}_j - \mathbf{y}_l \rVert^{2}}{\lambda_g \times \sigma^{2}_{g\_i}} \right),
+\end{equation}
+où $\sigma_{g\_i}$ est défini comme l'écart moyen entre l'intensité des voxels voisins et le voxel courant.
+Ce paramètre est défini de la façon suivante : 
+\begin{equation}
+\sigma^{2}_{g\_i} = \frac{\sum_{l \in N_j} \lVert \mathbf{y}_j - \mathbf{y}_l \rVert^{2}}{\lvert N_j \rvert}.
+\end{equation}
+De cette manière, plutôt que d'avoir à fixer un paramètre de régularisation global $\beta$, deux paramètres $\lambda_g$ et $\lambda_s$ dont la définition est plus intuitive.
+Le paramètre $\lambda_s$ peut être déduit de la taille du voisinage utilisé, laissant $\lambda_g$ comme seul paramètre global à ajuster.
+Avec cette définition du paramètre de régularisation local, il est alors possible de construire une image $\zeta$ selon la formule : 
+\begin{equation}
+\zeta_{j} = \frac{\sum_{l \in N_j} S_{jl} \mathbf{y}_{j}}{\sum{S_{jl}}}.
+\end{equation}
+La recherche du minimum de la fonction coût se fait alors selon le même principe que les travaux de~\cite{Szilagyi:AICIEEE:2003}.
 
+Une dernière méthode est à mettre en valeur. 
+Constatant que le choix des paramètres de régularisation reste malgré tout difficile (surtout en l'absence d'\emph{a priori} sur le bruit), les travaux de~\cite{Krinidis:TIP:2010} introduisent un nouveau facteur permettant de définir une régularisation sans paramètre contrôlant le poids entre l'attache aux données et la régularisation.
+Ce facteur, noté $G_{jk}$, est calculé de la façon suivante : 
+\begin{equation}
+G_{jk} = \sum_{l \in N_{j},\mbox{ }j \neq l} \frac{1}{\lVert \mathbf{x}_j - \mathbf{x}_l \rVert + 1} (1 - u^{q}_{lk}) \lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2}.
+\end{equation}
+La fonction coût à minimiser devient alors : 
+\begin{equation}
+J_{FLICM} = \sum_{j \in \Omega} \sum_{k=1}^{C} (u_{jk}^{q} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2} + G_{jk}).
+\end{equation}
+La principale remarque est qu'il n'y a pas de paramètre réglant le poids entre l'attache aux données et la régularisation.
+Le poids de la régularisation est déterminé de manière complètement automatique en fonction de la similarité en intensité et de la position spatiale des voxels considérés.
+De plus, l'algorithme FLICM travaille directement sur l'image originale et prend en compte la mise à jour des fonctions d'appartenance à chaque itération, évitant ainsi la perte de détails que peut occasionner le calcul d'une image moyenne.
 
-\cite{Krinidis:TIP:2010} : Introduction d'un facteur de flou pour la régularisation. Cependant, pas appliqué à la segmentation cérébrale.
 
 %------------------------------------------------------------------------Maturation cérébrale----------------------------------------------------------------------------------------
 
