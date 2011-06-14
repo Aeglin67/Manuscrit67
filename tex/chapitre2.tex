@@ -409,11 +409,24 @@ De plus, l'algorithme FLICM travaille directement sur l'image originale et prend
 
 \section{Segmentation cérébrale pré et post-natales}
 
+Cette section présente un état de l'art en segmentation des cerveaux en maturation.
+Elle concerne les méthodes employées pour effectuer une segmentation des tissus cérébraux dans les cas prénataux et post-nataux.
+Ces derniers regroupent plusieurs cas distincts, notamment les prématurés ou les jeunes enfants agés de moins de deux ans.
+
 \subsection{Post-natal}
 
-\cite{Matsuzawa:CC:2001} : Étude volumétrique avec classification ne distinguant pas les tissus myélinisés des non-myélinisés.
+Une première étude concernant les tissus cérébraux chez les enfants a été effectuée par~\cite{Matsuzawa:CC:2001} et comprends des cas allant de 1 mois à 10 ans.
+Il s'agit d'une étude volumétrique cherchant à différencier le LCR, la matière grise et la matière blanche.
+Cependant, cette étude ne prend pas en compte un élément capital et qui est la myélinisation de la matière blanche au cours du temps.
 
-\cite{Prastawa:MIA:2005} : Principal challenge : séparer matière blanche myélinisée et non-myélinisée par élagage d'un arbre. Incorpore un atlas.
+Afin de palier à ce défaut, les travaux de~\cite{Prastawa:MIA:2005} ont introduit une séparation de la amtière blanche myélinisée et non myélinisée.
+Leur méthode sur trois étapes distincts étant : l'estimation initiale de la distribution en intensité, la correction du biais, puis la correction de la segmentation.
+L'estimation initiale de la distribution en intensité est réalisé grâce à un seuillage d'un atlas anatomique préalablement recalé sur le cas à traiter.
+Ce seuillage permet de collecter des échantillons de LCR, de matière grise et de matière blanche.
+L'estimation de la distribution en intensité du LCR et de la matière grise est faite directement, tandis que la distribution de la matière blanche myélinisée et non myélinisée est obtenue par élagage d'un arbre minimum construit à partir des échantillons des deux types de matière blanche.
+La correction du biais est obtenue selon la méthode de~\cite{VanLeemput1:TMI:1999}.
+La dernière étape est réalisé par l'utilisation d'une méthode d'estimation de la distribution en intensité non-paramétrique à cause notamment des forts recouvrements dues à une modélisation gaussienne.
+Une nouvelle fois, des échantillons suposés fiables sont tirés de l'image et permettent une estimation de la distribution en intensité par l'utilisation de fonctions noyaux.
 
 \cite{Xue:NeuroImage:2007} : Segmentation des tissus en excluant les noyaux gris + Champs de Markov adaptatifs localement + atlas. Extraction du cerveau par level-set.
 
