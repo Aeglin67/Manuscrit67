@@ -426,13 +426,33 @@ Ce seuillage permet de collecter des échantillons de LCR, de matière grise et de
 L'estimation de la distribution en intensité du LCR et de la matière grise est faite directement, tandis que la distribution de la matière blanche myélinisée et non myélinisée est obtenue par élagage d'un arbre minimum construit à partir des échantillons des deux types de matière blanche.
 La correction du biais est obtenue selon la méthode de~\cite{VanLeemput1:TMI:1999}.
 La dernière étape est réalisé par l'utilisation d'une méthode d'estimation de la distribution en intensité non-paramétrique à cause notamment des forts recouvrements dues à une modélisation gaussienne.
-Une nouvelle fois, des échantillons suposés fiables sont tirés de l'image et permettent une estimation de la distribution en intensité par l'utilisation de fonctions noyaux.
+Une nouvelle fois, des échantillons fiables sont tirés de l'image et permettent une estimation de la distribution en intensité par l'utilisation de fonctions noyaux.
 
-\cite{Xue:NeuroImage:2007} : Segmentation des tissus en excluant les noyaux gris + Champs de Markov adaptatifs localement + atlas. Extraction du cerveau par level-set.
+L'étude de~\cite{Xue:NeuroImage:2007} a pour objectif d'étudier l'évolution de la courbure du cortex au cours de la grossesse, ainsi que l'évolution de l'épaisseur corticale.
+Les images utilisées sont des images de prématurés.
+Pour atteindre cet objectif, une phase de segmentation des tissus, suivie d'une phase de reconstruction 3D du cortex est réalisée.
+La phase de segmentation présente également plusieurs étape.
+Une première étape élimine les tissus non-pertinents (tronc cérébral, cervelet, noyaux gris et corps caleux) dont l'intensité est trop proche de celle du cortex.
+Cette étape est réalisée par le recalage d'un atlas, choisi en fonction de l'âge de gestation du nouveau nés.
+La deuxième étape consiste en une segmentation basée sur un algorithme EM permettant une première segmentation du cortex et de la matière blanche.
+Cependant, les effets de volume partiel propres aux images de nouveaux nés nécessite une troisième étape permettant de détecter et de corriger les voxels ayant une mauvaise classification.
+Cela est réalisé par l'utilisation d'un algorithme EM intégrant des \emph{a priori} issu des champs de Markov.
+Cependant, le poids de cette régularisation est modifié en fonction de l'environnement entourant le voxel.
+Par exemple, si un voxel est labélisé en temps que matière blanche mais qu'il est entouré de matière grise et de LCR, il est considéré comme étant un voxel de volume partiel et l'\emph{a priori} markovien sera modifié de manière à favoriser la matière grise et le LCR plutôt que la matière blanche.
+En résumé, la segmentation du cortex est obtenue par une restriction de l'ensemble de segmentation puis par l'utilisation d'\emph{a priori} markoviens locaux, permettant une segmentation plus fiable du cortex.
 
-\cite{Weisenfeld:NeuroImage:2009} : Segmentation des nouveaux nés par une phase d'apprentissage automatique conduite par une sélection de prototypes et une estimation des distributions d'intensités non-paramétrique. Ils disposent pour ce faire d'une bibliothèque de cas typiques fournissant ces prototypes pour chaque tissus.
+Les travaux de~\cite{Weisenfeld:NeuroImage:2009} parviennent à une segmentation complète des structures cérébrales par l'utilisation d'un estimation non-paramétrique de la distribution d'intensité.
+Le préalable à cette segmentation est la mise à disposition d'une base d'images où un expert a sélectionné plusieurs voxels représentatifs des différents tissus.
+Ces voxels sont désignés comme des prototypes et chaque image en a plusieurs milliers.
+Chaque image de la base est alors recalée sur le cas à étudier et les prototypes vont permettre la définition de plusieurs segmentations et d'obtenir une classification floue de chaque tissu.
+Les prototypes sont alors mis à jour et la segmentation réestimé jusqu'à ce que la segmentation finale ne bouge plus.
 
-\cite{Merisaari:JNM:2009} : Segmentation en deux étapes : watershed et classification des régions obtenus + utilisation de cette première classification comme \emph{a priori} pour une classification voxel à voxel.
+L'approche de~\cite{Merisaari:JNM:2009} est intéressante car elle ne repose que sur les données de l'image pour effectuer la segmentation, malgré qu'elle n'effectue que la séparation du LCR du reste des structures cérébrales.
+Cette méthode consiste en trois étapes.
+Premièrement, une segmentation définissant de nombreuses zones est réalisée grâce à une segmentation par ligne de partage des eaux. 
+Dans un deuxième temps, chaque zone est labélisée selon le modèle des mixtures de gaussienne en fonction de la moyenne des intensités de cette zone.
+Enfin, cette première segmentation est utilisée comme \emph{a priori} de la même manière qu'un atlas pour effectuer la classification voxel par voxel.
+Il s'agit de la première approche cherchant à obtenir une segmentation sans phase d'apprentissage, ni atlas.
 
 \cite{Shi:NeuroImage:2010} : Utilisation d'une segmentation à un temps t comme atlas pour une segmentation d'un même patient à un temps t-1.
 
