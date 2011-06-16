@@ -454,18 +454,31 @@ Dans un deuxième temps, chaque zone est labélisée selon le modèle des mixtures d
 Enfin, cette première segmentation est utilisée comme \emph{a priori} de la même manière qu'un atlas pour effectuer la classification voxel par voxel.
 Il s'agit de la première approche cherchant à obtenir une segmentation sans phase d'apprentissage, ni atlas.
 
-\cite{Shi:NeuroImage:2010} : Utilisation d'une segmentation à un temps t comme atlas pour une segmentation d'un même patient à un temps t-1.
+Plus récemment, l'article de~\cite{Shi:NeuroImage:2010} décrit une approche longitudinale de la segmentation.
+Partant du principe que des IRM acquises à un âge plus avancé seront plus précises, notamment grâce à une plus grande maturité des tissus, cette méthodologie utilise les résultats d'une segmentation à un instant $t$ comme \emph{a priori} spatial pour obtenir une segmentation à un instant $t - 1$.
+La première segmentation est réalisée en utilisant l'algorithme AFCM de~\cite{Pham:TMI:1999} et les cartes de probabilité issues de cette étape sont ensuite recalés sur les acquisition plus anciennes afin d'être segmenté par un algorithme EM.
 
-\cite{Shi:HBM:2011} : Utilisation d'un atlas pondéré par une carte de confiance corticale issue d'un filtre hessien dont la zone autour des ventricules a été exclue à l'aide d'un template.
+Du même auteur~\cite{Shi:HBM:2011}, nous pouvons également mentionner une méthodologie destinée à mettre le cortex en valeur.
+Elle utilise un atlas de population mais le pondère par des éléments du cas étudié, notamment une carte de confiance sur l'emplacement du cortex, issu d'un filtre hessien.
+De plus, les éléments subcorticaux sur volumes intracrânien sont enlevé à l'aide d'un template recalé sur le cas étudié, de manière à ne pas confondre les noyaux gris et le cortex.
 
-Idée principale : une atlas ou une classification supervisée est nécessaire.
-
-Exception : (pas encore paru, mais je le cite ici pour éviter de l'oublier) \cite{Gui:ISBI:2011}, segmentation par une série d'opérations morphologiques, croissance de région et \emph{a priori} anatomiques.
+De manière générale, les propriétés de IRM cérébrales des nouveaux nés ne permettent pas l'utilisation d'algorithmes de segmentation sans l'aide d'\emph{a priori} spatiaux sous forme d'atlas de population, ou sans l'ajout d'une phase d'apprentissage.
+Cependant, une méthode parue récemment est parvenue à une segmentation sans ces éléments en utilisant des \emph{ apriori} anatomiques génériques.
+L'article de~\cite{Gui:ISBI:2011} montre qu'il est possible d'obtenir une segmentation en ne se basant que sur les données de l'images par une succession d'opérations connues, mais mise en \oe uvre dans l'ordre nécessaire à l'optention d'une segmentation complète.
+L'extraction du volume intracrânien, la division des deux hémisphères cérébraux et la détection des noyaux gris est réalisée grâce à une segmentation par ligne de partage des eaux.
+Par la suite, l'extraction du cortex et de la matière blanche est réalisé par un algorithme de croissance de région avec des contraintes fortes telles que l'interdiction aux labels de LCR et de matière blanche d'être voisins.
+De plus, une étape finale de classification permet de segmenter le cervelet, le tronc cérébral et de détecter la matière blanche non-myélinisée.
+Cette méthode semble performante mais est dépend largement de la détection des noyaux gris.
+Si les noyaux gris ne sont pas discernables, la segmentation n'est pas possible.
 
 \subsection{Prénatal}
 \label{prenatal}
 
-\cite{Claude:TBE:2004} : Segmentation semi-automatique.
+Les images acquises \emph{in utero} présentent des difficultés supplémentaires, dues au temps d'acquisition plus faible et au conditions d'acquisition particulière (impossibilité d'immobilisé le patient, signal perturbé par les différents tissus de la mère, \ldots).
+Cependant, l'étude de la maturation cérébrale \emph{in vivo} ainsi que la définition d'outils diagnostiques prénataux nécessite la définition d'outils permettant de traiter automatiquement ces images.
+
+Une première tentative de segmentation des tissus cérébraux est la méthode de~\cite{Claude:TBE:2004}, consistant en une segmentation semi-autmatique.
+Le but était de conduire une étude de la zone contenant le cervelet et le tronc cérébral.
 
 \cite{Ferrario:ESPC:2008} : Segmentation du volume intracrânien avec une étape de classification par mixture de gaussienne et une étape de reclassification à l'aide de champs de Markov.
 
