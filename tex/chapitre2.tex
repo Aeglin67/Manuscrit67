@@ -51,6 +51,8 @@
 
 \cite{Ashburner:NeuroImage:2005} : Méthode reposant quasi complètement sur le recalage d'un atlas et introduisant un \emph{a priori} sur les tissus combinant l'\emph{a priori} de l'atlas pondéré par la quantité de tissus présent dans un petit volume $\rightarrow$ résistance au bruit.
 
+Méthodes faisant le recalage de l'atlas en même temps que la segmentation, et d'autres qui font d'abord le recalage puis la segmentation.
+
 \subsection{Classification}
 \label{subsec:classif}
 
@@ -478,13 +480,31 @@ Les images acquises \emph{in utero} présentent des difficultés supplémentaires, 
 Cependant, l'étude de la maturation cérébrale \emph{in vivo} ainsi que la définition d'outils diagnostiques prénataux nécessite la définition d'outils permettant de traiter automatiquement ces images.
 
 Une première tentative de segmentation des tissus cérébraux est la méthode de~\cite{Claude:TBE:2004}, consistant en une segmentation semi-autmatique.
-Le but était de conduire une étude de la zone contenant le cervelet et le tronc cérébral.
+Le but était de conduire une étude de la fosse postérieure du crâne et des structures comme le cervelet et le tronc cérébral.
+La segmentation de la fosse postérieure du crâne est réalisée de manière manuelle car il n'existe pas de délimitation claire entre cette zone et le reste cerveau.
+Le cervelet et le tronc cérébral sont segmentés grâce à un algorithme de croissance de région.
+Les germes sont choisies par un seuillage de l'image originale et la croissance est contrôlé par des critères d'adjacence et d'homogénéité.
+Cette étude est une première tentative de segmentation des tissus cérébraux en IRM f\oe tale.
+Cependant, elle n'est réalisé que sur une coupe sagittale et nécessite une importante implication de l'expert pour délimiter la fosse postérieure du crâne.
 
-\cite{Ferrario:ESPC:2008} : Segmentation du volume intracrânien avec une étape de classification par mixture de gaussienne et une étape de reclassification à l'aide de champs de Markov.
+Plus tard, les travaux de~\cite{Ferrario:ESPC:2008} se sont intéressé à la reconstruction de la surface corticale des cerveaux de f\oe tus.
+Pour parvenir à ce résultat, une première étape est l'extraction du volume intracrânien faite grâce à un algorithme fondé sur les contours actifs~\cite{Bresson:JMIV:2007}.
+La deuxième étape consiste en une segmentation par mixtures de gaussiennes.
+Deux classes de LCR, deux classes pour les tissus cérébraux ainsi qu'une classe intermédiaire sont utilisées afin de tenir compte du recouvrement des distributions d'intensité des différents tissus.
+La classe intermédiaire est ensuite éliminée par un algorithme de correction des labels fondé sur les champs de Markov favorisant les classes LCR et cérébrales.
+La troisième étape consiste à repérer les deux  composantes connexes de LCR les plus grandes et d'éliminer la plus large de manière à obtenir la surface du cortex.
 
-\cite{Anquez:ISBI:2009} : Segmentation du volume intracrânien par détection des yeux, \emph{a priori} anatomiques et opérateurs de morphologie mathématique.
+Les travaux de~\cite{Anquez:ISBI:2009} présentent une méthode d'extraction du volume intracrânien, en utilisant des \emph{a priori} anatomiques ainsi que des opérateurs de morphologie mathématique~\cite{Najman:2010}.
+La première étape est une détection des yeux du f\oe tus à partir d'un modèle comprenant des \emph{a priori} de forme, de contrastes ainsi que des \emph{a priori} biométriques.
+A partir de cette localisation des yeux, la coupe sagital passant au milieu du cerveau est reconstruite (l'orientation du sujet n'est pas connue) et une première segmentation du volume intracrânien est effectuée dans cette coupe.
+Cette première segmentation est alors utilisée pour contraindre la segmentation 3D dans une zone restreinte avant une segmentation complète par élégage d'un graphe.
 
-\cite{BachCuedra:MICCAI:2009} : Segmentation avec une étape de classification par mixture de gaussienne et une étape de régularisation déconnectée des données avec des \emph{a priori} anatomiques.
+Une autre méthode de comprenant une phase de segmentation par mixture de gaussienne suivie d'une phase de régularisation déconnectée des données est celle de~\cite{BachCuedra:MICCAI:2009}.
+Le but est cette fois de segmenter l'ensemble des tissus cérébraux en distinguant les noyaux gris du cortex.
+La première étape consiste en un algorithme EM divisant les voxels en huit classes (quatre classes pures et quatre classes de transition).
+Le modèle de Markov mis en \oe uvre est similaire à celui de~\cite{Ferrario:ESPC:2008} et est appliqué trois fois successives.
+La première fois permet de labeliser tous les voxels voisins du fond de l'image comme étant du LCR, la deuxième permet de segmenter le cortex en imposant un critère d'épaisseur et la troisième permet de séparer les noyaux gris du cortex et de classer les voxels de transition encore présent.
+Cette méthode est intéressante car elle introduit des contraintes anatomiques, cependant la phase de régularisation déconnectée des données n'est pas sans poser quelques problèmes car rien ne garanti que la labelisation peut se corriger automatiquement si elle n'est pas guidée par les données de l'image.
 
 \cite{Habas:SPIE:2009} : Segmentation à l'aide d'un atlas incluant un modèle de structures laminaires à partir des ventricules.
 
