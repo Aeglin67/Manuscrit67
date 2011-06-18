@@ -504,15 +504,29 @@ Le but est cette fois de segmenter l'ensemble des tissus cérébraux en distinguan
 La première étape consiste en un algorithme EM divisant les voxels en huit classes (quatre classes pures et quatre classes de transition).
 Le modèle de Markov mis en \oe uvre est similaire à celui de~\cite{Ferrario:ESPC:2008} et est appliqué trois fois successives.
 La première fois permet de labeliser tous les voxels voisins du fond de l'image comme étant du LCR, la deuxième permet de segmenter le cortex en imposant un critère d'épaisseur et la troisième permet de séparer les noyaux gris du cortex et de classer les voxels de transition encore présent.
-Cette méthode est intéressante car elle introduit des contraintes anatomiques, cependant la phase de régularisation déconnectée des données n'est pas sans poser quelques problèmes car rien ne garanti que la labelisation peut se corriger automatiquement si elle n'est pas guidée par les données de l'image.
+Cette méthode est intéressante car elle introduit des contraintes anatomiques, cependant la phase de régularisation déconnectée des données n'est pas sans poser quelques problèmes car rien ne garantie que la segmentation peut se corriger automatiquement si elle n'est pas guidée par les données de l'image.
 
-\cite{Habas:SPIE:2009} : Segmentation à l'aide d'un atlas incluant un modèle de structures laminaires à partir des ventricules.
+Les méthodes suivantes bénéficient d'une étape de reconstruction des volumes afin d'obtenir des images isotropes~\cite{Kim:TMI:2010,Rousseau:AR:2006}.
 
-\cite{Gholipour:IJCARS:2010} : Étude sur le volume intracrânien à l'aide d'une segmentation combinant level-sets, composantes connexes et opérateurs de morpho-maths.
+Une approche par atlas a été utilisée par~\cite{Habas:SPIE:2009}.
+Afin de bénéficier d'un \emph{a priori} supplémentaire sur le positionnement des tissus.
+Sachant que le cerveau des f\oe tus se présente sous la forme d'une succession de couches, ils utilisent cette connaissance pour bâtir un \emph{a priori} spatial sous une forme laminaire à partir d'une segmentation des ventricules et du LCR péricérébral. 
+La connaissance des ventricules est issue d'un atlas anatomique construit spécifiquement pour cette application permettant d'avoir une connaissance des ventricules, de la matrice germinale, de la matière blanche, du cortex et du LCR péricérébral.
+L'ensemble de ces connaissances est intégrée dans un algorithme EM avec une régularisation par champs de Markov cachés.
 
-\cite{Habas:NeuroImage:2010} : Segmentation à l'aide d'un atlas spatio-temporel.
+Une méthode plus récente~\cite{Gholipour:IJCARS:2010} n'utilise pas d'atlas anatomique, mais n'a pas pour objectif une segmentation des tissus.
+L'objectif est de réaliser une étude quantitative du volume intracrânien en supprimant le LCR péricérébral.
+Plusieurs étapes sont nécessaires pour obtenir une segmentation de ce volume.
+Dans un premier temps, une classification des voxels en dix classes est réalisée de manière à prendre en compte le recouvrement des distributions en intensité.
+A cette étape, l'utilisateur doit sélectionner les labels représentant les tissus cérébraux à cause de la variabilité d'un cas à un autre.
+Une fois les labels sélectionnés, un filtre morphologique est utilisé pour éliminer les voxels de volumes partiels ainsi que pour combler la partie du volume intracrânien correspondant aux ventricules.
+Enfin, un algorithme de contours actifs est appliqué afin d'obtenir une segmentation finale.
+Cette méthodologie utilise des opérateurs connus et n'est pas complètement automatique, cependant elle atteint son but de réaliser une segmentation fiable du volume intracrânien.
 
-Pour la reconstruction de volumes 3D : \cite{Kim:TMI:2010,Rousseau:AR:2006}.
+Une dernière méthodologie de segmentation des tissus est celle de~\cite{Habas:NeuroImage:2010}.
+Ils présentent la construction d'un atlas spatio-temporel afin de prendre les évolutions du cerveau au cours de la grossesse et de bénéficier d'un \emph{a priori} le plus pertinent possible.
+Une utilisation de cet atlas dans le cadre de la segmentation cérébrale est également présentée.
+
 
 %------------------------------------------------------------------------Bilan----------------------------------------------------------------------------------------
 
