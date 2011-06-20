@@ -15,6 +15,10 @@ Certaines méthodologies de types FCM ont inclus une forme de prise en compte de 
 Cependant, les travaux sur les méthodes de débruitage par patch (dont l'approche non-locale) ont montré que ces dernières était plus efficace car elles offrent une estimation de la similarité plus fiable qu'une comparaison voxel à voxel.
 L'intégration de l'approche non-locale au sein du terme de régularisation permettrait donc une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
+Concernant la prise en compte du biais, certaines méthodologies de type FCM ont introduit une évaluation locale des centroïdes afin de ne pas avoir à évaluer le champs de biais directement.
+Cependant, la principale difficulté est de fixer la taille du voisinage utilisé pour estimer ces centroïdes locaux et une mauvaise estimation à un voxel donné ne peut pas être corrigé.
+L'introduction des moyennes non-locales devrait permettre de prendre en compte l'estimation des centroïdes locaux voisins et de rendre le processus de segmentation globalement plus robuste.
+
 La suite du chapitre s'organise de la façon suivante.
 Dans un premier temps, les moyennes non-locales sont définies et une synthèse des travaux les utilisant est présentée.
 Par la suite, l'intégration de cette approche dans l'algorithme FCM est discutée en distinguant l'apport au terme d'attache aux données de celui au terme de régularisation.
@@ -25,8 +29,7 @@ Enfin, des validations, ainsi qu'une évaluation des performances de l'algorithme
 
 \subsection{Définition}
 
-Les notations utilisées dans le cadre des moyennes non-locales sont définies ici.
-On rappelle que l'image $I$ est considérée comme une fonction $I : \Omega \rightarrow Y$, où $\Omega$ est le support de l'image contenant $N$ voxels et $Y$ est l'espace des intensités.
+L'image $I$ est considérée comme une fonction $I : \Omega \rightarrow Y$, où $\Omega$ est le support de l'image contenant $N$ voxels et $Y$ est l'espace des intensités.
 Le débruitage par moyennes non-locales et l'évaluation des redondances reposent sur des patchs, qui sont définis comme un petit voisinage cubique autour d'un voxel d'intérêt $j$, de rayon $W$ et indexé par son voxel central.
 Un patch est noté de la manière suivante : 
 \begin{equation}
@@ -39,13 +42,13 @@ où $d$ est la dimension de l'image $I$ et $\mathbf{x}_j$ est le vecteur correspo
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/Mean_Filter.eps}}
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/NL_Mean_Filter.eps}}
 \end{center}
-\caption{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne (ou une médiane) de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
+\caption{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
 \label{fig:mean_filter}
 \end{figure}
 
 Avec cette définition du patch, l'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par : 
 \begin{equation}
-\mathbf{\hat{y}}_{j} = \frac{\sum_{j'=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{j''=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j''} \rVert}{h} \right)} \label{nlfcm:estimateur:complet}.
+\mathbf{\hat{y}}_{j} = \frac{\sum_{l=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{l=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)} \label{nlfcm:estimateur:complet}.
 \end{equation}
 Cette formulation est proche des estimateurs par noyau en statistique.
 En effet, l'estimation de la valeur optimale $\mathbf{\hat{y}}_{j}$ du voxel $j$ nécessite un noyau $K(\cdotp)$ (une fonction de $\mathbb{R}$ dans $\mathbb{R}$) et une \emph{fenêtre} $h$ (régit le degré de lissage de l'estimation).
@@ -57,16 +60,16 @@ Cette formulation correspond à une moyenne pondérée des voxels sur l'ensemble du
 
 Constatant que l'estimateur se présente sous la forme d'une moyenne pondérée, nous pouvons réécrire la formule \ref{nlfcm:estimateur:complet} sous la forme :
 \begin{equation}
-\mathbf{\hat{y}}_{j} = \sum_{j' = 1}^{N}\omega_{nl}(j,j') \cdotp \mathbf{y}_{j'} \label{nlfcm:estimateur:court},
+\mathbf{\hat{y}}_{j} = \sum_{l = 1}^{N}\omega_{nl}(j,l) \cdotp \mathbf{y}_{l} \label{nlfcm:estimateur:court},
 \end{equation}
-où $\omega_{nl}(j,j')$ est le poids non-local attribué au voxel $j'$ pour l'estimation de $\mathbf{\hat{y}}_{j}$. 
+où $\omega_{nl}(j,l)$ est le poids non-local attribué au voxel $j'$ pour l'estimation de $\mathbf{\hat{y}}_{j}$. 
 Ce terme est défini par :
 \begin{equation}
-\omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)}{\sum_{j''=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j''} \rVert}{h} \right)} \label{nlfcm:poids:definition},
+\omega_{nl}(j,l) = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)}{\sum_{l=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)} \label{nlfcm:poids:definition},
 \end{equation}
 et est donc directement liée au calcul de la similarité entre les voxels de la zone de recherche.
 
-\subsection{Paramètres}
+\subsection{Etude des paramètres régissant le comportement de l'approche non-locale}
 
 Pour des raisons pratiques, notamment le temps d'exécution et l'efficacité du filtre, le calcul des poids non-locaux a été restreint à une zone de recherche $\Omega_{j}^{R}$ autour du voxel $j$.
 Ce fait fût entériné dès l'article fondateur de \cite{Buades:MMS:2005}.
@@ -107,6 +110,7 @@ Pour en savoir plus, le lecteur est invité à lire la thèse de Salmon \cite{Salmo
 \subsection{Segmentation non-locale}
 
 Une première utilisation des moyennes non-locales dans l'algorithme FCM a été définie par~\cite{Wang:CMIG:2008} avec une application à la segmentation cérébrale.
+Cette méthodologie a été développée de manière indépendante de la notre.
 Les auteurs utilisent une pondération entre information locale et information non-locale en redéfinissant la distance entre l'intensité d'un voxel et le centroïde d'une classe de la façon suivante :
 \begin{equation}
 D^{2}(\mathbf{y}_{j}, \mathbf{v}_{k}) = (1-\lambda_{j}) d^{2}_{l}(\mathbf{y}_{j}, \mathbf{v}_{k}) + \lambda_{j} d^{2}_{nl}(\mathbf{y}_{j}, \mathbf{v}_{k}) \label{nlfcm:wang:distance},
@@ -117,9 +121,9 @@ Le paramètre $\lambda_{j}$ contrôle localement la proportion entre ces deux dist
 
 La distance locale est calculée de la façon suivante :
 \begin{equation}
-d^{2}_{l}(\mathbf{y}_{j}, \mathbf{v}_{k}) = \frac{\sum_{j' \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{j'}) \lVert \mathbf{y}_{j'} - \mathbf{v}_{k} \rVert^{2}_{2}}{\sum_{j'' \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{j''})} \label{nlfcm:wang:distance:locale},
+d^{2}_{l}(\mathbf{y}_{j}, \mathbf{v}_{k}) = \frac{\sum_{l \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l}) \lVert \mathbf{y}_{l} - \mathbf{v}_{k} \rVert^{2}_{2}}{\sum_{l \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l})} \label{nlfcm:wang:distance:locale},
 \end{equation}
-où $N_{j}$ est un voisinage centré autour du voxel $j$, $\omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{j'}) = e^{-\frac{\lvert \mathbf{y}_{j} - \mathbf{y}_{j'} \rvert}{\sigma^{2}}}$ est le poids local accordé au voxel $j'$ et $\sigma^{2}$ est la variance sur $N_{j}$.
+où $N_{j}$ est un voisinage centré autour du voxel $j$, $\omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l}) = e^{-\frac{\lvert \mathbf{y}_{j} - \mathbf{y}_{l} \rvert}{\sigma^{2}}}$ est le poids local accordé au voxel $l$ et $\sigma^{2}$ est la variance sur $N_{j}$.
 Cette distance locale représente donc une moyenne pondérée sur le voisinage $N_j$, les pondérations étant calculées à partir de la similarité entre le voxel central et ses voisins (similarité voxel à voxel et non similarité des patchs).
 
 La distance non-locale est calculée de la façon suivante : 
@@ -127,7 +131,6 @@ La distance non-locale est calculée de la façon suivante :
 d^{2}_{nl}(\mathbf{y}_{j}, \mathbf{v}_{k}) = \sum_{j' = 1}^{N}\omega_{nl}(j,j') \lVert \mathbf{y}_{j'} - \mathbf{v}_{k} \rVert^{2}_{2}.
 \end{equation}
 % En pratique, ce calcul de la distance non-locale est limité à une zone de recherche $\Omega^{R}_{j}$ centrée autour du voxel $j$.
-
 Le paramètre $\lambda_{j}$ est calculé automatiquement en tenant compte de la similarité globale du patch $P^{I}_{j}$ au sein de $\Omega^{R}_{j}$. 
 Plus il y a de voxels similaires au voxel central au sein de la zone de recherche $\Omega^R_j$, plus le poids de la distance non-locale dans le calcul de la distance générale sera important.
 L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de similarité entre les voxels (par exemple, dans une IRM cérébrale, autour des sillons cérébraux) où il est plus efficace de prendre en compte une similarité entre les voxels directement plutôt qu'entre les patchs.
@@ -144,30 +147,33 @@ L'estimation de la fenêtre $h$ est inspiré de \cite{Coupe:TMI:2008}, laissant un
 \subsection{Terme d'attache aux données (NL-FCM)}
 \label{subsec:nl:dd}
 
-Comme précisé dans la section \ref{subsec:fcm:bias}, l'algorithme FCM considère que les centroïdes des classes sont invariants au sein de l'espace de l'image, le rendant sensible à l'inhomogénéité des intensités.
-Il est alors nécessaire de définir un modèle du biais explicite de manière à en prévenir les effets sur la segmentation.
+Comme précisé dans la section \ref{subsec:fcm:def}, l'algorithme FCM considère que les centroïdes des classes sont invariants au sein de l'espace de l'image, le rendant sensible à l'inhomogénéité des intensités.
+Nous avons vu à la section~\ref{subsec:fcm:bias} qu'il est alors nécessaire de définir un modèle du biais explicite de manière à en prévenir les effets sur la segmentation.
 Cependant, de nombreuses hypothèses doivent être faites pour pouvoir estimer ce biais, notamment sur sa nature multiplicative, la nature lente des variations d'intensité (valable que pour les inhomogénéité dues à l'imageur), la modélisation du biais lui même (polynomiales, B-Splines, \ldots{}) ou encore la définition d'un champ de biais unique ou d'un champ par tissu.
 
 Une approche locale de la segmentation est une alternative intéressante car elle permet une estimation des modèles d'intensité dans des sous-volumes du volume complet sans avoir recours à une estimation explicite du biais.
 Une même intensité peut donc être étiqueter différemment selon l'estimation locale du modèle.
 La taille des sous-volumes est cependant cruciale car un sous-volume trop important sera sensible à l'inhomogénéité tandis qu'un volume trop petit risque de conduire à une mauvaise évaluation du modèle d'intensité local. 
-Dans le cas de l'IRM cérébrale, une fenêtre trop petite peut,  par exemple, conduire à une mauvaise évaluation dans des zones de grande concentration de matière blanche.
+Dans le cas de l'IRM cérébrale, une fenêtre trop petite peut, par exemple, conduire à une mauvaise évaluation dans des zones de grande concentration de matière blanche.
+En effet, trop peu de voxels représentant la matière grise ou le LCR (voir aucun) seraient alors pris en compte pour permettre une estimation fiable des centroïdes des classes représentant ces tissus. 
+Or l'algorithme FCM reposant sur l'estimation de ces centroïdes, cela conduirait à une classification finale faussée.
 
-Défini dans le cadre de FCM, cette notion de modèle local se traduit par la minimisation de la fonction d'énergie suivante : 
-$$
-J = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{jk} \rVert_{2}^{2}.
-$$
+Définie dans le cadre de FCM, cette notion de modèle local se traduit par la minimisation de la fonction d'énergie suivante : 
+\begin{equation}
+J = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{jk} \rVert_{2}^{2}. \label{eq:fcm:local}
+\end{equation}
 La différence entre cette fonction coût et celle de l'algorithme FCM classique réside dans l'introduction de centroïdes locaux $\mathbf{v}_{jk}$ fournissant une évaluation du modèle d'intensité au voxel $j$, le problème de cette évaluation restant ouvert.
 Des approches par recouvrement de sous-volumes ont été définies telle que celle de \cite{Zhu:NeuroImage:2003} comportant une étape de classification par FCM proprement dite, puis une étape de fusion de l'information.
 De même, \cite{Scherrer:TMI:2009} introduit des modèles markoviens locaux par la division de l'image en sous-volumes et estime ces modèles en coopération avec les modèles voisins afin d'assurer la cohérence de l'ensemble de la segmentation.
 Ces deux approches se positionnent dans une optique de fusion d'information pour résoudre le problème de la segmentation.
 % Cependant, ce genre d'approche peut-être vu comme un déplacement du problème de l'évaluation d'un modèle vers celui de la fusion de plusieurs modèles.
 
-A notre connaissance, aucune méthode n'a proposé de manière simple de prendre en compte les modèles voisins afin de tenir compte des éventuelles mauvaises évaluation des modèles locaux.
-L'introduction d'une pondération entre les différents modèles locaux en fonction de la similarité des voxels est une option qui n'a pas encore été explorée.
-Les moyennes non-locale fournissant ce genre de pondération grâce aux termes $\omega_{nl}(\cdot,\cdot)$, un terme d'attache aux données non-local est alors défini de la façon suivante :
+A notre connaissance, aucune méthode ne permet la prise en compte des modèles voisins sans une approche de fusion de l'information.
+Cependant, l'approche non-locale permet de mettre en \oe uvre une pondération entre les différents voxels de l'image en fonction de la similarité de leur patch.
+En faisant l'hypothèse que deux voxels dont les patchs sont similaires font parti du même tissus, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu?entraîne une mauvaise évaluation des centroïdes locaux.
+Un terme d'attache aux données non-local est alors défini de la façon suivante :
 \begin{equation}
-J_{NL-FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} \sum_{j' \in \Omega^{R_d}_{j}} \omega_{nl}(j, j') u_{jk}^{q} \Vert \mathbf{y}_{j} - \mathbf{v}_{j'k} \Vert_2^{2} \label{eq:nlfcm:dd}.
+J_{NL-FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{l \in \Omega^{R_d}_{j}} \omega_{nl}(j, l) \Vert \mathbf{y}_{j} - \mathbf{v}_{lk} \Vert_2^{2} \label{eq:nlfcm:dd}.
 \end{equation}
 Ce terme d'attache aux données doit permettre une meilleure robustesse de la segmentation en cas de mauvaise évaluation de certains modèles locaux.
 
