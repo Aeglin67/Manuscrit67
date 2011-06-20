@@ -3,15 +3,22 @@
 \minitoc
 
 Dans ce chapitre, une nouvelle méthode de segmentation basée sur FCM est définie.
-Elle prend en compte un paradigme défini en 2005 et appelé : les moyennes non-locales (en anglais, \emph{non-local means}).
-Ce paradigme, issu de travaux dans le cadre du débruitage d'images, a été spécifié de manière indépendante par \cite{Buades:MMS:2005},\cite{Kervrann:TIP:2006} et \cite{Awate:PAMI:2006}.
-L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer une valeur corrigée de chaque pixel (ou voxel dans le cas d'images 3D).
-La nécessité d'avoir une évaluation robuste de ces redondances a conduit à l'introduction de patchs (un petit voisinage autour d'un voxel), permettant une estimation plus fiable de la similarité entre les voxels.
+Elle prend en compte une approche proposée en 2005 et appelée : les moyennes non-locales (en anglais, \emph{non-local means}).
+Cette approche, issue de travaux dans le cadre du débruitage d'images, a été spécifiée de manière indépendante par \cite{Buades:MMS:2005}, et \cite{Awate:PAMI:2006}.
+% \cite{Kervrann:TIP:2006}
+L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer une valeur corrigée de chaque pixel.
+La nécessité d'avoir une évaluation robuste de ces redondances a conduit à l'introduction de patchs (voisinage autour d'un voxel), permettant une estimation fiable de la similarité entre les voxels.
+
+L'utilisation de la redondance de l'information de l'image est une option peu explorée en segmentation cérébrale.
+Comme nous l'avons vu précédemment, beaucoup de méthodes utilisent une modélisation spécifique d'un champ de biais pour la correction de l'inhomogénéité de l'intensité ou une approche prenant en compte la classification des voxels environnants pour corriger le bruit.
+Certaines méthodologies de types FCM ont inclus une forme de prise en compte de la redondance en favorisant les voxels dont l'intensité est la plus proche de celle du voxel courant et qui sont spatialement les plus proches du voxel courant.
+Cependant, les travaux sur les méthodes de débruitage par patch (dont l'approche non-locale) ont montré que ces dernières était plus efficace car elles offrent une estimation de la similarité plus fiable qu'une comparaison voxel à voxel.
+L'intégration de l'approche non-locale au sein du terme de régularisation permettrait donc une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
 La suite du chapitre s'organise de la façon suivante.
 Dans un premier temps, les moyennes non-locales sont définies et une synthèse des travaux les utilisant est présentée.
-Par la suite, l'intégration de ce paradigme dans l'algorithme FCM est discutée en distinguant l'apport au terme d'attache aux données de celui au terme de régularisation.
-Enfin, des validations, ainsi qu'une évaluation des performances de ce FCM non-local par rapport à d'autres méthodes (inspirées de FCM ou fondées sur les champs et chaînes de Markov) sont réalisées.
+Par la suite, l'intégration de cette approche dans l'algorithme FCM est discutée en distinguant l'apport au terme d'attache aux données de celui au terme de régularisation.
+Enfin, des validations, ainsi qu'une évaluation des performances de l'algorithme proposé par rapport à d'autres méthodes (inspirées de FCM ou fondées sur les champs et chaînes de Markov) sont réalisées.
 
 \section{L'approche non-locale}
 \label{sec:nl:def}
