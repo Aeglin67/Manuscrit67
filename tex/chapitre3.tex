@@ -170,12 +170,12 @@ Ces deux approches se positionnent dans une optique de fusion d'information pour
 
 A notre connaissance, aucune méthode ne permet la prise en compte des modèles voisins sans une approche de fusion de l'information.
 Cependant, l'approche non-locale permet de mettre en \oe uvre une pondération entre les différents voxels de l'image en fonction de la similarité de leur patch.
-En faisant l'hypothèse que deux voxels dont les patchs sont similaires font parti du même tissus, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu?entraîne une mauvaise évaluation des centroïdes locaux.
+En faisant l'hypothèse que deux voxels dont les patchs sont similaires font parti du même tissus, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu'entraîne une mauvaise évaluation des centroïdes locaux.
 Un terme d'attache aux données non-local est alors défini de la façon suivante :
 \begin{equation}
 J_{NL-FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{l \in \Omega^{R_d}_{j}} \omega_{nl}(j, l) \Vert \mathbf{y}_{j} - \mathbf{v}_{lk} \Vert_2^{2} \label{eq:nlfcm:dd}.
 \end{equation}
-Ce terme d'attache aux données doit permettre une meilleure robustesse de la segmentation en cas de mauvaise évaluation de certains modèles locaux.
+Ce terme d'attache aux données permet une meilleure robustesse de la segmentation en cas de mauvaise évaluation de certains modèles locaux.
 
 Deux différences sont notables par rapport à la définition standard de FCM (donnée par l'équation \ref{eq:fcm}).
 La première a déjà été évoquée et consiste à remplacer le terme global des centroïdes $\mathbf{v}_{k}$ dans FCM par un terme local $\mathbf{v}_{jk}$ de manière à bénéficier d'une évaluation locale du modèle d'intensité.
@@ -186,44 +186,50 @@ Un modèle étant défini pour chaque voxel de l'image, cette proportion est donc c
 \subsection{Terme de régularisation (NL-Reg)}
 \label{subsec:nl:reg}
 
-Dans les précédents travaux, le terme de régularisation s'apparente la plupart du temps à l'expression d'un filtrage médian ou par moyenne pour lisser la segmentation.
+Comme vu dans la section~\ref{subsec:fcm:noise}, le terme de régularisation de la fonction d'énergie de FCM s'apparente la plupart du temps à l'expression d'un filtrage médian ou par moyenne pour lisser la segmentation, comme les articles de~\cite{Pham:CVIU:2001} et de~\cite{Ahmed:TMI:2002}.
 Plusieurs articles ont introduits différentes stratégies permettant de prendre en compte la similarité entre les voxels (introduisant ainsi une pondération entre les voxels d'un même voisinage), mais cette prise en compte nécessite le calcul de plusieurs variables additionnelles ou la définition d'une image intermédiaire.
 
 Les moyennes non-locales sont particulièrement intéressantes dans cette situation, car elles fournissent les outils nécessaire à une pondération relativement aisée des voxels d'intêret au sein de la zone de recherche.
 Le rôle de poids non-locaux est donc de sélectionner les voxels les plus pertinents au sein de la zone de recherche pour effectuer la régularisation en fonction de leur degré de similarité avec le voxel courant.
-L'hypothèse que nous faisons est que si deux voxels sont similaires, alors ils appartiennent au même tissu.
-L'objectif est d'obtenir une régularisation plus lisse de façon adaptative et naturelle.
+L'hypothèse que nous faisons est que si les patchs de deux voxels sont similaires, alors ils appartiennent au même tissu.
+L'objectif est d'obtenir une régularisation plus lisse de façon adaptative.
 
-Le terme de régularisation défini dans cette section s'inspire de celui de~\cite{Pham:CVIU:2001} (dont la définition est donnée par l'équation \ref{eq:rfcm}), régularisant la proportion d'une classe au sein d'un voxel en prenant en compte la proportion des autres classes dans le voisinage.
+Le terme de régularisation défini dans cette section s'inspire de celui de \cite{Pham:CVIU:2001} (dont la définition est donnée par l'équation \ref{eq:rfcm}), régularisant la proportion d'une classe au sein d'un voxel en prenant en compte la proportion des autres classes dans le voisinage.
 Le terme de régularisation non-local est exprimé de la façon suivante :
 \begin{equation}
 J_{NL\textrm{-}Reg} =
 \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
 \end{equation}
 
-Rappelons que $L_{k}=[\![1,C]\!]\setminus \{k\} = \{1, \ldots, k-1, k+1, \ldots, C\}$ et représente donc l'ensemble des classes exceptée la classe dont on effectue la régularisation et $\Omega^{R_{r}}_{j}$ représente la zone de recherche centrée autour du voxel $j$ destinée à calculer les poids non-locaux pour la régularisation.
+Rappelons que $L_{k}=[\![1,C]\!]\setminus \{k\} = \{1, \ldots, k-1, k+1, \ldots, C\}$ et représente l'ensemble des classes exceptée la classe dont on effectue la régularisation et $\Omega^{R_{r}}_{j}$ représente la zone de recherche centrée autour du voxel $j$ destinée à calculer les poids non-locaux pour la régularisation.
 Le paramètre $\beta$ contrôle les poids respectifs entre le terme de régularisation et le terme d'attache aux données au sein de la fonction d'énergie.
 
 \subsection{Algorithme non-local complet (NL-R-FCM)}
 
-L'association des deux termes non locaux donne un algorithme de segmentation non local complet permettant de prendre en compte l'inhomogénéité et le bruit de l'image. 
+L'association des deux termes non locaux donne un algorithme de segmentation non local complet permettant de prendre en compte l'inhomogénéité en intensité et le bruit de l'image. 
 La fonction d'énergie devient donc : 
 \begin{equation}
-\begin{split}
-J_{NL\textrm{-}R\textrm{-}FCM} =\\
-\sum_{j \in \Omega} \sum_{k=1}^{C} \sum_{j' \in \Omega^{R_d}_{j}} \omega_{nl}(j, j') u_{jk}^{q} \Vert \mathbf{y}_{j} - \mathbf{v}_{j'k} \Vert_2^{2} \\
-+ \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j'' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j'') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
-\end{split}
+J_{NL\textrm{-}R\textrm{-}FCM} =
+\left\{ 
+\begin{array}{c}
+\sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j' \in \Omega^{R_d}_{j}} \omega_{nl}(j, j') \Vert \mathbf{y}_{j} - \mathbf{v}_{j'k} \Vert_2^{2} + \\
+\frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j'' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j'') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
+\end{array}
+\right.
 \end{equation}
-
-Il est important de noter que les poids $\omega_{nl}(\cdot,\cdot)$ présents dans le terme d'attache aux données et le terme de régularisation sont distincts et ne sont pas utilisés dans le même but.
-De même, les zone de recherche $\Omega^{R_d}_{j}$ et $\Omega^{R_r}_{j}$ n'ont pas nécessairement la même taille.
+Il est important de noter que les poids $\omega_{nl}(\cdot,\cdot)$ présents dans le terme d'attache aux données et le terme de régularisation sont distincts car les zone de recherche $\Omega^{R_d}_{j}$ et $\Omega^{R_r}_{j}$ ne sont pas nécessairement identiques.
 
 Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-local sont les suivantes : 
 \begin{enumerate}
 \item Calculer les poids non-locaux $\omega_{nl}$ pour le terme d'attache aux données et le terme de régularisation.
-\item Calculer les centroïdes $\mathbf{v}_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$ (évaluation initiale).
-\item Calculer $u_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$ (évaluation initiale).
+\item Calculer les centroïdes $\mathbf{v}_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$ (évaluation initiale) selon : 
+\begin{equation}
+\mathbf{v}_{jk} = \frac{\sum_{l \in M_{j}} u_{lk}^{q} \mathbf{y}_{l}}{\sum_{l \in M_{j}} u_{lk}^{q}}.
+\end{equation}
+\item Calculer $u_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$ (évaluation initiale) selon : 
+\begin{equation}
+ u_{jk} = \frac{(\sum_{j' \in \Omega^{R_d}} \omega(j,j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}{\sum_{k=1}^{C}(\sum_{j' \in \Omega^{R_d}} \omega(j,j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}
+\end{equation}
 \item Répéter jusqu'à un minimum local de la fonction d'énergie : 
 \begin{itemize}
 \item Recalculer $\mathbf{v}_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$.
@@ -233,7 +239,7 @@ Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-
 \end{enumerate}
 
 La donnée d'entrée de l'algorithme est l'image à segmenter (fournissant $\Omega$ et les valeurs $\mathbf{y}$).
-Les paramètres déterminant son comportement sont : $C$ (le nombre de classes), $\beta$ (qui contrôle le rapport entre le terme d'attache aux données et le terme de régularisation), la taille de la zone de recherche pour le calcul des poids non-locaux destinés à la régularisation $\Omega^{R_r}_j$, la taille de la zone de recherche pour le calcul des poids non-locaux destinés au terme d'attache aux données $\Omega^{R_d}_j$, la taille des sous-volume $M_j$ permettant l'estimation des modèles locaux et le paramètre de lissage $\alpha$.
+Les paramètres déterminant son comportement sont : $C$ (le nombre de classes), $\beta$ (qui contrôle le rapport entre le terme d'attache aux données et le terme de régularisation), la taille de la zone de recherche pour le calcul des poids non-locaux destinés à la régularisation $\Omega^{R_r}_j$, la taille de la zone de recherche pour le calcul des poids non-locaux destinés au terme d'attache aux données $\Omega^{R_d}_j$, la taille des sous-volumes $M_j$ permettant l'estimation des modèles locaux et le paramètre de lissage $\alpha$.
 
 \section{Validations}
 \label{sec:nlfcm:validations}
@@ -248,7 +254,7 @@ Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menée
 \end{enumerate}
 Par la suite, l'algorithme FCM non-local complet est appliqué à l'ensemble de la base IBSR et comparé à d'autres méthodologies.
 
-L'évaluation des performances des différents algorithmes est faite par comparaison de la segmentation simulée avec la vérité terrain fournie par les bases d'images respectives.
+L'évaluation des performances des différents algorithmes est faite par comparaison de la segmentation estimée avec la vérité terrain fournie par les bases d'images respectives.
 La qualité de la segmentation est mesurée par le calcul de l'indice de similarité Dice : 
 $$
 Dice = \frac{2\cdotp VP}{2\cdotp VP + FP + FN},
@@ -263,8 +269,7 @@ Ces méthodes sont :
         \item EMS de Van Leemput \emph{et al.}~\cite{VanLeemput2:TMI:1999},
         \item HMC de Bricq \emph{et al.}~\cite{Bricq:MIA:2008}.
 \end{itemize}
-Rappellons que les méthodes SPM5 et EMS incluent une correction du biais, ainsi qu'une classification avec régularisation par champs de Markov.
-Enfin, HMC inclue une correction du biais, tout en s'appuyant sur les chaînes de Markov pour la régularisation, chose rendue possible par un parcours fractal d'Hilbert-Peano permettant de conserver au mieux les informations de voisinage.
+Ces trois méthodes incluent une correction du biais et un terme de régularisation markovien.
 
 % \subsection{Outils de validation}
 % 
