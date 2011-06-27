@@ -48,26 +48,26 @@ où $d$ est la dimension de l'image $I$ et $\mathbf{x}_j$ est le vecteur correspo
 
 Avec cette définition du patch, l'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par : 
 \begin{equation}
-\mathbf{\hat{y}}_{j} = \frac{\sum_{l=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{l=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)} \label{nlfcm:estimateur:complet}.
+\mathbf{\hat{y}}_{j} = \frac{\sum_{j'=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{j'=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)} \label{nlfcm:estimateur:complet}.
 \end{equation}
 Cette formulation est proche des estimateurs par noyau en statistique.
 En effet, l'estimation de la valeur optimale $\mathbf{\hat{y}}_{j}$ du voxel $j$ nécessite un noyau $K(\cdotp)$ (une fonction de $\mathbb{R}$ dans $\mathbb{R}$) et une \emph{fenêtre} $h$ (régit le degré de lissage de l'estimation).
-La calcul de la similarité est effectué par la comparaison entre les patchs respectifs des voxels considérés et est contrôlé par le choix de la norme $\lVert \cdotp \rVert$.
+Le calcul de la similarité est effectué par la comparaison entre les patchs respectifs des voxels considérés et est contrôlé par le choix de la norme $\lVert \cdotp \rVert$.
 Cette formulation correspond à une moyenne pondérée des voxels sur l'ensemble du support de l'image.
 % La nouveauté de cette méthode réside dans le calcul de la similarité entre les voxels, celle-ci se faisant par comparaison de leur patch. 
 % La pondération entre les voxels est déduite directement de la mesure de la similarité. 
 % Le choix de la fonction noyaux et du paramètre $h$ entrent alors en jeu.
 
-Constatant que l'estimateur se présente sous la forme d'une moyenne pondérée, nous pouvons réécrire la formule \ref{nlfcm:estimateur:complet} sous la forme :
+Cela nous permet de réécrire la formule \ref{nlfcm:estimateur:complet} sous la forme :
 \begin{equation}
-\mathbf{\hat{y}}_{j} = \sum_{l = 1}^{N}\omega_{nl}(j,l) \cdotp \mathbf{y}_{l} \label{nlfcm:estimateur:court},
+\mathbf{\hat{y}}_{j} = \sum_{j' = 1}^{N}\omega_{nl}(j,j') \cdotp \mathbf{y}_{j'} \label{nlfcm:estimateur:court},
 \end{equation}
-où $\omega_{nl}(j,l)$ est le poids non-local attribué au voxel $j'$ pour l'estimation de $\mathbf{\hat{y}}_{j}$. 
+où $\omega_{nl}(j,j')$ est le poids non-local attribué au voxel $j'$ pour l'estimation de $\mathbf{\hat{y}}_{j}$. 
 Ce terme est défini par :
 \begin{equation}
-\omega_{nl}(j,l) = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)}{\sum_{l=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{l} \rVert}{h} \right)} \label{nlfcm:poids:definition},
+\omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)}{\sum_{i=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{i} \rVert}{h} \right)} \label{nlfcm:poids:definition},
 \end{equation}
-et est donc directement liée au calcul de la similarité entre les voxels de la zone de recherche.
+avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$ et est donc directement liée au calcul de la similarité entre les voxels de la zone de recherche.
 
 \subsection{Etude des paramètres régissant le comportement de l'approche non-locale}
 
@@ -106,6 +106,17 @@ Enfin, à un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assim
 Depuis son apparition en 2005, la paradigme non-locale a été utilisé dans d'autres domaines que le débruitage d'images.
 Des domaines aussi divers que la déconvolution \cite{Mignotte:PRL:2008}, les problèmes inverses \cite{Bougleux:ECCV:2008} et la reconstruction de volumes \cite{Rousseau:MIA:2010} ont bénéficié des apports de ce paradigme.
 Pour en savoir plus, le lecteur est invité à lire la thèse de Salmon \cite{Salmon:2010}, portant justement sur le paradigme en lui même.
+
+Citations à rajouter : 
+\begin{itemize}
+        \item \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008} : régularisation sur des graphes. Version discrète et généralisation de différents filtres existants montrant comment ils sont apparentés les uns aux autres.
+        \item \cite{Gilboa:MMS:2008} : Opérateurs non-locaux destinés à étendre les techniques connues fondées sur des EDP ou une approche varationelle au non-locale. Principal focus, les opérateurs différentiels discrétisés tels que gradients et divergence.
+        \item \cite{Pizarro:IJCV:2010} : Extension d'un formalisme continue et général du débruitage au domaine non-local dont les précédentes méthodes de régularisation sur graphe sont des versions discrètes.
+        \item \cite{Bresson:2008} : Segmentation non supervisée par contours actifs, approches variationnelles non-locales.
+        \item \cite{Tasdizen:TIP:2009} : Débruitage par moyenne non-locale utilisant l'analyse en composante principale (issues de la décomposition de la matrice de covariance du vecteur de l'ensemble des voisinages).
+        \item \cite{Manjon:JMRI:2010} : Filtre avec patch adaptatif pour IRM ayant un bruit variable.
+\end{itemize}
+
 
 \subsection{Segmentation non-locale}
 
