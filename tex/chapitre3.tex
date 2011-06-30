@@ -124,27 +124,35 @@ L'article de \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'util
 Enfin, à un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assimile la première version des moyennes non-locales à une régression linéaire de niveau $0$ et l'étend à des niveaux supérieurs.
 De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tel que le filtre bilatéral, les filtres bayésiens, \ldots).
 Des techniques de régularisation de graphes discrètes, (voir les travaux de \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008}) permettent de faire le lien entre ces différentes techniques.
-Ces méthodes de régularisation peuvent être vues comme des versions discrète d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)}. 
+Ces méthodes de régularisation peuvent être vues comme des versions discrète d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)} \cite{Mrazek:2006}. 
 Ici, le terme \emph{non-local} est utilisé car des interactions avec des voxels plus éloignés que le voisinage immédiat sont prises en compte.
-
+Ce formalisme définit une forme générale permettant l'unification de nombreux filtres existants par la somme d'un terme d'attache-aux-données et d'un terme de lissage.
+Il est étendu à la prise en compte des patchs par l'article de \cite{Katkovnik:IJCV:2010}, définissant ainsi le \emph{Generalized NDS (GNDS)}, dont le NDS est un cas particulier.
 
 Depuis son apparition en 2005, la paradigme non-locale a été utilisé dans d'autres domaines que le débruitage d'images.
-Des domaines aussi divers que la déconvolution \cite{Mignotte:PRL:2008}, les problèmes inverses \cite{Bougleux:ECCV:2008} et la reconstruction de volumes \cite{Rousseau:MIA:2010} ont bénéficié des apports de ce paradigme.
-Pour en savoir plus, le lecteur est invité à lire la thèse de Salmon \cite{Salmon:2010}, portant justement sur le paradigme en lui même.
+Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de l'apport des moyennes non-locales.
+Nous pouvons citer les travaux de \cite{Bougleux:ECCV:2008}, ceux de \cite{Mignotte:PRL:2008} en déconvolution et ceux de \cite{Rousseau:MIA:2010} en reconstruction de volumes.
+Enfin, la segmentation d'images est un domaines où les moyennes non-locales ont également trouvés une application.
+Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'opérateurs gradient et divergence non-locaux de manière à étendre les techniques fondées sur des équations différentielles partielles (EDP) ou des approches variationnelles.
+Les travaux de \cite{Bresson:2008} ont définis plusieurs fonctionnelles non-locales permenttant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
+Enfin, l'article de \cite{Wang:CMIG:2008} définit une première approche permettant de prendre en compte l'information non-locale dans FCM. 
+Elle est décrite à la section suivante.
 
-Citations à rajouter : 
-\begin{itemize}
+Pour en savoir plus sur les limites et les différentes approches concernant les moyennes non-locales, le lecteur est invité à lire la thèse de Salmon \cite{Salmon:2010}.
+
+% Citations à rajouter : 
+% \begin{itemize}
 %         \item \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008} : régularisation sur des graphes. Version discrète et généralisation de différents filtres existants montrant comment ils sont apparentés les uns aux autres.
-        \item \cite{Gilboa:MMS:2008} : Opérateurs non-locaux destinés à étendre les techniques connues fondées sur des EDP ou une approche varationelle au non-locale. Principal focus, les opérateurs différentiels discrétisés tels que gradients et divergence.
-        \item \cite{Pizarro:IJCV:2010} : Extension d'un formalisme continue et général du débruitage au domaine non-local dont les précédentes méthodes de régularisation sur graphe sont des versions discrètes.
-        \item \cite{Bresson:2008} : Segmentation non supervisée par contours actifs, approches variationnelles non-locales.
+%         \item \cite{Gilboa:MMS:2008} : Opérateurs non-locaux destinés à étendre les techniques connues fondées sur des EDP ou une approche varationelle au non-locale. Principal focus, les opérateurs différentiels discrétisés tels que gradients et divergence.
+%         \item \cite{Pizarro:IJCV:2010} : Extension d'un formalisme continue et général du débruitage au domaine non-local dont les précédentes méthodes de régularisation sur graphe sont des versions discrètes.
+%         \item \cite{Bresson:2008} : Segmentation non supervisée par contours actifs, approches variationnelles non-locales.
 %         \item \cite{Tasdizen:TIP:2009} et \cite{Tasdizen:ICIP:2008} : Débruitage par moyenne non-locale utilisant l'analyse en composante principale (issues de la décomposition de la matrice de covariance du vecteur de l'ensemble des voisinages). La fenêtre $h$ est choisie comme une combinaison linéaire du niveau de bruit $\sigma$. Les paramètres de cette combinaison linéaire sont choisis de manière empirique.
 %         \item \cite{Manjon:JMRI:2010} : Filtre avec patch adaptatif pour IRM ayant un bruit variable.
 %         \item \cite{Kervrann:TIP:2006} : Filtre à moyenne non-locale à patchs fixes mais à zone de recherche variable.
 %         \item \cite{Azzabou:ICIP:2007} : Comparaison par rapport à un dictionaire construit à partir de l'ACP de l'ensemble des configuration de patchs trouvées dans l'image.
 %         \item \cite{Duval:2010} : Choix local de $h$ car même si il existe une relation linéaire entre $\sigma$ et $h$, elle est différente d'une image à une autre. Privilégie les noyaux compactes.
-\end{itemize}
-
+% \end{itemize}
+% 
 
 \subsection{Segmentation par FCM non-locale}
 
