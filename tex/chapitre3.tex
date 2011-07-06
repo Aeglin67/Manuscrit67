@@ -134,7 +134,10 @@ Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le
 Nous pouvons citer les travaux de \cite{Bougleux:ECCV:2008}, ceux de \cite{Mignotte:PRL:2008} en déconvolution et ceux de \cite{Rousseau:MIA:2010} en reconstruction de volumes.
 Enfin, la segmentation d'images est un domaines où les moyennes non-locales ont également trouvés une application.
 Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'opérateurs gradient et divergence non-locaux de manière à étendre les techniques fondées sur des équations différentielles partielles (EDP) ou des approches variationnelles.
-Les travaux de \cite{Bresson:2008} ont définis plusieurs fonctionnelles non-locales permenttant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
+Les travaux de \cite{Bresson:2008} ont définis plusieurs fonctionnelles non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
+Les moyennes non-locales ont également été utilisées en propagation de labels à partir d'une base d'images dont la vérité terrain est connue. 
+L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patchs similaires dans les images de la base, après une recalage affine et une égalisation d'histogramme.
+Cette méthododologie a l'avantage de ne pas nécessiter de recalage non-linéaire, très gourmand en temps de calcul, et base l'étape de fusion des labels sur les poids non-locaux calculés à travers la base.
 Enfin, l'article de \cite{Wang:CMIG:2008} définit une première approche permettant de prendre en compte l'information non-locale dans FCM. 
 Elle est décrite à la section suivante.
 
