@@ -49,9 +49,23 @@
 \subsection{Utilisation d'atlas}
 \label{subsec:atlas}
 
+\cite{Marroquin:TMI:2002} : Utilisation d'un atlas.
+
 \cite{Ashburner:NeuroImage:2005} : Méthode reposant quasi complètement sur le recalage d'un atlas et introduisant un \emph{a priori} sur les tissus combinant l'\emph{a priori} de l'atlas pondéré par la quantité de tissus présent dans un petit volume $\rightarrow$ résistance au bruit.
 
+\cite{Zhou:TBE:2007} : Fuzzy Connectivness et atlas. A completer.
+
+Multi-atlas : 
+
+\cite{Heckemann:NeuroImage:2006} : Multi-atlas, décrit une méthode combinant recalage non-rigide et une méthode de fusion définie par \cite{Kittler:PAMI:1998} (définie quatre critère de décision : max, min, medium and vote majoritaire).
+
+\cite{Aljabar:NeuroImage:2009} : Multi-atlas avec recalage. Large base d'atlas (environ 250 cas) donc grand temps de calcul du recalage. Sélection d'un nombre restreint d'atlas en fonction de leur similarité avec le sujet traité. Deux façon de faire cette sélection : directement par comparaison de l'intensité des images ou par la comparaison de méta-données telles que : age, pathologie, historique clinique, \ldots{} Choix de métrique également très important.
+
+\cite{Rousseau:TMI:2011} : Propagation de labels à partir d'exemples. Introduction d'une recherche non-locale.
+
 Méthodes faisant le recalage de l'atlas en même temps que la segmentation, et d'autres qui font d'abord le recalage puis la segmentation.
+
+Comparaison de plusieurs méthodes de recalage : \cite{Klein:NeuroImage:2009}. Une chose importante, il n'y a pas de transformation permettant de passer d'un cerveau à un autre à tous les coups.
 
 \subsection{Classification}
 \label{subsec:classif}
@@ -84,6 +98,8 @@ Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{
 \cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
 
 \cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
+
+\cite{Marroquin:TMI:2002} : MAP avec Markov cachés. Utilisation d'un atlas pour calculé des \emph{a priori} pertinents et avoir une initialisation automatique.
 
 \cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
 
@@ -514,7 +530,7 @@ Sachant que le cerveau des f\oe tus se présente sous la forme d'une succession d
 La connaissance des ventricules est issue d'un atlas anatomique construit spécifiquement pour cette application permettant d'avoir une connaissance des ventricules, de la matrice germinale, de la matière blanche, du cortex et du LCR péricérébral.
 L'ensemble de ces connaissances est intégrée dans un algorithme EM avec une régularisation par champs de Markov cachés.
 
-Une méthode plus récente~\cite{Gholipour:IJCARS:2010} n'utilise pas d'atlas anatomique, mais n'a pas pour objectif une segmentation des tissus.
+Une méthode plus récente~\cite{Gholipour:IJCARS:2011} n'utilise pas d'atlas anatomique, mais n'a pas pour objectif une segmentation des tissus.
 L'objectif est de réaliser une étude quantitative du volume intracrânien en supprimant le LCR péricérébral.
 Plusieurs étapes sont nécessaires pour obtenir une segmentation de ce volume.
 Dans un premier temps, une classification des voxels en dix classes est réalisée de manière à prendre en compte le recouvrement des distributions en intensité.

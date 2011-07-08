@@ -2,12 +2,12 @@
 \label{chap:foetale}
 \minitoc
 
-Ce chapitre décrit une méthode de segmentation du cortex en IRM f\oe tale.
+Ce chapitre décrit une méthode de segmentation du cortex à partir d'images IRM f\oe tale.
 Etant donné les différences au niveau anatomique et de l'aspect des images entre les IRM adultes et les IRM f\oe tales, une nouvelle méthodologie a du être mise en place afin de prendre en compte les spécificités du cerveau des f\oe tus.
 
 La méthode de segmentation doit prendre en compte les principales caractéristiques de ces images.
 Le modèle développé doit donc être adapté aux différents stades du développement cérébral et à l'aspect visuel des différents tissus.
-En effet, dans le cas d'une image pondérée T2, nous pouvons observer que le cortex se présente sous la forme d'une bande sombre entre la MB et le LCR ($\mathbf{v}_{GM} < \mathbf{v}_{WM} < \mathbf{v}_{LCR}$), contrairement au cortex adulte dont l'intensité moyenne se situe entre celle du LCR et de la MB ($\mathbf{v}_{WM} < \mathbf{v}_{GM} < \mathbf{v}_{LCR}$ dans le cas d'une image pondérée en T2).
+En effet, dans le cas d'une image pondérée en T2, nous pouvons observer que le cortex se présente sous la forme d'une bande sombre entre la MB et le LCR ($\mathbf{v}_{GM} < \mathbf{v}_{WM} < \mathbf{v}_{LCR}$), contrairement au cortex adulte dont l'intensité moyenne se situe entre celle du LCR et de la MB ($\mathbf{v}_{WM} < \mathbf{v}_{GM} < \mathbf{v}_{LCR}$ dans le cas d'une image pondérée en T2).
 Cette hyper-intensité de la matière blanche par rapport au cortex s'explique par l'absence de myéline à ce stade de la maturation cérébrale.
 L'inversion du contraste intervient dans les deux ans après la naissance avec la myélinisation, justifiant que certaines méthodes utilisées en segmentation néonatales soient proches de celles employées en segmentation f\oe tale.
 
@@ -41,7 +41,7 @@ Cependant, ces connaissances sont intégrées dans une approche proche des données
 \end{figure}
 
 L'analyse des images à partir des vérités-terrain (notamment l'analyse des histogrammes) montre des distributions d'intensité très différentes entre les IRM adultes et les IRM f\oe tales (voir la figure~\ref{FIG:DISTRIB}).
-En effet, la distribution d'une IRM adulte révèle trois pics distincts correspondant respectivement au LCR, et aux matières grise et blanche.
+En effet, la distribution en intensité d'une IRM adulte révèle trois pics distincts correspondant respectivement au LCR, et aux matières grise et blanche.
 La grande majorité des méthodes de segmentation des tissus cérébraux se sont appuyés sur cette propriété, tout en utilisant différentes contraintes (atlas, régularisation, topologie, \ldots) afin d'obtenir un résultat anatomiquement correct.
 
 Cependant, l'observation de la distribution des IRM f\oe tales indique non seulement un important recouvrement entre le LCR et la matière blanche, mais montre également que la courbe représentant le cortex est presque entièrement inclue dans la courbe de la matière blanche.
@@ -87,12 +87,12 @@ Ces deux étapes reposent sur une même méthode de segmentation définie à partir d
 \end{figure}
 
 
-Le but de cette section est de définir une méthodologie permettant de prendre en compte les contraintes anatomiques décrites plus haut.
+% Le but de cette section est de définir une méthodologie permettant de prendre en compte les contraintes anatomiques décrites plus haut.
 Pour ce faire, un modèle reposant sur trois cercles concentriques est défini. 
 Il tient compte du biais en intensité et introduit des contraintes géométriques pour prendre en compte les problèmes dus au volume partiel.
 Ce modèle est appelé le $k$-means topologique.
 
-Rappelons tout d'abord que la segmentation par l'algorithme $k$-means s'apparente à la minimisation de la fonction coût suivante : 
+Rappelons tout d'abord que la segmentation par l'algorithme $k$-means est équivalente à la minimisation de la fonction coût suivante : 
 \begin{equation}
 J_{k\mbox{-}means} = \sum_{\mathbf{y}_{j} \in S_k} \sum_{k=0}^{K} \Vert \mathbf{y}_{j} - \mathbf{v}_{k} \Vert_2^{2},
 \end{equation}
@@ -100,7 +100,7 @@ où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centro
 
 Tout comme l'algorithme FCM, le $k$-means ne prend pas en compte le biais en intensité présent dans les IRM.
 Des centroïdes locaux $\mathbf{v}_{jk}$ sont donc introduits afin de prendre en compte cette réalité sans pour autant nécessiter de connaissance particulière sur ce biais.
-Ces centroïdes locaux sont calculé de la façon suivante (voir la figure \ref{FIG:BIAS}) : 
+Ces centroïdes locaux sont calculés de la façon suivante (voir la figure \ref{FIG:BIAS}) : 
 \begin{enumerate}
  \item Le domaine de l'image $\Omega$ est divisé en sous-volumes $r$,
 \item Pour chaque sous-volume $r$ et pour chaque classe, une moyenne $\mathbf{v}_{rk}$ est calculée,
@@ -131,7 +131,7 @@ La formulation des contraintes géométriques ne correspond pas exactement à celle
 En effet, des tests préliminaires ont révélé que les points simples imposent une trop grande rigidité lors du processus de segmentation, bloquant l'évolution des différents labels.
 Ces contraintes géométriques sont donc conçues de manière à laisser un label se séparer en plusieurs composantes de manière à coller le plus possible à la réalité de l'image et gagner ainsi en flexibilité.
 De la même façon, la réunion de deux composantes est autorisée, comportement interdit par les points simples.
-Néanmoins, les contraintes géométriques sont conservées (par exemple, un label complètement inclue dans un autre le restera même si il est divisé en plusieurs composantes).
+Néanmoins, les contraintes géométriques sont conservées (par exemple, un label complètement inclus dans un autre le restera même si il est divisé en plusieurs composantes).
 
 L'algorithme évolue donc selon un échange de voxels aux frontières de manière séquentielle.
 Chaque frontière est considérée l'une après l'autre.
@@ -154,7 +154,7 @@ La convergence est atteinte lorsqu'aucun changement de label n'est effectué.
 
 La méthode de segmentation du cortex se divise en deux phases distinctes, les deux utilisant le $k$-means topologique défini à la section précédente (voir le figure~\ref{FIG:FOE:PROCESS}).
 La première étape consiste à extraire le cerveau tout en divisant le LCR en LCR externe et LCR interne.
-Cela permet de définir la frontière entre le LCR externe et la cerveau, permettant ainsi de construire une zone d'intêret incluant le cortex.
+Cela permet de définir la frontière entre le LCR externe et le cerveau, permettant ainsi de construire une zone d'intêret incluant le cortex.
 La deuxième étape est la segmentation proprement dite du cortex au sein de cette zone d'intêret.
 
 \subsubsection{Extraction du LCR}
@@ -189,15 +189,15 @@ Ainsi, une classe est caractérisée par un vecteur de centroïdes, composée de la 
 
 % Les validations de cette méthodes de segmentation sont menées sur une base de 8 cas et son comportement est étudié aussi bien dans le cas d'image reconstruites que non-reconstruites.
 La validation est menée aussi bien sur des images \og brutes \fg{} (c'est à dire non reconstruites) que sur des volumes reconstruits.
-L'extension de la méthodologie des données 2D à 3D est immédiate.
+% L'extension de la méthodologie des données 2D à 3D est immédiate.
 
 \subsection{Images non reconstruites}
 
 \subsubsection{Caractéristiques et paramètres}
 
-Les expériences sont menées sur huit cas acquis avec une machine IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des spin d'écho ultra-rapide.
+Les expériences sont menées sur huit cas acquis avec une machine IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des spins d'écho ultra-rapides.
 Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiales, coronales et sagitales.
-L'âge des différents f\oe tus va de 27 à 32 semaines d'aménorrhée (SA). 
+L'âge des différents f\oe tus s'étend de 27 à 32 semaines d'aménorrhée (SA). 
 La table~\ref{TAB:UNBUILD:CHARAC} résume les caractéristiques des images.
 
 \begin{table}[!th]
@@ -340,7 +340,7 @@ Cas (SA) & Coupe & Dice 3D & Dice maximum \\
 \end{tabular}
 
 \end{center}
-\caption{\emph{Coefficients Dice illustrant le recouvrement entre la vérité terrain et les segmentations automatiques. Coefficient global et Coefficient maximum coupe à coupe.}\label{TAB:DICE:UNBUILD}}
+\caption{\emph{Coefficients Dice illustrant le recouvrement entre la vérité terrain et les segmentations automatiques. Coefficient global et coefficient maximum coupe à coupe.}\label{TAB:DICE:UNBUILD}}
 \end{table}
 
 Afin d'avoir une idée plus précise de la performance réelle de notre algorithme, les segmentations manuelles d'un même cas ont été comparées quantitativement.
@@ -381,7 +381,7 @@ Cas (SA) & Coupe & Exp 1 - Exp 2 & Seg - Exp 1 & Seg - Exp 2\\
         & Sagital & 59.06 & 49.33 & 43.10\\
 \hline
 \end{tabular}
-\caption{\emph{Comparaison croisées entre les segmentations manuelles et automatiques : Expert 1 contre Expert 2, Segmentation automatique contre Expert 1, Segmentation automatique contre Expert 2.}\label{TAB:DICE:UNBUILD:EXP}}
+\caption{\emph{Comparaison croisées entre les segmentations manuelles et automatiques : Expert 1 contre expert 2, segmentation automatique contre expert 1, segmentation automatique contre expert 2.}\label{TAB:DICE:UNBUILD:EXP}}
 \end{center}
 \end{table}
 
@@ -419,7 +419,7 @@ Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:MIA:2010} à par
 
 Pour cette étude, nous disposons de six cas.
 Les images reconstruites présentent ont pour dimensions $256\times256\times88$ à $256\times256\times117$ voxels.
-La dimension des voxels est de $0.742\times0.742\times0.742$.
+La résolution des voxels est de $0.742\times0.742\times0.742\mbox{ }mm^3$.
 
 Un 6-voisinage 3D est utilisé pour mettre en oeuvre l'algorithme de $k$-means topologique.
 Empiriquement, un élément structurant de taille $5\times5\times5$ est utilisé pour l'opérateur \emph{Top-Hat}.
@@ -474,7 +474,7 @@ Case (GA)& \hspace{1mm} 1 (28) \hspace{1mm} & \hspace{1mm} 2 (30) \hspace{1mm} &
 % \hline
 % $Sen$ with regularization & 80.19 & 82.79 & 74.08 & 72.69 & 85.45 & 75.59\\
 % \hline
-$DSC$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61\\
+$Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61\\
 % \hline
 % \hspace{1mm} $DSC$ with regularization  \hspace{1mm} & 71.02 & 71.37 & 77.76 & 71.86 & 75.78 & 75.23\\
 \hline
@@ -493,3 +493,5 @@ Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a pr
 
 Cependant, comme précisé à la section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
 Une méthode d'extraction automatique du volume intracrânien, basée sur des opérateurs de morphologie mathématique, existe~\cite{Anquez:ISBI:2009} et la séparation des deux hémisphères et du cervelet est une opération déjà réalisée dans des cas adultes, qui pourrait être adaptée aux images reconstruites en IRM f\oe tale.
+
+\section{Conclusion}
