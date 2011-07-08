@@ -131,7 +131,9 @@ Il est étendu à la prise en compte des patchs par l'article de \cite{Katkovnik:I
 
 Depuis son apparition en 2005, la paradigme non-locale a été utilisé dans d'autres domaines que le débruitage d'images.
 Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de l'apport des moyennes non-locales.
-Nous pouvons citer les travaux de \cite{Bougleux:ECCV:2008}, ceux de \cite{Mignotte:PRL:2008} en déconvolution et ceux de \cite{Rousseau:MIA:2010} en reconstruction de volumes.
+Nous pouvons citer les travaux de \cite{Bougleux:IJCV:2009} déjà évoqués, ainsi que ceux de \cite{Mignotte:PRL:2008} en déconvolution et ceux de \cite{Rousseau:MIA:2010} en reconstruction de volumes.
+En déconvolution, les moyennes non-locales sont utilisées de manière à favoriser les images présentant un haut niveau de redondance, soit dans l'idéal des images invariantes au filtre non-locale.
+
 Enfin, la segmentation d'images est un domaines où les moyennes non-locales ont également trouvés une application.
 Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'opérateurs gradient et divergence non-locaux de manière à étendre les techniques fondées sur des équations différentielles partielles (EDP) ou des approches variationnelles.
 Les travaux de \cite{Bresson:2008} ont définis plusieurs fonctionnelles non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
@@ -295,7 +297,7 @@ Les paramètres déterminant son comportement sont : $C$ (le nombre de classes), $
 \section{Validations}
 \label{sec:nlfcm:validations}
 
-Les expériences permettant la validation des FCM non-locaux sont menées tout d'abord sur des images simulées fournies par la base BrainWeb \cite{Cocosco:FMHB:1997, Kwann:VBC:1996}, puis sur des cas réels fournis par la base IBSR (\emph{Internet Brain Segmentation Repository}).
+Les expériences permettant la validation des FCM non-locaux sont menées tout d'abord sur des images simulées fournies par la base BrainWeb \cite{Cocosco:NeuroImage:1997, Kwann:VBC:1996}, puis sur des cas réels fournis par la base IBSR (\emph{Internet Brain Segmentation Repository}).
 
 Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menées de manière à déterminer le comportement de l'algorithme FCM non-local et d'évaluer ses performances par rapport à d'autres méthodes :
 \begin{enumerate}
