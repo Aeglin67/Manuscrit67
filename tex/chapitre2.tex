@@ -6,13 +6,17 @@
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
 
-\section{Vue d'ensemble}
+\section{Les différentes familles de segmentation}
 \label{sec:overview}
 
 \subsection{Modèles déformables}
 \label{subsec:snake}
 
+Modèle explicite : les snakes définis par \cite{Kass:IJCV:1988}.
+
 \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
+
+Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodésique \cite{Casselles:IJCV:1997}. Très gourmand en temps de calcul, mise en place des algorithme \emph{fast marching} : \cite{Sethian:PNAS:1996}.
 
 \cite{Baillard:MIA:2001} : deux étapes, recalage d'un modèle puis évolution des level-sets multigrille et multi-résolution.
 
@@ -26,8 +30,17 @@
 
 \cite{Ciofolo:MIA:2009} : Level sets concurrents évoluant selon un système de décision flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels et la position du contour dans l'image.
 
+
 \subsection{Croissance de régions}
 \label{subsec:regionGrowing}
+
+\cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+
+\cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
+
+\cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
+
+
 
 \subsection{Approches topologiques}
 \label{subsec:topologie}
@@ -45,6 +58,7 @@
 \cite{Bazin:MIA:2008} : Ajout d'un atlas statistique et de contraintes homéomorphiques digitales par rapport à \cite{Bazin:TMI:2007}
 
 \cite{Pham:SPM:2010} : État de l'art sur l'utilisation de la topologie pour la segmentation des tissus.
+
 
 \subsection{Utilisation d'atlas}
 \label{subsec:atlas}
@@ -86,7 +100,7 @@ On précise que FCM est présenté à la section suivante.
 \cite{Richard:AIM:2004} : Approche multi-agents.
 
 
-\subsubsection{Mixtures de gaussienne}
+\subsubsection{Approches probabilistes}
 \label{subsubsec:gaussianMix}
 
 Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{Dempster:JRSS:1977} et ajout des champs (\cite{Geman:PAMI:1984}) ou chaînes de Markov pour la régularisation.
