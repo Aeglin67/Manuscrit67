@@ -31,15 +31,58 @@ Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodés
 \cite{Ciofolo:MIA:2009} : Level sets concurrents évoluant selon un système de décision flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels et la position du contour dans l'image.
 
 
-\subsection{Croissance de régions}
-\label{subsec:regionGrowing}
+% \subsection{Croissance de régions}
+% \label{subsec:regionGrowing}
+% 
+% \cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+% 
+% \cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
+% 
+% \cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
 
-\cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+\subsection{Classification}
+\label{subsec:classif}
 
-\cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
+On précise que FCM est présenté à la section suivante.
 
-\cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
+\subsubsection{Méthodes non paramétriques}
+\label{subsubsec:nonParam}
 
+\cite{Warfield:MIA:2000} : Classification par kPPV supervisée par un ensemble de prototypes désignés par un expert et contrainte par un modèle anatomique.
+
+\cite{Cocosco:MIA:2003} : Deux étapes : sélection automatique de l'ensemble d'apprentissage par élagage d'un arbre couvrant minimale d'un ensemble de voxels (première sélection à partir d'un atlas) + kPPV supervisé par l'ensemble d'apprentissage.
+
+\cite{Jimenez-Alaniz:TMI:2006} : Estimation de la densité de probabilité par Mean-Shift et segmentation par a priori sur les tissus et carte de confiance des bords. Non-supervisée (Mean-Shift : cherche les modes (ou points de plus hautes densités) de la distribution)).
+
+\cite{Mayer:TMI:2009} : Mean-Shift basé sur l'intensité et les coordonnées spatiales (inclue ainsi un \emph{a priori} spatial) puis réduction par fusion des différents modes obtenus puis $k$-means pondérés par le nombre de voxels de chaque cluster pour obtenir la segmentation finale. Non supervisée.
+
+\cite{Richard:AIM:2004} : Approche multi-agents.
+
+
+\subsubsection{Approches probabilistes}
+\label{subsubsec:gaussianMix}
+
+Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{Dempster:JRSS:1977} et ajout des champs (\cite{Geman:PAMI:1984}) ou chaînes de Markov pour la régularisation.
+
+\cite{VanLeemput1:TMI:1999, VanLeemput2:TMI:1999} : EM avec estimation du biais et régularisation par champs de Markov.
+
+\cite{Zhang:TMI:2001} : EM avec régularisation par champs de Markov cachés.
+
+\cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
+
+\cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
+
+\cite{Marroquin:TMI:2002} : MAP avec Markov cachés. Utilisation d'un atlas pour calculé des \emph{a priori} pertinents et avoir une initialisation automatique.
+
+\cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
+
+\cite{Scherrer:TMI:2009} : Segmentation conjointe des tissus et des structures cérébrales par un modèle de champs de Markov locaux distribués.
+
+\subsubsection{$K$-Moyennes}
+\label{subsubsec:kMeans}
+
+Définition des K-Moyennes.
+Utilisation en segmentation des tissus : \cite{Vemuri:IAACG:1995}.
 
 
 \subsection{Approches topologiques}
@@ -71,7 +114,7 @@ Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodés
 
 Multi-atlas : 
 
-\cite{Heckemann:NeuroImage:2006} : Multi-atlas, décrit une méthode combinant recalage non-rigide et une méthode de fusion définie par \cite{Kittler:PAMI:1998} (définie quatre critère de décision : max, min, medium and vote majoritaire).
+\cite{Heckemann:NeuroImage:2006} : Multi-atlas, décrit une méthode combinant recalage non-rigide et une méthode de fusion définie par \cite{Kittler:PAMI:1998} (définie quatre critères de décision : max, min, medium and vote majoritaire).
 
 \cite{Aljabar:NeuroImage:2009} : Multi-atlas avec recalage. Large base d'atlas (environ 250 cas) donc grand temps de calcul du recalage. Sélection d'un nombre restreint d'atlas en fonction de leur similarité avec le sujet traité. Deux façon de faire cette sélection : directement par comparaison de l'intensité des images ou par la comparaison de méta-données telles que : age, pathologie, historique clinique, \ldots{} Choix de métrique également très important.
 
@@ -81,49 +124,18 @@ Méthodes faisant le recalage de l'atlas en même temps que la segmentation, et d'
 
 Comparaison de plusieurs méthodes de recalage : \cite{Klein:NeuroImage:2009}. Une chose importante, il n'y a pas de transformation permettant de passer d'un cerveau à un autre à tous les coups.
 
-\subsection{Classification}
-\label{subsec:classif}
+\subsection{Prise en compte du biais en intensité}
 
-On précise que FCM est présenté à la section suivante.
-
-\subsubsection{Méthodes non paramétriques}
-\label{subsubsec:nonParam}
-
-\cite{Warfield:MIA:2000} : Classification par kPPV supervisée par un ensemble de prototypes désignés par un expert et contrainte par un modèle anatomique.
-
-\cite{Cocosco:MIA:2003} : Deux étapes : sélection automatique de l'ensemble d'apprentissage par élagage d'un arbre couvrant minimale d'un ensemble de voxels (première sélection à partir d'un atlas) + kPPV supervisé par l'ensemble d'apprentissage.
-
-\cite{Jimenez-Alaniz:TMI:2006} : Estimation de la densité de probabilité par Mean-Shift et segmentation par a priori sur les tissus et carte de confiance des bords. Non-supervisée.
-
-\cite{Mayer:TMI:2009} : Mean-Shift basé sur l'intensité et les coordonnées spatiales (inclue ainsi un \emph{a priori} spatial) puis réduction par fusion des différents modes obtenus puis $k$-means pondérés par le nombre de voxels de chaque cluster pour obtenir la segmentation finale. Non supervisée.
-
-\cite{Richard:AIM:2004} : Approche multi-agents.
+Plusieurs approches pour le bruit.
+\begin{itemize}
+        \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
+        \item Filtrage spatial : en considérant que le biais représente les fréquence basse de l'image tandis que les détails anatomiques représentent les fréquences hautes. Filtres passe-bas ou approches homomorphiques \cite{Johnston:TMI:1996}. Risque d'altération des contours.
+        \item Minimisation de l'entropie de l'image : \cite{Mangin:MMBIA:2000}.
+        \item Méthodes statistiques : Estimation basée sur ML ou MAP.
+        
+\end{itemize}
 
 
-\subsubsection{Approches probabilistes}
-\label{subsubsec:gaussianMix}
-
-Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{Dempster:JRSS:1977} et ajout des champs (\cite{Geman:PAMI:1984}) ou chaînes de Markov pour la régularisation.
-
-\cite{VanLeemput1:TMI:1999, VanLeemput2:TMI:1999} : EM avec estimation du biais et régularisation par champs de Markov.
-
-\cite{Zhang:TMI:2001} : EM avec régularisation par champs de Markov cachés.
-
-\cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
-
-\cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
-
-\cite{Marroquin:TMI:2002} : MAP avec Markov cachés. Utilisation d'un atlas pour calculé des \emph{a priori} pertinents et avoir une initialisation automatique.
-
-\cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
-
-\cite{Scherrer:TMI:2009} : Segmentation conjointe des tissus et des structures cérébrales par un modèle de champs de Markov locaux distribués.
-
-\subsubsection{$K$-Moyennes}
-\label{subsubsec:kMeans}
-
-Définition des K-Moyennes.
-Utilisation en segmentation des tissus : \cite{Vemuri:IAACG:1995}.
 
 %------------------------------------------------------------------------État de l'art FCM----------------------------------------------------------------------------------------
 
