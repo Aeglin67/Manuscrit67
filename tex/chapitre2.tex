@@ -31,14 +31,14 @@ Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodés
 \cite{Ciofolo:MIA:2009} : Level sets concurrents évoluant selon un système de décision flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels et la position du contour dans l'image.
 
 
-% \subsection{Croissance de régions}
-% \label{subsec:regionGrowing}
-% 
-% \cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
-% 
-% \cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
-% 
-% \cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
+\subsection{Approches structurelles}
+\label{subsec:regionGrowing}
+
+\cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+
+\cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
+
+\cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
 
 \subsection{Classification}
 \label{subsec:classif}
@@ -85,7 +85,7 @@ Définition des K-Moyennes.
 Utilisation en segmentation des tissus : \cite{Vemuri:IAACG:1995}.
 
 
-\subsection{Approches topologiques}
+\subsection{Utilisation de la topologie}
 \label{subsec:topologie}
 
 \cite{Mangin:JMIV:1995} : Représentation du cortex à partir de la squelettisation de l'ensemble LCR/Cortex.
@@ -131,11 +131,10 @@ Plusieurs approches pour le bruit.
         \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
         \item Filtrage spatial : en considérant que le biais représente les fréquence basse de l'image tandis que les détails anatomiques représentent les fréquences hautes. Filtres passe-bas ou approches homomorphiques \cite{Johnston:TMI:1996}. Risque d'altération des contours.
         \item Minimisation de l'entropie de l'image : \cite{Mangin:MMBIA:2000}.
-        \item Méthodes statistiques : Estimation basée sur ML ou MAP.
-        
+        \item Méthodes statistiques : Estimation basée sur sur les critère du maximum de vraisemblance (\cite{VanLeemput1:TMI:1999} et \cite{Zhang:TMI:2001}) ou maximum \emph{a posteriori} (\cite{Wells:TMI:1996} et \cite{Guillemaud:TMI:1997}).
 \end{itemize}
 
-
+Penser à montrer les différentes modélisations (cf Scherrer).
 
 %------------------------------------------------------------------------État de l'art FCM----------------------------------------------------------------------------------------
 
