@@ -34,11 +34,23 @@ Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodés
 \subsection{Approches structurelles}
 \label{subsec:regionGrowing}
 
+\cite{Hohne:JCAT:1992} : Interactivité, laissant l'utilisateur déterminer les seuils et critères de convergence pour la segmentation (4 phases : seuillage, érosion binaire, sélection de la plus grande composante, dilatation conditionelle)
+
 \cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+
+\cite{Mangin:MICCAI:1998} : Sélection de modes par une analyse multi-échelle de l'histogramme de l'image + opérateur morphologique pour extraire les différents tissus.
 
 \cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
 
 \cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
+
+\cite{Stokking:NeuroImage:2000} : automatise complètement \cite{Hohne:JCAT:1992} par une détection automatique des seuils selon un algorithme de croissance de région.
+
+\cite{Park:IWSCA:2007} : Méthode automatique basée sur l'utilisation de plusieurs opérateurs : rejet du fond, normalisation (debiaisement), extraction du cerveau sur une coupe, extension aux autres coupes.
+
+Approches par watershed : 
+
+
 
 \subsection{Classification}
 \label{subsec:classif}
