@@ -3,7 +3,14 @@
 \minitoc
 
 Ce chapitre présente les différentes familles de méthodes développée pour répondre à la problématique de la segmentation cérébrale.
-La segmentation cérébrale consiste à trouver les régions homogènes de l'image
+La segmentation cérébrale consiste à trouver les régions homogènes de l'image. 
+Ces régions sont supposées être pertinentes, c'est à dire qu'elles doivent mettre en valeur des parties significatives de l'image, telles que les différents tissus cérébraux (LCR, matière grise et matière blanche).
+
+Les méthodes de segmentation doivent prendre en compte les principales caractéristiques des imageurs par résonnance magnétique (décrites à la section \ref{intro:irm}) afin de parvenir à un résultats pertinents.
+Plusieurs familles de méthodes ont été développées afin de répondre à ce problème, sans pour autant représenter des catégories rigides, de nombreux algorithmes se situant à la frontière de ces familles.
+Une première section présentera les grandes familles de segmentation classées selon le principe les régissant.
+Par la suite, la méthodologie FCM (\emph{Fuzzy C-Means} ou \emph{C-Moyennes floues}) sera détaillée car elle permet une approche tenant compte naturellement du volume partiel présent dans l'image.
+Enfin, une dernière section présentera un état de l'art de la segmentation dans le cadre de la maturation cérébrale.
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
 
@@ -13,9 +20,17 @@ La segmentation cérébrale consiste à trouver les régions homogènes de l'image
 \subsection{Modèles déformables}
 \label{subsec:snake}
 
-Modèle explicite : les snakes définis par \cite{Kass:IJCV:1988}.
+Le principe des modèles déformables est l'adaptation d'un contour paramétrique à la structure que l'on cherche à segmenter.
+Deux types de modèles déformables sont distingués : les modèles explicites et les modèles implicites.
 
-\cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
+Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
+Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'un terme d'attache aux donnée (donc lié à l'image) et d'un terme de régularisation (prenant en compte l'élasticité et la rigidité du contour).
+Le principal problème des ces modèles sont leur forte dépendance à l'initialisation. 
+En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une initialisation moins proche.
+Un exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation du contour particulière afin de mieux prendre en compte la complexité des structures.
+
+% \cite{Xu:TIP:1998} : snakes et GVF.
+% \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
 
 Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodésique \cite{Casselles:IJCV:1997}. Très gourmand en temps de calcul, mise en place des algorithme \emph{fast marching} : \cite{Sethian:PNAS:1996}.
 
