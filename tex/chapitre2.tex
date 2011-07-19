@@ -25,22 +25,30 @@ Deux types de modèles déformables sont distingués : les modèles explicites et le
 
 Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
 Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'un terme d'attache aux donnée (donc lié à l'image) et d'un terme de régularisation (prenant en compte l'élasticité et la rigidité du contour).
-Le principal problème des ces modèles sont leur forte dépendance à l'initialisation. 
-En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une initialisation moins proche.
-Un exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation du contour particulière afin de mieux prendre en compte la complexité des structures.
+Les principaux problèmes des ces modèles sont leure forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou sépration de labels). 
+En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation.
+Un exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation particulière du contour afin de mieux prendre en compte la complexité des structures.
 
 % \cite{Xu:TIP:1998} : snakes et GVF.
 % \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
 
-Modèle implicite : les level-sets géométrique \cite{Casselles:NM:1993} et géodésique \cite{Casselles:IJCV:1997}. Très gourmand en temps de calcul, mise en place des algorithme \emph{fast marching} : \cite{Sethian:PNAS:1996}.
+Les modèles implicites sont des méthodes par ensemble de niveaux (\emph{levels-sets} en anglais) permettant d'intégrer naturellement les changements de topologie.
+Le contour est considéré comme l'ensemble de niveaux zéro d'une hypersurface surface de dimension supérieure, notée $\Psi$.
+La modélisation ne prend donc pas en compte directement l'évolution du contour, mais bien celui de $\Psi$, sachant que le contour peut-être déduit de manière immédiate.
+Cette évolution est inspirée des travaux en propagations des ondes de \cite{Osher:JCP:1988}, formalisant l'équation d'évolution sous formes d'équations à dérivée partielle.
+Elle se fait dans la direction de la normale à la surface et la vitesse de propagation est proportionnelle à la courbure.
+Elle est contrainte de manière à attirer la courbe vers l'objet à segmenter avec des contraintes spécifiques de régularisation.
+Deux solutions existent pour construire le modèle de propagation des ondes, à l'origine des \emph{level-sets} géométriques \cite{Casselles:NM:1993} et géodésiques \cite{Casselles:IJCV:1997}. 
+Cependant, la simulation de cette propagation est très gourmande en temps de calcul, menant à la définition d'algorithmes \emph{fast marching} \cite{Sethian:PNAS:1996}.
 
-\cite{Baillard:MIA:2001} : deux étapes, recalage d'un modèle puis évolution des level-sets multigrille et multi-résolution.
+Les level-sets ont été utilisés dans le cadre de la segmentation pour récupérer des structures très spécifiques telles que le cortex, les ventricules ou les noyaux gris.
+L'article de \cite{Baillard:MIA:2001} réalise une segmentation du cerveau en deux étapes.
+Un modèle est d'abord recalé selon un procédé multigrille et multi-résolution avant une étape d'évolution du contour obtenu par \emph{level-sets}.
+L'article de \cite{Han:TPAMI:2003} définit une nouveau type de \emph{levels sets} permettant de respecter les contraintes topologiques du modèle initial.
+Une application à la reconstruction de la surface corticale montre que l'ajout de ces contraintes permet de corriger les effets potentiellement indésirables comme des boucles.
 
-\cite{Han:TPAMI:2003} : Levels sets introduisant une contrainte topologique.
-
-\cite{Yang:TMI:2004} : Évolution de levels sets via estimation du MAP et contraintes de voisinages $\rightarrow$ structures internes.
-
-\cite{Duncan:NeuroImage:2004} : deux level-sets (LCR/MG et MG/MB) évoluent en parallèle dans la cadre d'une estimation du MAP et de contraintes de voisinage $\rightarrow$ cortex.
+Les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004} sont basés sur l'évolution de \emph{level-sets} concurrents \emph{via} une estimation du maximum \emph{a posteriori} prenant en compte la forme des objets à segmenter et leurs relations de voisinages.
+Les travaux de \cite{Yang:TMI:2004} proposent une application à la segmentation des structures internes du cerveau (ventricules, noyaux gris, \ldots{}) tandis que ceux de \cite{Duncan:NeuroImage:2004} proposent une segmentation du cortex par deux \emph{level-sets} représentant respectivement l'interface matière blanche/matière grise et la surface du cortex.
 
 \cite{Colliot:PR:2006} : Modèle déformable intégrant des contraintes de localisation (angle et distance) sous forme floue par rapport à une structure de référence $\rightarrow$ segmentation des noyaux gris autour des ventricules.
 
