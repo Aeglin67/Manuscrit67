@@ -24,10 +24,13 @@ Le principe des modèles déformables est l'adaptation d'un contour paramétrique à
 Deux types de modèles déformables sont distingués : les modèles explicites et les modèles implicites.
 
 Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
-Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'un terme d'attache aux donnée (donc lié à l'image) et d'un terme de régularisation (prenant en compte l'élasticité et la rigidité du contour).
+Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une force externe (le terme d'attache aux donnée lié au contenu de l'image) et d'une force interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
 Les principaux problèmes des ces modèles sont leure forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou sépration de labels). 
 En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation.
 Un exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation particulière du contour afin de mieux prendre en compte la complexité des structures.
+Un exemple plus récent est l'article de \cite{Colliot:PR:2006}, définissant la force externe comme une combinaison du terme d'attache-aux-données et d'une information spatiale concernant la position des différents objets entre eux.
+Cette information spatiale se présentent sous la forme de contraintes de localisation (angle et distance) sous forme floue par rapport à une structure de référence.
+Cette méthodologie a été appliqué à la segmentation des noyaux gris autour des ventricules.
 
 % \cite{Xu:TIP:1998} : snakes et GVF.
 % \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
@@ -50,9 +53,12 @@ Une application à la reconstruction de la surface corticale montre que l'ajout d
 Les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004} sont basés sur l'évolution de \emph{level-sets} concurrents \emph{via} une estimation du maximum \emph{a posteriori} prenant en compte la forme des objets à segmenter et leurs relations de voisinages.
 Les travaux de \cite{Yang:TMI:2004} proposent une application à la segmentation des structures internes du cerveau (ventricules, noyaux gris, \ldots{}) tandis que ceux de \cite{Duncan:NeuroImage:2004} proposent une segmentation du cortex par deux \emph{level-sets} représentant respectivement l'interface matière blanche/matière grise et la surface du cortex.
 
-\cite{Colliot:PR:2006} : Modèle déformable intégrant des contraintes de localisation (angle et distance) sous forme floue par rapport à une structure de référence $\rightarrow$ segmentation des noyaux gris autour des ventricules.
+Dans le même esprit d'utiliser plusieurs sources d'information pour guider le contour, l'article de \cite{Ciofolo:MIA:2009} définit une méthodologie décidant de la direction de propagation à partir d'un controlleur flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels, la position du contour dans l'image et par rapport à d'autres objets.
+Les expériences menées ont montrées une bonne adaptabilité de cette méthode qui a été appliqué à la séparation des hémisphères cérébraux et du cervelet, ainsi qu'à la segmentation des différentes structures autour des ventricules.
 
-\cite{Ciofolo:MIA:2009} : Level sets concurrents évoluant selon un système de décision flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels et la position du contour dans l'image.
+Toutes ces méthodes obtiennent de bons résultats, mais reste néanmoins trop dépendantes de l'initialisation du contour et des pré-traitement à effectuer.
+Les images peu contrastée ou présentant un biais en intensité peuvent devenir un problème, d'autant que la correction de biais tent à réduire le contraste dans certaines zones du cerveau (voir l'article de \cite{Colliot:PR:2006}).
+Ces outils restent donc délicats à utiliser et l'utilisation d'une information \emph{a priori} est nécessaire pour accompagner efficacement l'évolution des contours.
 
 
 \subsection{Approches structurelles}
@@ -79,10 +85,17 @@ Approches par watershed :
 \subsection{Classification}
 \label{subsec:classif}
 
-On précise que FCM est présenté à la section suivante.
+Les méthodes par classification ont pour but d'obtenir une partition de l'image en un nombre de classes pré-définies à partir de l'analyse de l'histogramme de niveaux de gris.
+Les principales méthodes sont les méthodes non-paramétriques (supervisées ou non), les approches statistiques, l'algorithme des K-moyennes et l'algorithme des C-moyennes floues.
+L'algorithme FCM est présenté plus en détail à la section \ref{sec:fcm}.
 
 \subsubsection{Méthodes non paramétriques}
 \label{subsubsec:nonParam}
+
+Les méthodes non-paramétriques sont utilisés dans le cas où aucune connaissance n'est disponible sur la forme de la distribution des éléments à classifier.
+Plusieurs types de méthodes existent, consistant soit à estimer la fonction de densité à partir d'échantillons, qui si ils sont satisfaisant deviennent représentatifs de cette fonction, soit d'estimer directement la probabilité \emph{a posteriori} de la distribution.
+
+Une première fa\c on de classifié est l'estimation de la fonction de dentisté de probabilité selon la méthode des $k$ plus proche voisins (kPPV).
 
 \cite{Warfield:MIA:2000} : Classification par kPPV supervisée par un ensemble de prototypes désignés par un expert et contrainte par un modèle anatomique.
 
