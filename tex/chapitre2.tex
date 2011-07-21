@@ -96,16 +96,32 @@ Les méthodes non-paramétriques sont utilisés dans le cas où aucune connaissance 
 Plusieurs types de méthodes existent, consistant soit à estimer la fonction de densité à partir d'échantillons, qui si ils sont satisfaisant deviennent représentatifs de cette fonction, soit d'estimer directement la probabilité \emph{a posteriori} de la distribution.
 
 Une première fa\c on de classifié est l'estimation de la fonction de dentisté de probabilité selon la méthode des $k$ plus proche voisins (kPPV).
+Soit un ensemble d'apprentissage $P$, consistant en $N$ prototypes de dimension $D$ dont on dispose de la vraie classification en $C$ classes.
+Un motif $\mathbf{y_j}$ est classé dans la classe $c$ si la majorité des $k$ plus proches motifs de l'ensemble d'apprentissage appartiennent à la classe $c$. 
+La distance des motifs est calculée selon une norme adaptée à chaque cas.
+Cependant, cette méthode suppose que l'ensemble d'apprentissage est représentatif des données traitées et doit être fourni en préalable comme entrée de l'algorithme.
+Cette ensemble peut-être fourni soit par un expert, soit être extrait de l'ensemble des motifs selon certaines conditions.
 
-\cite{Warfield:MIA:2000} : Classification par kPPV supervisée par un ensemble de prototypes désignés par un expert et contrainte par un modèle anatomique.
+L'article de \cite{Warfield:MIA:2000} montre une approche utilisant le kPPV avec un ensemble d'apprentissage défini par un expert.
+Typiquement, $50$ à $100$ voxels par classes sont sélectionnés (uniquement en fonction de l'intensité des voxels).
+Un modèle anatomique est également fourni afin de contraindre la segmentation afin d'obtenir des résultats plus pertinents.
+Un autre exemple d'utilisation des kPPV est donné par l'article de \cite{Cocosco:MIA:2003}.
+La principale différence avec les travaux précédents réside dans l'extraction de l'ensemble d'apprentissage.
+Plutôt qu'une sélection manuelle, les auteurs ont défini une sélection automatique par élagage d'un arbre couvrant minimale d'un ensemble de voxels à partir d'un atlas anatomique.
+L'algorithme kPPV est ensuite appliqué afin d'obtenir la segmentation finale.
 
-\cite{Cocosco:MIA:2003} : Deux étapes : sélection automatique de l'ensemble d'apprentissage par élagage d'un arbre couvrant minimale d'un ensemble de voxels (première sélection à partir d'un atlas) + kPPV supervisé par l'ensemble d'apprentissage.
+Une autre méthodologie non paramétrique rencontrée en segmentation est la méthode du \emph{Mean-Shift} qui a l'avantage d'être non-supervisée, évitant ainsi la nécessaire étape de définition de l'ensemble d'apprentissage.
+Ce type d'algorithme recherche les modes (ou \emph{maxima} locaux) de la distribution et regroupe les différents élements selon leur proximité par rapport à ces modes.
+De manière générale, l'information prise en compte est l'intensité des voxels, mais également leurs coordonnées spatiale dans l'image, ce conduit à une sur-segmentation de l'image.
 
-\cite{Jimenez-Alaniz:TMI:2006} : Estimation de la densité de probabilité par Mean-Shift et segmentation par a priori sur les tissus et carte de confiance des bords. Non-supervisée (Mean-Shift : cherche les modes (ou points de plus hautes densités) de la distribution)).
-
-\cite{Mayer:TMI:2009} : Mean-Shift basé sur l'intensité et les coordonnées spatiales (inclue ainsi un \emph{a priori} spatial) puis réduction par fusion des différents modes obtenus puis $k$-means pondérés par le nombre de voxels de chaque cluster pour obtenir la segmentation finale. Non supervisée.
-
-\cite{Richard:AIM:2004} : Approche multi-agents.
+Un exemple de l'utilisation du \emph{Mean-Shift} est donné dans l'article de \cite{Jimenez-Alaniz:TMI:2006}.
+La segmentation est également contrainte par l'ajout de l'information fournie par la détection des contours de l'image.
+L'enjeu est ensuite de fusionner l'ensemble des régions détectées par le \emph{Mean-Shift} pour obtenir la segmentation finale.
+Cette étape est faite l'analyse des régions adjacente afin de fusionner les régions homogènes d'intensité proche, ainsi que par une étape de supression des petites régions.
+Les régions finales sont alors classées selon une méthode bayésienne avec un \emph{a priori} fourni par un atlas anatomique.
+L'article de \cite{Mayer:TMI:2009} repose sur une première étape toujours fondée sur un \emph{Mean-Shift} la prise en compte de l'intensité et des coordonnées spatiales.
+Cependant, après une étape de fusion des modes adjacents, la classification finale est effectuée selon un algorithme $k$-means pondéré par le nombre de voxels de chaque région.
+Le problème posé par la fusion des régions reste donc une question encore largement ouverte.
 
 
 \subsubsection{Approches probabilistes}
@@ -122,6 +138,8 @@ Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{
 \cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
 
 \cite{Marroquin:TMI:2002} : MAP avec Markov cachés. Utilisation d'un atlas pour calculé des \emph{a priori} pertinents et avoir une initialisation automatique.
+
+\cite{Richard:AIM:2004} : Approche multi-agents.
 
 \cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
 
