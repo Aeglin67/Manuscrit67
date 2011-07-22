@@ -127,7 +127,39 @@ Le problème posé par la fusion des régions reste donc une question encore largem
 \subsubsection{Approches probabilistes}
 \label{subsubsec:gaussianMix}
 
-Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM~\cite{Dempster:JRSS:1977} et ajout des champs (\cite{Geman:PAMI:1984}) ou chaînes de Markov pour la régularisation.
+Ces approches introduisent un \emph{a priori} sur la forme de la distribution, en la modélisant comme une mixture de gaussienne, le but étant de calculer les paramètres optimaux permettant de quantifier ce mélange.
+Soit $\mathbf{y}_j$ un vecteur de dimension $d$ représentant les données issues du voxel $j$ à classer.
+L'intensité de ce voxel est considéré comme la réalisation d'une variable aléatoire suivant un mélange de gaussienne suivante : 
+\begin{equation}
+f(\mathbf{y}_j ; \theta) = \sum_{k=1}^{C} \alpha_{k} (2\pi)^{d/2} \lvert \Sigma_{k} \rvert^{\frac{1}{2}} \exp{(-\frac{1}{2}(\mathbf{y}_j - \mathbf{u}_k)^{t}\mathbf{\Sigma}_{k}^{-1}(\mathbf{y}_j - \mathbf{u}_k))},
+\end{equation}
+où $C$ est le nombre de classes recherchée, $\theta = (\alpha, \mathbf{u}, \mathbf{\Sigma})$, $\mathbf{u}_{k}$ est le vecteur moyenne de la $k^{\text{ième}}$ distribution gaussienne et $\mathbf{Sigma}_{k}$ est sa matrice de covariance et $\alpha$ est la proportion du mélange.
+Les poids $\alpha_k$ sont positifs et vérifient la relation : 
+\begin{equation}
+\sum_{k=1}^{C} = 1.
+\end{equation}
+L'objectif est de donner une étiquette $x_j$ à chaque voxel $j$ avec $x_j \in \{c_1, c_2, \ldots, c_k\}$.
+L'outils privilégié pour estimer l'ensemble de ces paramètres est l'algorithme \emph{Expectation-Maximization} (EM) \cite{Dempster:JRSS:1977} consistant à estimer le maximum de vraisemblance.
+
+Des exemples d'utilisation de ce modèle sont donnés par les articles de \cite{Ashburner:NeuroImage:2000}, ajoutant une correction des inhomogénéités en intensité, de \cite{Dugas:MICCAI:2004}, ajoutant la prise en compte du volume partiel, ou par \cite{Ait:MICCAI:2005}, qui remplacent l'étape de maximisation de la vraisemblance par un estimateur de vraisemblance tamisé.
+Cependant, l'algorithme EM est sensible au bruit, et nécessite l'introduction d'\emph{a priori} pour garantir une homogénéité spatiale des labels.
+De manière générale, les champs de Markov sont utilisés dans ce cadre.
+
+Ces champs de Markov permettent de modéliser l'interaction spatiale entre les voxels.
+Soit $S$ un ensemble de sites $s$ et des variables aléatoires $X_s$ associée à ces sites.
+Le champ $X = (X_{s})_{s \in S}$ est un champ de Markov pour un système de voisinage $V_s$ donné si et seulement si :
+\begin{equation}
+P(X_s | X_t, t \neq s) = P(X_s | X_t, t \in V_s).
+\end{equation}
+Le théorème de Hammersley-Clifford établit une équivalence entre les champs de Gibbs et les champs de Markov, dont la distribution peut alors être exprimé selon :
+\begin{equation}
+P(X = x) = \frac{1}{Z} \exp{(-U(x))},
+\end{equation}
+avec $U(x) = \sum_{c \in C} V_c(x_s, s \in c)$ et où $Z$ est une constante de normalisation.
+$C$ est l'ensemble des cliques définies par le système de voisinage et $V_c$ un potentiel dépendant de la configuration de la clique $c$ \cite{Geman:PAMI:1984}.
+
+
+% Etant donné un Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM et ajout des champs () ou chaînes de Markov pour la régularisation.
 
 \cite{VanLeemput1:TMI:1999, VanLeemput2:TMI:1999} : EM avec estimation du biais et régularisation par champs de Markov.
 
