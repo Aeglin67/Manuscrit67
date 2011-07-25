@@ -133,15 +133,18 @@ L'intensité de ce voxel est considéré comme la réalisation d'une variable aléato
 \begin{equation}
 f(\mathbf{y}_j ; \theta) = \sum_{k=1}^{C} \alpha_{k} (2\pi)^{d/2} \lvert \Sigma_{k} \rvert^{\frac{1}{2}} \exp{(-\frac{1}{2}(\mathbf{y}_j - \mathbf{u}_k)^{t}\mathbf{\Sigma}_{k}^{-1}(\mathbf{y}_j - \mathbf{u}_k))},
 \end{equation}
-où $C$ est le nombre de classes recherchée, $\theta = (\alpha, \mathbf{u}, \mathbf{\Sigma})$, $\mathbf{u}_{k}$ est le vecteur moyenne de la $k^{\text{ième}}$ distribution gaussienne et $\mathbf{Sigma}_{k}$ est sa matrice de covariance et $\alpha$ est la proportion du mélange.
+où $C$ est le nombre de classes recherchée, $\theta = (\alpha, \mathbf{u}, \mathbf{\Sigma})$, $\mathbf{u}_{k}$ est le vecteur moyenne de la $k^{\text{ième}}$ distribution gaussienne et $\mathbf{\Sigma}_{k}$ est sa matrice de covariance et $\alpha$ est la proportion du mélange.
 Les poids $\alpha_k$ sont positifs et vérifient la relation : 
 \begin{equation}
 \sum_{k=1}^{C} = 1.
 \end{equation}
 L'objectif est de donner une étiquette $x_j$ à chaque voxel $j$ avec $x_j \in \{c_1, c_2, \ldots, c_k\}$.
 L'outils privilégié pour estimer l'ensemble de ces paramètres est l'algorithme \emph{Expectation-Maximization} (EM) \cite{Dempster:JRSS:1977} consistant à estimer le maximum de vraisemblance.
+L'algorithme ICM (\emph{Iterated Conditional Modes}) de \cite{Besag:JRSS:1986}, cherchant le maximum \emph{a posteriori} (MAP) de la distribution est également utilisé.
 
-Des exemples d'utilisation de ce modèle sont donnés par les articles de \cite{Ashburner:NeuroImage:2000}, ajoutant une correction des inhomogénéités en intensité, de \cite{Dugas:MICCAI:2004}, ajoutant la prise en compte du volume partiel, ou par \cite{Ait:MICCAI:2005}, qui remplacent l'étape de maximisation de la vraisemblance par un estimateur de vraisemblance tamisé.
+Des exemples d'utilisation de ce modèle sont donnés par les articles de \cite{VanLeemput1:TMI:1999} et \cite{Ashburner:NeuroImage:2000}, ajoutant une correction des inhomogénéités en intensité, de \cite{Dugas:MICCAI:2004}, ajoutant la prise en compte du volume partiel, ou par \cite{Ait:MICCAI:2005}, qui remplacent l'étape de maximisation de la vraisemblance par un estimateur de vraisemblance tamisé.
+Une approche locale a également été introduite par \cite{Kovacevic:NeuroImage:2002} qui modélise l'histogramme du volume intracrânien par une mixture de quatre gaussienne aussi bien au niveau locale que globale pour apporter une réponse à problème des inhomogénéité en intensité.
+Enfin, les travaux de \cite{Richard:AIM:2004} définissent une approche multi-agents, chaque agent étant dédié à une partie de l'image ou un tissu particulier, la segmentation globale étant reconstruite à partir des informations collectées au niveau local.
 Cependant, l'algorithme EM est sensible au bruit, et nécessite l'introduction d'\emph{a priori} pour garantir une homogénéité spatiale des labels.
 De manière générale, les champs de Markov sont utilisés dans ce cadre.
 
@@ -158,31 +161,41 @@ P(X = x) = \frac{1}{Z} \exp{(-U(x))},
 avec $U(x) = \sum_{c \in C} V_c(x_s, s \in c)$ et où $Z$ est une constante de normalisation.
 $C$ est l'ensemble des cliques définies par le système de voisinage et $V_c$ un potentiel dépendant de la configuration de la clique $c$ \cite{Geman:PAMI:1984}.
 
+Les champs de Markov se sont révélés comme particulièrement bien adapté à la segmentation des tissus cérébraux dans un environnement, comme le montre les publications de \cite{Held:TMI:1997}, \cite{VanLeemput2:TMI:1999}, \cite{Zhang:TMI:2001} et \cite{Shattuck:NeuroImage:2001}.
+L'article de \cite{Marroquin:TMI:2002} présente une approche recherchant le MAP avec une régularisation par des champs de Markov cachés. 
+Un atlas anatomique est utilisé en complément de manière à obtenir des \emph{a priori} pertinents et avoir une initialisation automatique.
+Les travaux de \cite{Bricq:MIA:2008} utilisent une régularisation par chaîne de Markov, où le voisinage est pris en compte grâce à un parcours fractale de l'image.
+Enfin, nous pouvons également citer les travaux de \cite{Scherrer:TMI:2009} qui a défini un modèle de champs de Markov locaux coopératifs, permettant une segmentation conjointe des tissus et des structures cérébrales.
 
-% Etant donné un Modélisation par mixtures de gaussienne, optimisation par l'algorithme EM et ajout des champs () ou chaînes de Markov pour la régularisation.
+% \cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
 
-\cite{VanLeemput1:TMI:1999, VanLeemput2:TMI:1999} : EM avec estimation du biais et régularisation par champs de Markov.
+% \cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
 
-\cite{Zhang:TMI:2001} : EM avec régularisation par champs de Markov cachés.
 
-\cite{Shattuck:NeuroImage:2001} : 3 classes pures + 3 classes volume partiels + \emph{a priori} markovien.
 
-\cite{Kovacevic:NeuroImage:2002} : estime l'histogramme de l'espace cérébral par une mixture de 4 gaussienne au niveau global et locale (régions).
+% \cite{Richard:AIM:2004} : Approche multi-agents.
 
-\cite{Marroquin:TMI:2002} : MAP avec Markov cachés. Utilisation d'un atlas pour calculé des \emph{a priori} pertinents et avoir une initialisation automatique.
+% \cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
 
-\cite{Richard:AIM:2004} : Approche multi-agents.
-
-\cite{Bricq:MIA:2008} : EM avec utilisation des chaînes de Markov.
-
-\cite{Scherrer:TMI:2009} : Segmentation conjointe des tissus et des structures cérébrales par un modèle de champs de Markov locaux distribués.
+% \cite{Scherrer:TMI:2009} : Segmentation conjointe des tissus et des structures cérébrales par un modèle de champs de Markov locaux distribués.
 
 \subsubsection{$K$-Moyennes}
 \label{subsubsec:kMeans}
 
-Définition des K-Moyennes.
-Utilisation en segmentation des tissus : \cite{Vemuri:IAACG:1995}.
+L'objectif de l'algorithme des $K$-Moyennes est de regrouper l'ensemble des voxels de l'image en $K$ classes en fonction de leur intensité.
+Chaque classe est définie par un centroïde (ici la moyenne de l'intensité des voxels appartenant à la classe) et chaque voxel est assigné à la classe en fonction de la proximité de son intensité avec le centroïde.
+En considérant une image composée de $N$ voxels, la segmentation par l'algorithme des $K$-Moyennes revient à minimiser la fonction d'énergie suivante : 
+\begin{equation}
+J_{K-\text{Means}} = \sum_{j=0}^{N} \sum_{k=1}^{K} \lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2},
+\end{equation}
+où $\mathbf{y}_j$ représente l'intensité du voxel $j$ et $\mathbf{v}_k$ le centroïde de la classe $k$.
+L'algorithme démarre d'une position initiale et alterne une étape d'appariemment des données aux classes et une étape de mise à jour des centroïdes.
+La convergence est atteinte lorsqu'aucune donnée ne change de classe.
 
+Cet algorithme a été utilisé en segmentation des tissus cérébraux \cite{Vemuri:IAACG:1995}. 
+Cependant, il est sensible à l'initialisation, ne tient pas compte d'un environnement bruité et étant donné le fort effet de volume partiel présent dans les images, l'appartenance binaire à une classe peut poser problème.
+Aujourd'hui, l'algorithme des $C$-Moyennes floues lui est préféré.
+Il est décrit à la section \ref{sec:fcm}.
 
 \subsection{Utilisation de la topologie}
 \label{subsec:topologie}
