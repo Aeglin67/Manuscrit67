@@ -224,6 +224,8 @@ Enfin, nous pouvons également citer les travaux de \cite{Bazin:TMI:2007} qui uti
 L'évolution se fait selon des érosions et dilatations successives des différents labels.
 La vitesse de propagation de ces érosions et dilatations est calculé à partir de l'appartenance calculée par l'algorithme FCM.
 La suite de ces travaux (voir \cite{Bazin:MIA:2008}) montre une amélioration de l'algorithme par l'introduction d'un atlas statistique et par l'ajout de contraintes homéomorphiques permettant de prendre ainsi en compte plus facilement la topologie dans un environnement multi-objet.
+
+Une dernière méthode à citer est celle de \cite{Miri:ICISP:2008} qui parviennent à effectuer une segmentation des tissus cérébraux à partir de quatre sphères concentriques évoluant par échange de points simples.
 % \cite{Mangin:JMIV:1995} : Représentation du cortex à partir de la squelettisation de l'ensemble LCR/Cortex.
 
 % \cite{MacDonald:NeuroImage:2000} : Segmentation du cortex par level-sets concurrents avec les contraintes suivantes : les deux surfaces ne peuvent pas se croiser + épaisseur max du cortex.
@@ -271,11 +273,32 @@ De plus, différents travaux montrent qu'il est préférable d'utiliser un atlas pa
 
 \subsection{Prise en compte du biais en intensité}
 
-Plusieurs approches pour le bruit.
+Le biais en intensité présent dans l'image est un artefact se présentant la plupart du temps comme une variation lente de l'intensité dans l'image.
+Il peut être du à l'imperfection de l'imageur (défaut de l'antenne de réception, hétérogénéité du champs magnétique statique, \ldots{}) ou à des causes biologiques (compisition différente d'un même tissu à différents endroits du cerveau, ou effet de susceptibilité magnétique).
+
+Plusieurs approches ont été envisagée pour la prise en compte du biais en intensité.
+Deux grandes familles de méthodes se dégagent : les approches séquentielles (effectuant une correction du biais avant la segmentation) et les approches couplées (intégrée directement dans le processus de segmentation).
+
+Les approches séquentielles ont historiquement d'abord reposé sur des filtrage spatiaux ou homomorphiques \cite{Johnston:TMI:1996} considérant que les basses fréquences représente le biais tandis que les hautes fréquence représentent les détails anatomiques.
+Cependant, malgré leur rapidité et leur facilité de mise en \oe uvre, ces approches peuvent corrompre certains détails importants tels que les contours.
+D'autres approches cherchent à minimiser l'entropie de l'histogramme en intensité de l'image.
+L'article de \cite{Mangin:MMBIA:2000} utilise cette approche avec une contrainte de lissage sur le champs de biais et une contrainte de similarité entre la moyenne de l'image originale et et celle de l'image restorée.
+Une technique consiste à réaliser un ajustement de surface en modélisant le champs de biais par des splines ou par un polynome, comme dans \cite{Styner:TMI:2000}, la correction se faisant alors voxel à voxel par division de l'image originale par le champs calculé.
+
+Les méthodes couplées ont pour but original de segmenter les données, mais prennent intrinsinquement en compte le biais en intensité qui peut les affecter.
+Elles alternent donc des étapes de classification avec des étapes d'évaluation des paramètres du modèle de biais.
+Plusieurs modèles d'interaction du biais $b$ avec le signal idéal $\mathbf{\tilde{y}}$ et le bruit $n$ ont été proposés.
+Le plus courant consiste à tranformer les intensité dans le domaine logarithmique, transformant le champs de biais généralement considéré comme multiplicatif, en un artefact additif donnant le modèle suivant : 
+\begin{equation}
+\log(\mathbf{y}_j) = \log(\mathbf{\tilde{y}_j}) + \log(b_j) + n_i,
+\end{equation}
+où $\mathbf{y}_j$ est l'intensité observé.
+Dernier commentaire sur utilisation EM et ICM, \ldots
+
 \begin{itemize}
-        \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
-        \item Filtrage spatial : en considérant que le biais représente les fréquence basse de l'image tandis que les détails anatomiques représentent les fréquences hautes. Filtres passe-bas ou approches homomorphiques \cite{Johnston:TMI:1996}. Risque d'altération des contours.
-        \item Minimisation de l'entropie de l'image : \cite{Mangin:MMBIA:2000}.
+%         \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
+%         \item Filtrage spatial : en considérant que le biais représente les fréquence basse de l'image tandis que les détails anatomiques représentent les fréquences hautes. Filtres passe-bas ou approches homomorphiques \cite{Johnston:TMI:1996}. Risque d'altération des contours.
+%         \item Minimisation de l'entropie de l'image : \cite{Mangin:MMBIA:2000}.
         \item Méthodes statistiques : Estimation basée sur sur les critère du maximum de vraisemblance (\cite{VanLeemput1:TMI:1999} et \cite{Zhang:TMI:2001}) ou maximum \emph{a posteriori} (\cite{Wells:TMI:1996} et \cite{Guillemaud:TMI:1997}).
 \end{itemize}
 
