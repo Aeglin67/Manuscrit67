@@ -293,7 +293,12 @@ Le plus courant consiste à tranformer les intensité dans le domaine logarithmiqu
 \log(\mathbf{y}_j) = \log(\mathbf{\tilde{y}_j}) + \log(b_j) + n_i,
 \end{equation}
 où $\mathbf{y}_j$ est l'intensité observé.
-Dernier commentaire sur utilisation EM et ICM, \ldots
+Dans ce cadre, l'article de \cite{VanLeemput1:TMI:1999} modélise le champs de biais comme une combinaison linéaire $\sum_{k}c_k \phi_k$ de fonctions de base polynomiales $\phi_k$.
+L'optimisation se fait alors selon l'algorithme EM, alternant l'estimation du modèle d'intensité, la classification des tissus et l'estimation du biais.
+L'algorithme EM est également utilisé par \cite{Zhang:TMI:2001} avec l'ajout de champs de Markov cachés.
+
+Cependant, d'autres modèles
+% Le champs de biais est alors généralement modélisé comme une  \cite{VanLeemput1:TMI:1999} et comme une combinaison de splines.
 
 \begin{itemize}
 %         \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
