@@ -64,23 +64,56 @@ Ces outils restent donc délicats à utiliser et l'utilisation d'une information \
 \subsection{Approches structurelles}
 \label{subsec:regionGrowing}
 
-\cite{Hohne:JCAT:1992} : Interactivité, laissant l'utilisateur déterminer les seuils et critères de convergence pour la segmentation (4 phases : seuillage, érosion binaire, sélection de la plus grande composante, dilatation conditionelle)
+Les méthodes évoquées ci-après incluent des opérateurs de morphologie mathématique \cite{Najman:2010}, qui cherchent à étudier ou traiter un ensemble par un autre ensemble, appelé l'élement structurant.
+Cet élément structurant doit être choisi en fonction de l'application recherchée.
+Nous rappellons tout d'abord la définition des deux opérateurs de base de la morphologie mathématique, qui sont la dilation et l'érosion par un élément structurant $B$.
 
-\cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
+Une image $X$ est considérée comme une partie de l'ensemble $E \subseteq \mathbb{R}^n$ ou $\mathbb{Z}^{n}$.
+La dilatation se définit comme l'addition de Minkowski de l'image $X$ par l'élément structurant $B$, soit formellement : 
+$$
+\delta_{B} : X \rightarrow X \oplus B = \bigcup_{b \in B} X_b = \bigcup_{x \in X} B_x = \{ x + b | x \in X, b \in B \}.
+$$
+L'érosion se définit comme la soustraction de Minkowski de l'image $X$ par l'élément structurant $B$, soit formellement : 
+$$
+\varepsilon_{B} : X \rightarrow X \ominus B = \bigcap_{b \in B} X_{-b} =  \{ p \in E | B_p \in X \}.
+$$
+La différence entre une dilatation et une érosion par un élément structurant unitaire définit le gradient morphologique.
 
-\cite{Mangin:MICCAI:1998} : Sélection de modes par une analyse multi-échelle de l'histogramme de l'image + opérateur morphologique pour extraire les différents tissus.
+Ces opérateurs ont été utilisés dans différents algorithmes de segmentation.
+Par exemple, l'article de \cite{Hohne:JCAT:1992} définit une méthode interactive comprenant quatre phases, qui sont : un seuillage, une érosion binaire, une sélection de la plus grande composante connexe et une dilatation conditionnelle. 
+L'utilisateur à le choix des seuils et des critères de convergences pour la segmentation.
+Cette méthode a été automatisée plus tard par \cite{Stokking:NeuroImage:2000} grâce à l'introduction d'une détection des seuils par un algorithme de croissance de région.
+% \cite{Hohne:JCAT:1992} : Interactivité, laissant l'utilisateur déterminer les seuils et critères de convergence pour la segmentation (4 phases : seuillage, érosion binaire, sélection de la plus grande composante, dilatation conditionelle)
 
-\cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
+% \cite{Freeborough:CMPB:1997} : Approche supervisée composée d'opérateurs de morphologie mathématiques, seuillage d'intensité et croissance de région pour récupérer le cerveau et le séparer du LCR. Segmentation également de l'hippocampe.
 
-\cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
+Les travaux de \cite{Mangin:MICCAI:1998} présentent quand à eux une méthode complètement automatique de segmentation des structures cérébrales.
+Il sélectionne des modes par une analyse multi-échelle de l'histogramme de l'image et utilise des opérateurs morphologiques pour l'extraction les différents tissus.
+Dans une même idée, l'article de \cite{Dokladal:PR:2003} propose une segmentation complète du cerveau en se basant uniquement sur des opérateurs morphologiques, conduisant à une segmentation progressive des tissus cérébraux.
+Cette segmentation est contrainte par des critères topologiques (position des tissus les uns par rapport aux autres, \ldots).
+% \cite{Kriegeskorte:NeuroImage:2001} : Correction d'une première segmentation du cortex pour obtenir une segmentation topologiquement correcte à partir d'une croissance de région contrainte.
 
-\cite{Stokking:NeuroImage:2000} : automatise complètement \cite{Hohne:JCAT:1992} par une détection automatique des seuils selon un algorithme de croissance de région.
+% \cite{Hata:TSMC:2000} : Croissance de région contrôlée par deux seuils (matière blanche puis matière grise). Seuils déterminés automatiquement par l'analyse de l'histogramme (repère les pics et détermine leur hauteur et leur netteté).
 
-\cite{Park:IWSCA:2007} : Méthode automatique basée sur l'utilisation de plusieurs opérateurs : rejet du fond, normalisation (debiaisement), extraction du cerveau sur une coupe, extension aux autres coupes.
+% \cite{Stokking:NeuroImage:2000} : automatise complètement \cite{Hohne:JCAT:1992} par une détection automatique des seuils selon un algorithme de croissance de région.
 
-Approches par watershed : 
+Enfin, nous pouvons citer des travaux récent, notamment ceux de \cite{Park:IWSCA:2007} définissant une approche automatique d'extraction du cerveau. 
+Le cerveau est tout d'abord extrait sur une coupe de l'image IRM et cette extraction est ensuite étendue à l'ensemble de l'image.
+Enfin, les travaux de \cite{Chiverton:CBM:2007} présente également une méthode automatique d'extraction du cerveau basée sur la morphologie statistique.
 
+Une autre catégorie de méthode est celle définie par une méthode de segmentation appellée la ligne de partage des eaux (définie par \cite{Digabel:QAMSS:1978}).
+Cette méthodologie décrit les images en terme géographique, c'est-à-dire qu'une image peut être perçue comme un relief en assimilant les niveaux de gris à une altitude.
+La ligne de partage des eaux est alors la crête définissant la limite entre deux bassins versants.
+Deux classes principales d'implémentation de cette méthode existent : un algorithme récursif d'immersion et un autre basé sur des fonctions de distances géodésiques \cite{Roerdink:FI:2000}.
+Cependant, cette méthodologie nécessite d'être associé à une étape de fusion des régions car elle conduit généralement à une sur-segmentation de l'image considérée.
 
+Ce genre de méthodologie a été utilisé pour extraire le cerveau du reste de l'image.
+Un premier exemple est donné par l'article de \cite{Thiran:SP:1997}, qui introduit une mode de sélection simple de marqueurs, de manière à éviter la sur-segmentation due à la ligne de partage des eaux.
+La même idée de sélection de marqueurs est reprise par \cite{Hahn:MICCAI:2000}, qui considère que la matière blanche représente une composante unique qui peut être utilisée comme base pour la segmentation du cerveau complet. 
+Ce genre d'approche peut également être couplé à un modèle déformable afin d'obtenir des résultats plus fiables \cite{Segonne:NeuroImage:2004}.
+
+La ligne de partage des eaux a également été utilisée pour la segmentation des sillons corticaux \cite{Rettman:NeuroImage:2002}.
+En imagerie angiographique, son utilisation a permis la segmentation du sinus sagittal supérieur grâce à des données multi-modales \cite{Passat:IVC:2007}.
 
 \subsection{Classification}
 \label{subsec:classif}
@@ -296,18 +329,20 @@ où $\mathbf{y}_j$ est l'intensité observé.
 Dans ce cadre, l'article de \cite{VanLeemput1:TMI:1999} modélise le champs de biais comme une combinaison linéaire $\sum_{k}c_k \phi_k$ de fonctions de base polynomiales $\phi_k$.
 L'optimisation se fait alors selon l'algorithme EM, alternant l'estimation du modèle d'intensité, la classification des tissus et l'estimation du biais.
 L'algorithme EM est également utilisé par \cite{Zhang:TMI:2001} avec l'ajout de champs de Markov cachés.
+L'optimisation peut être également réalisée par la recherche du maximum \emph{a posteriori} comme dans les articles de \cite{Wells:TMI:1996} et \cite{Guillemaud:TMI:1997}.
 
-Cependant, d'autres modèles
+La prise en compte du biais en intensité demande donc d'émettre plusieurs hypothèses sur la nature de cette inhomogénéité.
+Ces hypothèses sont notamment : la manière dont le bruit et le biais interagissent, la nature multiplicative du biais, la nature lente des variations en intensité, la modélisation de ces variations (polynomes, splines, \ldots), définition d'un champs de biais unique ou d'un champs particulier pour chaque tissu, \ldots
 % Le champs de biais est alors généralement modélisé comme une  \cite{VanLeemput1:TMI:1999} et comme une combinaison de splines.
 
-\begin{itemize}
+% \begin{itemize}
 %         \item Ajustement de surface : modélisation par splines ou par un polynome. Correction faite par division voxel à voxel. (ou addition dans si l'image a subi une transformation logarithmique) \cite{Styner:TMI:2000}.
 %         \item Filtrage spatial : en considérant que le biais représente les fréquence basse de l'image tandis que les détails anatomiques représentent les fréquences hautes. Filtres passe-bas ou approches homomorphiques \cite{Johnston:TMI:1996}. Risque d'altération des contours.
 %         \item Minimisation de l'entropie de l'image : \cite{Mangin:MMBIA:2000}.
-        \item Méthodes statistiques : Estimation basée sur sur les critère du maximum de vraisemblance (\cite{VanLeemput1:TMI:1999} et \cite{Zhang:TMI:2001}) ou maximum \emph{a posteriori} (\cite{Wells:TMI:1996} et \cite{Guillemaud:TMI:1997}).
-\end{itemize}
+%         \item Méthodes statistiques : Estimation basée sur sur les critère du maximum de vraisemblance (\cite{VanLeemput1:TMI:1999} et \cite{Zhang:TMI:2001}) ou maximum \emph{a posteriori} (\cite{Wells:TMI:1996} et \cite{Guillemaud:TMI:1997}).
+% \end{itemize}
 
-Penser à montrer les différentes modélisations (cf Scherrer).
+% Penser à montrer les différentes modélisations (cf Scherrer).
 
 %------------------------------------------------------------------------État de l'art FCM----------------------------------------------------------------------------------------
 
