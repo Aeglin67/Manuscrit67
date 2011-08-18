@@ -549,6 +549,8 @@ Au début des années 2000, la nécessité d'une prise en compte du bruit produit pa
 L'idée commune à ces méthodes est l'utilisation de l'environnement autour d'un voxel pour contraindre sa segmentation.
 Par exemple, si un voxel est au milieu d'une zone de matière blanche, le processus de segmentation va favoriser sa classification en matière blanche de manière à obtenir une continuité des labels des tissus.
 
+\subsubsection{Terme de régularisation}
+
 Dans cette optique, deux fonctions d'énergie ont été définies de manière indépendante.
 Elles définissent la fonction d'énergie comme la somme d'un terme d'attache aux données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation tenant compte des fonctions d'appartenance des voxels voisins destiné à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
 La première, appelée FCM robuste (en anglais : \emph{Robust FCM} ou \emph{RFCM})~\cite{Pham:CVIU:2001} ne prend en compte que les fonctions d'appartenance des voxels voisins pour contraindre la segmentation : 
@@ -582,6 +584,7 @@ Le calcul des centroïdes doit prendre en compte le voisinage défini et est donc 
 \mathbf{v}_k = \frac{\sum_{k=1}^{C} u_{jk}^{q} \left( \mathbf{y}_{j} + \frac{\beta}{\lvert N_j \rvert} \sum_{l \in N_j} \mathbf{y}_l \right)}{(1+\beta) \sum_{k=1}^{C} u_{jk}^{q}}
 \end{equation}
 
+\subsubsection{Accélération du processus de segmentation}
 
 L'exploration des différents voisinage étant couteuse en temps de calcul, des améliorations visant l'accélération de l'exécution ont été mise en place.
 Les travaux de~\cite{Szilagyi:AICIEEE:2003} parviennent à ce but en définissant une image intermédiaire $\zeta$ de la manière suivante : 
@@ -611,6 +614,8 @@ où $\mathbf{\overline{y}}_j$ représente la moyenne ou la médiane des intensités 
 L'expression des fonctions d'appartenance et des centroïdes est similaire à celle de~\cite{Ahmed:TMI:2002}.
 Il existe également une version de cet algorithme n'utilisant pas les opérateurs noyaux, appelé FCM\_S.
 % Il suffit de remplacer le terme $\lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2}$ par $(1-K(\mathbf{y}_j, \mathbf{v}_k))$ dans le calcul de la fonction d'appartenance.
+
+\subsubsection{Détermination automatique de la balance entre attache-aux-données et régularisation}
 
 Cependant, les deux méthodes précédentes, tout comme les méthodes de~\cite{Ahmed:TMI:2002} et \cite{Pham:CVIU:2001}, ont le désavantage de reposer sur un paramètre $\beta$ contrôlant les poids respectifs entre les termes d'attache aux données et le terme de régularisation.
 Ce paramètre est choisi la plupart du temps par expérimentation et ce choix est loin d'être intuitif.
