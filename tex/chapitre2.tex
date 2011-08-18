@@ -487,7 +487,7 @@ Une autre façon de modifier la mesure de similarité et de trouver des frontières
 $$
 D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = (\mathbf{y}_{j} - \mathbf{v}_k)^T T_k (\mathbf{y}_{j} - \mathbf{v}_k),
 $$
-où $T_k$ est une matrice calculée à partir d'une matrice de covariance floue $S_k$ calculée de la façon suivante : 
+où $T_k$ est une matrice calculée à partir d'une matrice de covariance floue $S_k$, elle même calculée de la façon suivante : 
 $$
 S_k = \frac{\sum_{j \in \Omega}u_{jk}^{q}(\mathbf{y}_j - \mathbf{v}_k)(\mathbf{y}_j - \mathbf{v}_k)^T}{\sum_{j \in \Omega}u_{jk}^{q}}.
 $$
@@ -497,7 +497,7 @@ Cette formulation a l'avantage de tenir compte d'une répartition des données aut
 Cependant, les formulations décrites cherchent à obtenir une séparation fiable des données par l'utilisation d'un espace plus approprié, mais ne prennent pas en compte la présence de bruit dans l'image.
 Deux approches sont intéressantes car elles apportent une réponse à cette problématique par une définition de la similarité.
 Nous pouvons citer l'article de~\cite{Shen:TITB:2005}, qui inclue un mécanisme d'attraction du voisinage dans la définition de la similarité en fonction du niveau de gris et de la distance au voxel courant. 
-Afin de régler au mieux les paramètres contrôlant les poids respectifs de ces deux termes, une optimisation par un réseau de neurones a également été mise en place.
+Afin de régler au mieux les paramètres contrôlant les poids respectifs de ces deux termes, une optimisation par un réseau de neurones est mise en place.
 
 La deuxième approche est un article de~\cite{Wang:MIA:2009}.
 Elle consiste à réaliser une analyse multi-échelle de l'image.
