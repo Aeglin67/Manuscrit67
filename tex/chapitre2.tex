@@ -305,7 +305,7 @@ De plus, différents travaux montrent qu'il est préférable d'utiliser un atlas pa
 % Comparaison de plusieurs méthodes de recalage : \cite{Klein:NeuroImage:2009}. Une chose importante, il n'y a pas de transformation permettant de passer d'un cerveau à un autre à tous les coups.
 
 \subsection{Prise en compte du biais en intensité}
-\label{art:bias}
+\label{subsec:art:bias}
 
 Le biais en intensité présent dans l'image est un artefact se présentant la plupart du temps comme une variation lente de l'intensité dans l'image.
 Il peut être du à l'imperfection de l'imageur (défaut de l'antenne de réception, hétérogénéité du champs magnétique statique, \ldots{}) ou à des causes biologiques (compisition différente d'un même tissu à différents endroits du cerveau, ou effet de susceptibilité magnétique).
@@ -515,8 +515,8 @@ L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + b_j$, 
 L'évaluation du biais représente alors une étape supplémentaire de l'algorithme FCM, après l'évaluation des fonctions d'appartenance et des centroïdes, et est faite de la façon suivante : $b_j = \mathbf{y}_{j} - \frac{\sum_{k=1}^{C}u^q_{jk}\mathbf{v}_k}{\sum_{k=1}^{C}u^q_{jk}}$.
 
 Les travaux de~\cite{Liew:TMI:2003} exploite d'une manière différente l'hypothèse de faible variabilité du biais.
-Ce dernier est modélisé comme une pile de surfaces B-Splines.
-Ainsi, le biais est évalué par une surface par coupe de l'image avec une régularisation imposant une continuité entre les différentes coupes.
+Ce dernier est modélisé comme une pile de surfaces B-Splines, avec une surface par coupe de l'image.
+Une régularisation permet de garantir la continuité entre les différentes coupes.
 L'évaluation du biais est ainsi réduite au calcul des coefficients contrôlant les différentes surfaces.
 
 Un autre exemple d'estimation du biais est donné par les travaux de~\cite{Li:IPMI:2009}.
@@ -538,8 +538,9 @@ J = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x
 \end{equation}
 L'avantage de cette formulation est que la prise en compte des intensités d'un voisinage autour du voxel courant permet également la correction du bruit de l'image, tout en ajoutant une pondération en fonction de la distance par rapport au voxel courant, partant du principe que seul les voxels les plus proches sont les plus pertinents à prendre en compte.
 
-Tous ces modèles utilisent une modélisation explicite du biais en intensité, ajoutant une étape supplémentaire d'estimation du biais en plus de l'estimation des centroïdes et des fonctions d'appartenance.
-De plus, les hypothèses sur la nature multiplicative du biais, ainsi que les faibles variations d'intensité dues à ce phénomène restreignent sa prise en compte.
+Tous ces modèles utilisent une modélisation explicite du biais en intensité, ajoutant une étape supplémentaire d'estimation des paramètres du biais en plus de l'estimation des centroïdes et des fonctions d'appartenance.
+De plus, comme vu à la section \ref{subsec:art:bias}, de nombreuses hypothèses sont alors faites sur la nature intrinsèque du biais, hypothèses dont il est difficile de vérifier la complète véracité.
+% De plus, les hypothèses sur la nature multiplicative du biais, ainsi que les faibles variations d'intensité dues à ce phénomène restreignent sa prise en compte.
 
 \subsection{Prise en compte du bruit}
 \label{subsec:fcm:noise}
@@ -790,6 +791,6 @@ Une utilisation de cet atlas dans le cadre de la segmentation cérébrale est égal
 Concernant la segmentation par FCM, les différentes méthodologies montrent de bonnes performances des différents algorithmes dévellopés en classification des tissus.
 L'avantage de FCM est qu'il procure une réponse native au problème du volume partiel en fournissant des fonctions d'appartenance à chaque tissus, tout en étant facilement extensible de manière à inclure de nouvelles fonctionnalités.
 La prise en compte du biais en intensité se fait de manière couplée avec une étape d'évaluation des paramètres de l'inhomogénéité (ces derniers dépendant du modèle choisi).
-Cela nécessite de poser plusieurs hypothèses sur la nature du biais, comme décrit à la section \ref{art:bias}.
+Cela nécessite de poser plusieurs hypothèses sur la nature du biais, comme décrit à la section \ref{subsec:art:bias}.
 La correction du bruit montre de bonne performances, grâce à une prise en compte du voisinage du voxel courant, procédé directement inspiré des champs de Markov.
 Les efforts des différentes recherches ont surtout été de déterminer automatiquement le poids entre les termes d'attache-aux-données et de régularisation et d'accélérer le processus de segmentation, par la définition d'images intermédiaires notamment.
