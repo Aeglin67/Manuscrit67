@@ -408,7 +408,7 @@ Segmentation par FCM d'une image présentant un biais en intensité.
 
 La première définition de l'algorithme FCM remonte à l'article de \cite{Zadeh:IC:1965} et s'appuie sur la notion d'ensembles flous.
 Très vite, cet algorithme a trouvé des applications, notamment dans le cadre médicale, comme en témoignent les publications de : \cite{Adey:IJN:1972}, \cite{Bezdek:NCC:1976} et \cite{Kalmanson:AJC:1975}.
-Il part du principe qu'une donnée n'a pas à être classée dans une classe en particulier, mais à plusieurs avec un certain degré d'appartenance.
+Il part du principe qu'une donnée n'a pas à être classée dans une classe en particulier, mais dans l'ensemble des classes avec un certain degré d'appartenance.
 
 L'algorithme FCM calcule une mesure de cette appartenance, via une fonction d'appartenance floue~\cite{Pham:IJPRAI:1996}, en chaque voxel de l'image et pour un nombre donné de classes.
 Soit une image $I : \Omega \rightarrow \mathbf{Y}$, où $\Omega$ est le support de l'image et $\mathbf{Y}$ l'espace des intensités.
@@ -420,21 +420,26 @@ Elle est contrainte de manière que $0 \leq u_{jk} \leq 1$ et que $\sum_{k=1}^{C}
 Cette donnée est supposée connue.
 Un fort degré d'appartenance (proche de $1$) signifie que l'intensité du voxel considéré est proche du centroïde de la classe, ce dernier étant considéré comme un prototype représentatif de l'intensité de la classe considérée.
 
-Mathématiquement, l'algorithme FCM se déroule de la façon suivante : 
+Mathématiquement, l'algorithme FCM revient à minimiser la fonction d'énergie : 
+\begin{equation}
+J_{FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) \label{eq:fcm},
+\end{equation}
+où $q$ est le degré de flou de la segmentation, habituellement fixé à $2$ dans la littérature et $D^{2}(\mathbf{y}_j, \mathbf{v}_k)$ représente une mesure de la similarité entre l'intensité au voxel $j$ et le centroïde de la classe $k$.
+
+Le déroulement de l'algorithme suit alors la procédure suivante : 
 \begin{enumerate}
-        \item Initialisation des centroïdes (peut-être faite par un algorithme $k$-means, où grâce à un atlas).
-        \item Calcul de la fonction d'appartenance floue par $u_{jk} = \frac{D^{2}(\mathbf{y}_j, \mathbf{v}_k)}{\sum_{k=1}^{C} D^{2}(\mathbf{y}_j, \mathbf{v}_k)}$, où $D^{2}(\mathbf{y}_j, \mathbf{v}_k)$ représente une mesure de la similarité entre l'intensité au voxel $j$ et le centroïde de la classe $k$.
+        \item Initialisation des centroïdes (peut-être faite par un algorithme $k$-means, grâce à un atlas ou aléatoirement).
+        \item Calcul de la fonction d'appartenance floue par $u_{jk} = \frac{D^{2}(\mathbf{y}_j, \mathbf{v}_k)}{\sum_{k=1}^{C} D^{2}(\mathbf{y}_j, \mathbf{v}_k)}$.
         \item Calcul des nouveaux centroïdes : $\mathbf{v}_k = \frac{\sum_{i \in \Omega}u_{jk}\mathbf{y}_j}{\sum_{i \in \Omega}u_{jk}}$.
         \item Si il y'a convergence, arrêt de l'algorithme, sinon retour au point 2.
 \end{enumerate}
 
-Ces itérations reviennent à effectuer un processus de minimisation de la fonction de coût suivante : 
-\begin{equation}
-J_{FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) \label{eq:fcm},
-\end{equation}
-où $q$ est le degré de flou de la segmentation, habituellement fixé à $2$ dans la littérature.
-La convergence est atteinte lorsqu'un minimum local de cette fonction est détectée.
+La convergence est atteinte lorsqu'un minimum local de la fonction d'énergie est détectée.
 De manière générale, le calcul de la similarité entre l'intensité des voxels et les centroïdes des classes est réalisé par la norme euclidienne, ce qui se traduit mathématiquement par : $D^{2}(\mathbf{y}_{j},\mathbf{v}_{k}) = \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2}$.
+
+Les paramètres à fixer pour l'algorithme FCM sont donc le nombre de classes $C$ et le choix de la fonction d'appartenance $D^2(\mathbf{y}_j, \mathbf{v}_k)$.
+A notre connaissance, aucune méthode ne permet de déterminer de façon fiable le nombre de classes de manière automatique.
+La question de la fonction d'appartenance sera discuté ultérieurement.
 
 L'hypothèse fondamentale faite lors de l'utilisation de l'algorithme FCM en segmentation anatomique est que chaque tissu peut-être représenté par une unique valeure $\mathbf{v}_k$, qui serait uniforme sur l'ensemble du domaine de l'image.
 Les variations de cette \og vraie \fg{} valeur sont alors imputés au biais de l'image, au bruit et à l'effet de volume partiel (mélange de plusieurs tissus au sein d'un même voxel dont les proportions déterminent l'intensité du voxel).
