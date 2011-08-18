@@ -547,7 +547,7 @@ De plus, comme vu à la section \ref{subsec:art:bias}, de nombreuses hypothèses s
 
 Au début des années 2000, la nécessité d'une prise en compte du bruit produit par les imageurs a conduit à l'introduction de termes de régularisation dans la fonction d'énergie de l'algorithme FCM.
 L'idée commune à ces méthodes est l'utilisation de l'environnement autour d'un voxel pour contraindre sa segmentation.
-Par exemple, si un voxel est au milieu d'une zone de matière blanche, le processus de segmentation va favoriser sa classification en matière blanche de manière à obtenir une continuité des lables des tissus.
+Par exemple, si un voxel est au milieu d'une zone de matière blanche, le processus de segmentation va favoriser sa classification en matière blanche de manière à obtenir une continuité des labels des tissus.
 
 Dans cette optique, deux fonctions d'énergie ont été définies de manière indépendante.
 Elles définissent la fonction d'énergie comme la somme d'un terme d'attache aux données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation tenant compte des fonctions d'appartenance des voxels voisins destiné à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
@@ -558,11 +558,11 @@ J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} -
 où $N_j$ représente un voisinage du voxel courant $j$, $M_k = \{1,\ldots,C\} \backslash \{k\}$ et où $\beta$ contrôle les poids respectifs du terme d'attache aux données et du terme de régularisation.
 La deuxième méthodologie, appelée un FCM modifié (en anglais : \emph{Modified FCM} ou \emph{MFCM})~\cite{Ahmed:TMI:2002},  définie la fonction d'énergie de la façon suivante : 
 \begin{equation}
-J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{\lvert N_j \rvert} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2}  \label{eq:mfcm}. 
+J_{MFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{\lvert N_j \rvert} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2}  \label{eq:mfcm}. 
 \end{equation}
 
 La principale différence entre ces deux formulations de la régularisation réside dans l'exploitation du voisinage.
-L'algorithme RFCM effectue une régularisation entièrement fondée sur les fonctions d'appartenance, encourageant d'autant plus le lissage de ces fonctions au dur et à mesure des itérations du l'algorithme.
+L'algorithme RFCM effectue une régularisation entièrement fondée sur les fonctions d'appartenance, encourageant d'autant plus le lissage de ces fonctions au fur et à mesure des itérations de l'algorithme.
 De plus, le lissage de la fonction d'appartenance d'une classe $k$ ne tient compte que des fonctions des autres classes, la logique étant que plus la proportion d'autre classes dans l'environnement est importante, plus la classe courante doit être pénalisée de manière à favoriser les autres classes.
 Ceci est illustré par le calcul de la fonction d'appartenance qui s'exprime de la façon suivante : 
 \begin{equation}
@@ -584,12 +584,12 @@ Le calcul des centroïdes doit prendre en compte le voisinage défini et est donc 
 
 
 L'exploration des différents voisinage étant couteuse en temps de calcul, des améliorations visant l'accélération de l'exécution ont été mise en place.
-Les travaux de~\cite{Szilagyi:AICIEEE:2003} parviennent à ce but en définissant une image intermédiaire $\zeta$ définie de la manière suivante : 
+Les travaux de~\cite{Szilagyi:AICIEEE:2003} parviennent à ce but en définissant une image intermédiaire $\zeta$ de la manière suivante : 
 \begin{equation}
 \mathbf{\zeta}_{j} = \frac{1}{1+\beta} \left( \mathbf{y}_{j} + \frac{\beta}{\lvert N_j \rvert} \sum_{l \in N_j} \mathbf{y}_{l} \right) \label{eq:Szilagyi:Image}.
 \end{equation}
-De plus, afin de ne pas explorer l'image plusieurs fois au cours des itérations de l'algorithme, un paramètre $\gamma_{p}$ est introduit indiquant le nombre de voxels de l'image à une intensité $p$ donnée (par conséquent, on a bien $\sum_{p = 0}^{p_{max}} \gamma_{p} = N$).
-La fonction d'énergie à minimiser s'exprime donc de la façon suivante : 
+De plus, afin de ne pas explorer l'image plusieurs fois au cours des itérations de l'algorithme, un paramètre $\gamma_{p}$ est introduit indiquant le nombre de voxels de l'image à une intensité $p$ donnée (par conséquent, on a $\sum_{p = 0}^{p_{max}} \gamma_{p} = N$).
+La fonction d'énergie à minimiser s'exprime alors de la façon suivante : 
 \begin{equation}
 J_{EnFCM} = \sum_{p=0}^{p_{max}} \sum_{k=1}^{C} \gamma_{p} u_{pk}^{q} \lVert \mathbf{\zeta}_{p} - \mathbf{v}_{k} \rVert_{2}^{2} \label{eq:Szilagyi:Cost}.
 \end{equation}
@@ -639,7 +639,7 @@ Ce paramètre est défini de la façon suivante :
 \begin{equation}
 \sigma^{2}_{g\_i} = \frac{\sum_{l \in N_j} \lVert \mathbf{y}_j - \mathbf{y}_l \rVert^{2}}{\lvert N_j \rvert}.
 \end{equation}
-De cette manière, plutôt que d'avoir à fixer un paramètre de régularisation global $\beta$, deux paramètres $\lambda_g$ et $\lambda_s$ dont la définition est plus intuitive.
+De cette manière, plutôt que d'avoir à fixer un paramètre de régularisation global $\beta$, deux paramètres $\lambda_g$ et $\lambda_s$, dont la définition est plus intuitive, sont à déterminer.
 Le paramètre $\lambda_s$ peut être déduit de la taille du voisinage utilisé, laissant $\lambda_g$ comme seul paramètre global à ajuster.
 Avec cette définition du paramètre de régularisation local, il est alors possible de construire une image $\zeta$ selon la formule : 
 \begin{equation}
@@ -647,7 +647,7 @@ Avec cette définition du paramètre de régularisation local, il est alors possibl
 \end{equation}
 La recherche du minimum de la fonction coût se fait alors selon le même principe que les travaux de~\cite{Szilagyi:AICIEEE:2003}.
 
-Une dernière méthode est à mettre en valeur. 
+Une dernière méthode, appelée \emph{Fuzzy Local Information C-Means} (FLICM) est à mettre en valeur. 
 Constatant que le choix des paramètres de régularisation reste malgré tout difficile (surtout en l'absence d'\emph{a priori} sur le bruit), les travaux de~\cite{Krinidis:TIP:2010} introduisent un nouveau facteur permettant de définir une régularisation sans paramètre contrôlant le poids entre l'attache aux données et la régularisation.
 Ce facteur, noté $G_{jk}$, est calculé de la façon suivante : 
 \begin{equation}
