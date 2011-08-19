@@ -6,11 +6,11 @@ Ce chapitre présente les différentes familles de méthodes développée pour répond
 La segmentation cérébrale consiste à trouver les régions homogènes de l'image. 
 Ces régions sont supposées être pertinentes, c'est à dire qu'elles doivent mettre en valeur des parties significatives de l'image, telles que les différents tissus cérébraux (LCR, matière grise et matière blanche).
 
-Les méthodes de segmentation doivent prendre en compte les principales caractéristiques des imageurs par résonnance magnétique (décrites à la section \ref{intro:irm}) afin de parvenir à un résultats pertinents.
+Les méthodes de segmentation doivent prendre en compte les principales caractéristiques des imageurs par résonnance magnétique (décrites à la section \ref{intro:irm}) afin de parvenir à un résultat pertinent.
 Plusieurs familles de méthodes ont été développées afin de répondre à ce problème, sans pour autant représenter des catégories rigides, de nombreux algorithmes se situant à la frontière de ces familles.
 Une première section présentera les grandes familles de segmentation classées selon le principe les régissant.
 Par la suite, la méthodologie FCM (\emph{Fuzzy C-Means} ou \emph{C-Moyennes floues}) sera détaillée car elle permet une approche tenant compte naturellement du volume partiel présent dans l'image.
-Enfin, une dernière section présentera un état de l'art de la segmentation dans le cadre de la maturation cérébrale.
+Enfin, une dernière section présentera un état de l'art des méthodes de segmentation dans le cadre de la maturation cérébrale.
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ Le principe des modèles déformables est l'adaptation d'un contour paramétrique à
 Deux types de modèles déformables sont distingués : les modèles explicites et les modèles implicites.
 
 Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
-Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une force externe (le terme d'attache aux donnée lié au contenu de l'image) et d'une force interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
-Les principaux problèmes des ces modèles sont leure forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou sépration de labels). 
+Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une force externe (le terme d'attache-aux-données lié au contenu de l'image) et d'une force interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
+Les principaux problèmes des ces modèles sont leur forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou sépration de labels). 
 En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation.
 Un exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation particulière du contour afin de mieux prendre en compte la complexité des structures.
 Un exemple plus récent est l'article de \cite{Colliot:PR:2006}, définissant la force externe comme une combinaison du terme d'attache-aux-données et d'une information spatiale concernant la position des différents objets entre eux.
@@ -101,7 +101,7 @@ Enfin, nous pouvons citer des travaux récent, notamment ceux de \cite{Park:IWSCA
 Le cerveau est tout d'abord extrait sur une coupe de l'image IRM et cette extraction est ensuite étendue à l'ensemble de l'image.
 Enfin, les travaux de \cite{Chiverton:CBM:2007} présente également une méthode automatique d'extraction du cerveau basée sur la morphologie statistique.
 
-Une autre catégorie de méthode est celle définie par une méthode de segmentation appellée la ligne de partage des eaux (définie par \cite{Digabel:QAMSS:1978}).
+Une autre catégorie de méthode est celle définie par un algorithme de segmentation appellé la ligne de partage des eaux (formalisé par \cite{Digabel:QAMSS:1978}).
 Cette méthodologie décrit les images en terme géographique, c'est-à-dire qu'une image peut être perçue comme un relief en assimilant les niveaux de gris à une altitude.
 La ligne de partage des eaux est alors la crête définissant la limite entre deux bassins versants.
 Deux classes principales d'implémentation de cette méthode existent : un algorithme récursif d'immersion et un autre basé sur des fonctions de distances géodésiques \cite{Roerdink:FI:2000}.
@@ -145,14 +145,14 @@ L'algorithme kPPV est ensuite appliqué afin d'obtenir la segmentation finale.
 
 Une autre méthodologie non paramétrique rencontrée en segmentation est la méthode du \emph{Mean-Shift} qui a l'avantage d'être non-supervisée, évitant ainsi la nécessaire étape de définition de l'ensemble d'apprentissage.
 Ce type d'algorithme recherche les modes (ou \emph{maxima} locaux) de la distribution et regroupe les différents élements selon leur proximité par rapport à ces modes.
-De manière générale, l'information prise en compte est l'intensité des voxels, mais également leurs coordonnées spatiale dans l'image, ce conduit à une sur-segmentation de l'image.
+De manière générale, l'information prise en compte est l'intensité des voxels, mais également leurs coordonnées spatiales dans l'image, ce qui conduit à une sur-segmentation de l'image.
 
 Un exemple de l'utilisation du \emph{Mean-Shift} est donné dans l'article de \cite{Jimenez-Alaniz:TMI:2006}.
 La segmentation est également contrainte par l'ajout de l'information fournie par la détection des contours de l'image.
 L'enjeu est ensuite de fusionner l'ensemble des régions détectées par le \emph{Mean-Shift} pour obtenir la segmentation finale.
-Cette étape est faite l'analyse des régions adjacente afin de fusionner les régions homogènes d'intensité proche, ainsi que par une étape de supression des petites régions.
+Cette étape est faite par l'analyse des régions adjacentes afin de fusionner les régions homogènes d'intensité proche, ainsi que par une étape de supression des petites régions.
 Les régions finales sont alors classées selon une méthode bayésienne avec un \emph{a priori} fourni par un atlas anatomique.
-L'article de \cite{Mayer:TMI:2009} repose sur une première étape toujours fondée sur un \emph{Mean-Shift} la prise en compte de l'intensité et des coordonnées spatiales.
+L'article de \cite{Mayer:TMI:2009} repose sur une première étape toujours fondée sur un \emph{Mean-Shift} avec la prise en compte de l'intensité et des coordonnées spatiales.
 Cependant, après une étape de fusion des modes adjacents, la classification finale est effectuée selon un algorithme $k$-means pondéré par le nombre de voxels de chaque région.
 Le problème posé par la fusion des régions reste donc une question encore largement ouverte.
 
@@ -173,7 +173,7 @@ Les poids $\alpha_k$ sont positifs et vérifient la relation :
 \end{equation}
 L'objectif est de donner une étiquette $x_j$ à chaque voxel $j$ avec $x_j \in \{c_1, c_2, \ldots, c_k\}$.
 L'outils privilégié pour estimer l'ensemble de ces paramètres est l'algorithme \emph{Expectation-Maximization} (EM) \cite{Dempster:JRSS:1977} consistant à estimer le maximum de vraisemblance.
-L'algorithme ICM (\emph{Iterated Conditional Modes}) de \cite{Besag:JRSS:1986}, cherchant le maximum \emph{a posteriori} (MAP) de la distribution est également utilisé.
+L'algorithme ICM (\emph{Iterated Conditional Modes}) de \cite{Besag:JRSS:1986}, cherchant le maximum \emph{a posteriori} (MAP) de la distribution, est également utilisé.
 
 Des exemples d'utilisation de ce modèle sont donnés par les articles de \cite{VanLeemput1:TMI:1999} et \cite{Ashburner:NeuroImage:2000}, ajoutant une correction des inhomogénéités en intensité, de \cite{Dugas:MICCAI:2004}, ajoutant la prise en compte du volume partiel, ou par \cite{Ait:MICCAI:2005}, qui remplacent l'étape de maximisation de la vraisemblance par un estimateur de vraisemblance tamisé.
 Une approche locale a également été introduite par \cite{Kovacevic:NeuroImage:2002} qui modélise l'histogramme du volume intracrânien par une mixture de quatre gaussienne aussi bien au niveau locale que globale pour apporter une réponse à problème des inhomogénéité en intensité.
@@ -187,14 +187,14 @@ Le champ $X = (X_{s})_{s \in S}$ est un champ de Markov pour un système de voisi
 \begin{equation}
 P(X_s | X_t, t \neq s) = P(X_s | X_t, t \in V_s).
 \end{equation}
-Le théorème de Hammersley-Clifford établit une équivalence entre les champs de Gibbs et les champs de Markov, dont la distribution peut alors être exprimé selon :
+Le théorème de Hammersley-Clifford établit une équivalence entre les champs de Gibbs et les champs de Markov, dont la distribution peut alors être exprimée selon :
 \begin{equation}
 P(X = x) = \frac{1}{Z} \exp{(-U(x))},
 \end{equation}
 avec $U(x) = \sum_{c \in C} V_c(x_s, s \in c)$ et où $Z$ est une constante de normalisation.
 $C$ est l'ensemble des cliques définies par le système de voisinage et $V_c$ un potentiel dépendant de la configuration de la clique $c$ \cite{Geman:PAMI:1984}.
 
-Les champs de Markov se sont révélés comme particulièrement bien adapté à la segmentation des tissus cérébraux dans un environnement, comme le montre les publications de \cite{Held:TMI:1997}, \cite{VanLeemput2:TMI:1999}, \cite{Zhang:TMI:2001} et \cite{Shattuck:NeuroImage:2001}.
+Les champs de Markov se sont révélés comme particulièrement bien adapté à la segmentation des tissus cérébraux dans un environnement bruité, comme le montre les publications de \cite{Held:TMI:1997}, \cite{VanLeemput2:TMI:1999}, \cite{Zhang:TMI:2001} et \cite{Shattuck:NeuroImage:2001}.
 L'article de \cite{Marroquin:TMI:2002} présente une approche recherchant le MAP avec une régularisation par des champs de Markov cachés. 
 Un atlas anatomique est utilisé en complément de manière à obtenir des \emph{a priori} pertinents et avoir une initialisation automatique.
 Les travaux de \cite{Bricq:MIA:2008} utilisent une régularisation par chaîne de Markov, où le voisinage est pris en compte grâce à un parcours fractale de l'image.
@@ -219,7 +219,7 @@ L'objectif de l'algorithme des $K$-Moyennes est de regrouper l'ensemble des voxe
 Chaque classe est définie par un centroïde (ici la moyenne de l'intensité des voxels appartenant à la classe) et chaque voxel est assigné à la classe en fonction de la proximité de son intensité avec le centroïde.
 En considérant une image composée de $N$ voxels, la segmentation par l'algorithme des $K$-Moyennes revient à minimiser la fonction d'énergie suivante : 
 \begin{equation}
-J_{K-\text{Means}} = \sum_{j=0}^{N} \sum_{k=1}^{K} \lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2},
+J_{K-\text{Means}} = \sum_{j=1}^{N} \sum_{k=1}^{K} \lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2},
 \end{equation}
 où $\mathbf{y}_j$ représente l'intensité du voxel $j$ et $\mathbf{v}_k$ le centroïde de la classe $k$.
 L'algorithme démarre d'une position initiale et alterne une étape d'appariemment des données aux classes et une étape de mise à jour des centroïdes.
@@ -235,7 +235,7 @@ Il est décrit à la section \ref{sec:fcm}.
 
 La topologie est un vaste domaine des mathématiques, fondée par Euler grâce à la solution qu'il a apporté au problème des ponts de Konigsberg \cite{Euler:CASP:1741}.
 Elle étudie les déformations spatiales d'un objet par des transformations continues (ou déformations homotopiques), hors division ou fusion d'objets.
-La topologie d'un objet représente les caractéristiques qui doivent demeurer invariante au cours de la transformation, c'est à dire conserver le même nombre de composantes connexes, de cavités et de tunnels.
+La topologie d'un objet représente les caractéristiques qui doivent demeurer invariantes au cours de la transformation, c'est à dire conserver le même nombre de composantes connexes, de cavités et de tunnels.
 
 Cependant, l'application dans le domaine numérique (donc discrétisé), n'est pas immédiate car une transformation voulue comme continue peut rompre ces invariants topologiques en fonction de la définition de la connexité et de l'échantillonage.
 Une topologie digitale a donc été définie dans le but de comblé l'espace entre la topologie continue et les objets discrétisés.
@@ -244,7 +244,7 @@ Cette notion nécessite la définition d'un système de voisinage (6-voisinage, 18-
 
 De nombreuse méthodologies ont introduits la notion de topologie dans le cadre de la segmentation des structures cérébrales \cite{Pham:SPM:2010}.
 Elle est utilisée dans le but d'imposer des contraintes géométriques et structurelles aux différents tissus et structures recherchées.
-Un premier exemple est l'article de \cite{Mangin:JMIV:1995} qui utilise les déformations homotopique pour obtenir une cartographie du cortex cérébral, le but final de l'étude étant l'étude des variabilité inter-individuelles des sillons.
+Un premier exemple est l'article de \cite{Mangin:JMIV:1995} qui utilise les déformations homotopiques pour obtenir une cartographie du cortex cérébral, le but final de l'étude étant l'étude des variabilité inter-individuelles des sillons.
 Une autre approche intéressante est celle de \cite{MacDonald:NeuroImage:2000}, qui segmente le cortex à l'aide de deux level-sets concurrents tout en imposant comme contraintes que ces deux surfaces ne peuvent pas se croiser, ainsi qu'une épaisseur maximum du cortex.
 
 La méthode de \cite{Han:TMI:2002} se situe plus dans une approche de correction de la topologie.
@@ -255,10 +255,10 @@ Chaque structures est extraite successivement selon des contraintes prédéfinies 
 
 Enfin, nous pouvons également citer les travaux de \cite{Bazin:TMI:2007} qui utilisent un algorithme de type FCM conjugué à un atlas anatomique prenant en compte les contraintes topologiques des différentes structures.
 L'évolution se fait selon des érosions et dilatations successives des différents labels.
-La vitesse de propagation de ces érosions et dilatations est calculé à partir de l'appartenance calculée par l'algorithme FCM.
+La vitesse de propagation de ces érosions et dilatations est calculée à partir de l'appartenance calculée par l'algorithme FCM.
 La suite de ces travaux (voir \cite{Bazin:MIA:2008}) montre une amélioration de l'algorithme par l'introduction d'un atlas statistique et par l'ajout de contraintes homéomorphiques permettant de prendre ainsi en compte plus facilement la topologie dans un environnement multi-objet.
 
-Une dernière méthode à citer est celle de \cite{Miri:ICISP:2008} qui parviennent à effectuer une segmentation des tissus cérébraux à partir de quatre sphères concentriques évoluant par échange de points simples.
+Une dernière méthode à citer est celle de \cite{Miri:ICISP:2008} qui effectue une segmentation des tissus cérébraux à partir de quatre sphères concentriques évoluant par échange de points simples.
 % \cite{Mangin:JMIV:1995} : Représentation du cortex à partir de la squelettisation de l'ensemble LCR/Cortex.
 
 % \cite{MacDonald:NeuroImage:2000} : Segmentation du cortex par level-sets concurrents avec les contraintes suivantes : les deux surfaces ne peuvent pas se croiser + épaisseur max du cortex.
@@ -289,7 +289,7 @@ Une étude réalisée par \cite{Klein:NeuroImage:2009} a comparé plusieurs de ces m
 Pour être moins dépendant de l'algorithme de recalage et de l'\emph{a priori} apporté par l'atlas, des approches prenant en compte plusieurs atlas ont été développées.
 Nous pouvons citer l'article de \cite{Heckemann:NeuroImage:2006} décrivant une méthode combinant un recalage non-rigide de plusieurs atlas sur le cas étudié avec une méthode de fusion définie par \cite{Kittler:PAMI:1998} (en général, la décision se fait par vote majoritaire).
 En poussant plus loin le raisonnement, l'article de \cite{Aljabar:NeuroImage:2009} utilise une large base d'atlas (environ 250).
-Pour faire face au large temps de calcul occasioné par un si grand nombre de cas, une sélection des atlas les plus pertinents est effectuée selon un critère de similarité (soit directement par comparaison de l'intensité des images, soit par comparaison des méta-données telles que l'âge, la pathologie, l'historique clinique, \ldots{}).
+Pour faire face aux larges temps de calcul occasionés par un si grand nombre de cas, une sélection des atlas les plus pertinents est effectuée selon un critère de similarité (soit directement par comparaison de l'intensité des images, soit par comparaison des méta-données telles que l'âge, la pathologie, l'historique clinique, \ldots{}).
 
 Cependant, l'utilisation de plusieurs atlas repose toujours sur le recalage de ces atlas et augmente le volume des données à manipuler. 
 De plus, la méthodologie utilisée pour la décision finale est également un élément à considérer.
@@ -308,12 +308,12 @@ De plus, différents travaux montrent qu'il est préférable d'utiliser un atlas pa
 \label{subsec:art:bias}
 
 Le biais en intensité présent dans l'image est un artefact se présentant la plupart du temps comme une variation lente de l'intensité dans l'image.
-Il peut être du à l'imperfection de l'imageur (défaut de l'antenne de réception, hétérogénéité du champs magnétique statique, \ldots{}) ou à des causes biologiques (compisition différente d'un même tissu à différents endroits du cerveau, ou effet de susceptibilité magnétique).
+Il peut être du à l'imperfection de l'imageur (défaut de l'antenne de réception, hétérogénéité du champs magnétique statique, \ldots{}) ou à des causes biologiques (composition différente d'un même tissu à différents endroits du cerveau, ou effet de susceptibilité magnétique).
 
-Plusieurs approches ont été envisagée pour la prise en compte du biais en intensité.
+Plusieurs approches ont été envisagées pour la prise en compte du biais en intensité.
 Deux grandes familles de méthodes se dégagent : les approches séquentielles (effectuant une correction du biais avant la segmentation) et les approches couplées (intégrée directement dans le processus de segmentation).
 
-Les approches séquentielles ont historiquement d'abord reposé sur des filtrage spatiaux ou homomorphiques \cite{Johnston:TMI:1996} considérant que les basses fréquences représente le biais tandis que les hautes fréquence représentent les détails anatomiques.
+Les approches séquentielles ont historiquement d'abord reposé sur des filtrage spatiaux ou homomorphiques \cite{Johnston:TMI:1996} considérant que les basses fréquences représentent le biais tandis que les hautes fréquence représentent les détails anatomiques.
 Cependant, malgré leur rapidité et leur facilité de mise en \oe uvre, ces approches peuvent corrompre certains détails importants tels que les contours.
 D'autres approches cherchent à minimiser l'entropie de l'histogramme en intensité de l'image.
 L'article de \cite{Mangin:MMBIA:2000} utilise cette approche avec une contrainte de lissage sur le champs de biais et une contrainte de similarité entre la moyenne de l'image originale et et celle de l'image restorée.
@@ -322,11 +322,11 @@ Une technique consiste à réaliser un ajustement de surface en modélisant le cham
 Les méthodes couplées ont pour but original de segmenter les données, mais prennent intrinsinquement en compte le biais en intensité qui peut les affecter.
 Elles alternent donc des étapes de classification avec des étapes d'évaluation des paramètres du modèle de biais.
 Plusieurs modèles d'interaction du biais $b$ avec le signal idéal $\mathbf{\tilde{y}}$ et le bruit $n$ ont été proposés.
-Le plus courant consiste à tranformer les intensité dans le domaine logarithmique, transformant le champs de biais généralement considéré comme multiplicatif, en un artefact additif donnant le modèle suivant : 
+Le plus courant consiste à tranformer les intensités dans le domaine logarithmique, transformant le champs de biais généralement considéré comme multiplicatif, en un artefact additif donnant le modèle suivant : 
 \begin{equation}
 \log(\mathbf{y}_j) = \log(\mathbf{\tilde{y}_j}) + \log(b_j) + n_i,
 \end{equation}
-où $\mathbf{y}_j$ est l'intensité observé.
+où $\mathbf{y}_j$ est l'intensité observée.
 Dans ce cadre, l'article de \cite{VanLeemput1:TMI:1999} modélise le champs de biais comme une combinaison linéaire $\sum_{k}c_k \phi_k$ de fonctions de base polynomiales $\phi_k$.
 L'optimisation se fait alors selon l'algorithme EM, alternant l'estimation du modèle d'intensité, la classification des tissus et l'estimation du biais.
 L'algorithme EM est également utilisé par \cite{Zhang:TMI:2001} avec l'ajout de champs de Markov cachés.
@@ -801,6 +801,9 @@ Une utilisation de cet atlas dans le cadre de la segmentation cérébrale est égal
 %------------------------------------------------------------------------Bilan----------------------------------------------------------------------------------------
 
 \section{Bilan}
+
+Nous avons dressé un état des lieux de la segmentation des structures cérébrales en IRM.
+
 
 Concernant la segmentation par FCM, les différentes méthodologies montrent de bonnes performances des différents algorithmes dévellopés en classification des tissus.
 L'avantage de FCM est qu'il procure une réponse native au problème du volume partiel en fournissant des fonctions d'appartenance à chaque tissus, tout en étant facilement extensible de manière à inclure de nouvelles fonctionnalités.
