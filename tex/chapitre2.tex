@@ -802,12 +802,24 @@ Une utilisation de cet atlas dans le cadre de la segmentation cérébrale est égal
 
 \section{Bilan}
 
-Nous avons dressé un état des lieux de la segmentation des structures cérébrales en IRM.
+Dans ce chapitre, nous avons proposé un état des lieux de la segmentation des structures cérébrales en IRM.
+De nombreuses méthodes ont été définies, chacune ayant ses qualités et ses défauts.
+Par exemple, les modèles déformables se révèlent efficaces lorsqu'une structures particulière (le cortex, les ventricules, les noyaux gris, \ldots) est recherchée.
+Les méthodes de classification sont quand à elles plus efficaces dans le cadre de la segmentation des principaux tissus cérébraux (LCR, matière grise et matière blanche).
 
-
-Concernant la segmentation par FCM, les différentes méthodologies montrent de bonnes performances des différents algorithmes dévellopés en classification des tissus.
-L'avantage de FCM est qu'il procure une réponse native au problème du volume partiel en fournissant des fonctions d'appartenance à chaque tissus, tout en étant facilement extensible de manière à inclure de nouvelles fonctionnalités.
-La prise en compte du biais en intensité se fait de manière couplée avec une étape d'évaluation des paramètres de l'inhomogénéité (ces derniers dépendant du modèle choisi).
+Parmi les différentes méthodes de classification, la méthode FCM a retenu notre attention.
+% Concernant la segmentation par FCM, les différentes méthodologies montrent de bonnes performances des différents algorithmes dévellopés en classification des tissus.
+Son avantage est qu'elle procure une réponse native au problème du volume partiel en fournissant des fonctions d'appartenance à chaque tissus, tout en étant facilement extensible de manière à inclure de nouvelles fonctionnalités.
+La prise en compte du biais en intensité se fait jusqu'ici de manière couplée avec une étape d'évaluation des paramètres de l'inhomogénéité (ces derniers dépendant du modèle choisi).
 Cela nécessite de poser plusieurs hypothèses sur la nature du biais, comme décrit à la section \ref{subsec:art:bias}.
 La correction du bruit montre de bonne performances, grâce à une prise en compte du voisinage du voxel courant, procédé directement inspiré des champs de Markov.
 Les efforts des différentes recherches ont surtout été de déterminer automatiquement le poids entre les termes d'attache-aux-données et de régularisation et d'accélérer le processus de segmentation, par la définition d'images intermédiaires notamment.
+
+Par ailleurs, l'étude des méthodologies dévelloppées dans le cadre de la maturation cérébrale révèle le besoin d'inclure des connaissances \emph{a priori} afin d'obtenir une segmentation efficace.
+Cette connaissance prend généralement la forme d'un atlas, mais peut prendre aussi la forme d'un ajustement des coefficients régissant le comportement des champs de Markov.
+L'utilisation de connaissances anatomiques génériques commence tout juste à être exploitée, que ce soit en modélisant le cerveau en couches, ou en utilisant ces \emph{a priori} afin d'obtenir une segmentation progressive des structures cérébrales.
+Ce type d'approche semble prometteur car il permet d'inclure des connaissances universelles et ne nécessite pas la délicate phase de construction et d'utilisation d'un atlas statistique.
+
+La contribution de cette thèse s'articule autour de deux points majeurs.
+Le premier est l'amélioration des performances de l'algorithmes FCM en prenant en compte la redondance de l'information dans l'image (voir le chapitre \ref{chap:nlfcm}).
+Le deuxième est une contribution à la segmentation du cortex d'un cerveau non mature (IRM \emph{in vivo}) par l'utilisation de connaissance anatomiques génériques, permettant ainsi de se passer d'un atlas statistique (voir le chapitre \ref{chap:foetale}).
