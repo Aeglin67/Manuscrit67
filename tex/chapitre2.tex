@@ -672,7 +672,7 @@ De plus, l'algorithme FLICM travaille directement sur l'image originale et prend
 
 \section{Segmentation cérébrale pré et post-natales}
 
-Cette section présente un état de l'art en segmentation des cerveaux en maturation.
+Cette section présente un état de l'art des techniques de segmentation dans le cadre de la maturation cérébrale.
 Elle concerne les méthodes employées pour effectuer une segmentation des tissus cérébraux dans les cas prénataux et post-nataux.
 Ces derniers regroupent plusieurs cas distincts, notamment les prématurés ou les jeunes enfants agés de moins de deux ans.
 
@@ -680,10 +680,13 @@ Ces derniers regroupent plusieurs cas distincts, notamment les prématurés ou les
 
 Une première étude concernant les tissus cérébraux chez les enfants a été effectuée par~\cite{Matsuzawa:CC:2001} et comprends des cas allant de 1 mois à 10 ans.
 Il s'agit d'une étude volumétrique cherchant à différencier le LCR, la matière grise et la matière blanche.
-Cependant, cette étude ne prend pas en compte un élément capital et qui est la myélinisation de la matière blanche au cours du temps.
+Cependant, cette étude ne prend pas en compte un élément capital, qui est la myélinisation de la matière blanche au cours du temps.
 
-Afin de palier à ce défaut, les travaux de~\cite{Prastawa:MIA:2005} ont introduit une séparation de la amtière blanche myélinisée et non myélinisée.
-Leur méthode sur trois étapes distincts étant : l'estimation initiale de la distribution en intensité, la correction du biais, puis la correction de la segmentation.
+Les méthodes de segmentation dans les cas post-nataux se regroupe en deux grandes familles, qui sont l'estimation de la distribution en intensité des différents tissus à partir d'exemple issu de l'image et la classification par un algorithme EM avec potentiellement une régularisation par champs de Markov.
+
+Un premier exemple d'estimation de la distribution en intensité par des exemples est l'article de \cite{Prastawa:MIA:2005}.
+Afin de palier à le défaut de l'article de \cite{Matsuzawa:CC:2001} qui ne prend pas en compte la myélinisation de la matière blanche au cours du temps, ils ont introduit une séparation de la matière blanche myélinisée et non myélinisée.
+Leur méthode repose sur trois étapes distinctes : l'estimation initiale de la distribution en intensité, la correction du biais, puis la correction de la segmentation.
 L'estimation initiale de la distribution en intensité est réalisé grâce à un seuillage d'un atlas anatomique préalablement recalé sur le cas à traiter.
 Ce seuillage permet de collecter des échantillons de LCR, de matière grise et de matière blanche.
 L'estimation de la distribution en intensité du LCR et de la matière grise est faite directement, tandis que la distribution de la matière blanche myélinisée et non myélinisée est obtenue par élagage d'un arbre minimum construit à partir des échantillons des deux types de matière blanche.
@@ -691,6 +694,13 @@ La correction du biais est obtenue selon la méthode de~\cite{VanLeemput1:TMI:199
 La dernière étape est réalisé par l'utilisation d'une méthode d'estimation de la distribution en intensité non-paramétrique à cause notamment des forts recouvrements dues à une modélisation gaussienne.
 Une nouvelle fois, des échantillons fiables sont tirés de l'image et permettent une estimation de la distribution en intensité par l'utilisation de fonctions noyaux.
 
+Un autre article illustrant ce genre d'approche est celui de \cite{Weisenfeld:NeuroImage:2009}, qui parvient à une segmentation complète des structures cérébrales par l'utilisation d'un estimation non-paramétrique de la distribution d'intensité.
+Le préalable à cette segmentation est la mise à disposition d'une base d'images où un expert a sélectionné plusieurs voxels représentatifs des différents tissus.
+Ces voxels sont désignés comme des prototypes et chaque image en a plusieurs milliers.
+Chaque image de la base est alors recalée sur le cas à étudier et les prototypes vont permettre la définition de plusieurs segmentations et d'obtenir une classification floue de chaque tissu.
+Les prototypes sont alors mis à jour et la segmentation réestimé jusqu'à ce qu'aucun changement ne soit observé dans la résultat final.
+
+Les approches par classification utilisent toute un algorithme EM, avec cependant quelques variantes.
 L'étude de~\cite{Xue:NeuroImage:2007} a pour objectif d'étudier l'évolution de la courbure du cortex au cours de la grossesse, ainsi que l'évolution de l'épaisseur corticale.
 Les images utilisées sont des images de prématurés.
 Pour atteindre cet objectif, une phase de segmentation des tissus, suivie d'une phase de reconstruction 3D du cortex est réalisée.
@@ -702,18 +712,12 @@ Cependant, les effets de volume partiel propres aux images de nouveaux nés néces
 Cela est réalisé par l'utilisation d'un algorithme EM intégrant des \emph{a priori} issu des champs de Markov.
 Cependant, le poids de cette régularisation est modifié en fonction de l'environnement entourant le voxel.
 Par exemple, si un voxel est labélisé en temps que matière blanche mais qu'il est entouré de matière grise et de LCR, il est considéré comme étant un voxel de volume partiel et l'\emph{a priori} markovien sera modifié de manière à favoriser la matière grise et le LCR plutôt que la matière blanche.
-En résumé, la segmentation du cortex est obtenue par une restriction de l'ensemble de segmentation puis par l'utilisation d'\emph{a priori} markoviens locaux, permettant une segmentation plus fiable du cortex.
-
-Les travaux de~\cite{Weisenfeld:NeuroImage:2009} parviennent à une segmentation complète des structures cérébrales par l'utilisation d'un estimation non-paramétrique de la distribution d'intensité.
-Le préalable à cette segmentation est la mise à disposition d'une base d'images où un expert a sélectionné plusieurs voxels représentatifs des différents tissus.
-Ces voxels sont désignés comme des prototypes et chaque image en a plusieurs milliers.
-Chaque image de la base est alors recalée sur le cas à étudier et les prototypes vont permettre la définition de plusieurs segmentations et d'obtenir une classification floue de chaque tissu.
-Les prototypes sont alors mis à jour et la segmentation réestimé jusqu'à ce que la segmentation finale ne bouge plus.
+En résumé, la segmentation du cortex est obtenue par une restriction de la zone d'intêret où la segmentation est effectuée puis par l'utilisation d'\emph{a priori} markoviens locaux, permettant une segmentation plus fiable du cortex.
 
 L'approche de~\cite{Merisaari:JNM:2009} est intéressante car elle ne repose que sur les données de l'image pour effectuer la segmentation, malgré qu'elle n'effectue que la séparation du LCR du reste des structures cérébrales.
 Cette méthode consiste en trois étapes.
-Premièrement, une segmentation définissant de nombreuses zones est réalisée grâce à une segmentation par ligne de partage des eaux. 
-Dans un deuxième temps, chaque zone est labélisée selon le modèle des mixtures de gaussienne en fonction de la moyenne des intensités de cette zone.
+Premièrement, une segmentation par ligne de partage des eaux est réalisée, conduisant à un grand nombre de régions. 
+Dans un deuxième temps, chaque région est labélisée selon le modèle des mixtures de gaussienne en fonction de la moyenne de ses intensités.
 Enfin, cette première segmentation est utilisée comme \emph{a priori} de la même manière qu'un atlas pour effectuer la classification voxel par voxel.
 Il s'agit de la première approche cherchant à obtenir une segmentation sans phase d'apprentissage, ni atlas.
 
@@ -725,8 +729,11 @@ Du même auteur~\cite{Shi:HBM:2011}, nous pouvons également mentionner une méthod
 Elle utilise un atlas de population mais le pondère par des éléments du cas étudié, notamment une carte de confiance sur l'emplacement du cortex, issu d'un filtre hessien.
 De plus, les éléments subcorticaux sur volumes intracrânien sont enlevé à l'aide d'un template recalé sur le cas étudié, de manière à ne pas confondre les noyaux gris et le cortex.
 
-De manière générale, les propriétés de IRM cérébrales des nouveaux nés ne permettent pas l'utilisation d'algorithmes de segmentation sans l'aide d'\emph{a priori} spatiaux sous forme d'atlas de population, ou sans l'ajout d'une phase d'apprentissage.
-Cependant, une méthode parue récemment est parvenue à une segmentation sans ces éléments en utilisant des \emph{ apriori} anatomiques génériques.
+Une remarque importante doit être faite à propos des méthodologies présentées précédemment.
+Toutes ont besoin d'utiliser un atlas, soit comme outils statistique afin de bénéficier de l'\emph{a priori} spatial qu'il apporte, soit pour aider à la sélection d'échantillons dans l'image, soit pour exclure une partie du cerveau de la zone d'intêret pour la segmentation.
+La seule méthode n'utilisant pas d'atlas est celle de \cite{Merisaari:JNM:2009}, mais ce dernier ne cherche qu'à séparer le cerveau du LCR.
+
+Cependant, une méthode parue récemment est parvenue à une segmentation sans atlas en utilisant des \emph{a priori} anatomiques génériques.
 L'article de~\cite{Gui:ISBI:2011} montre qu'il est possible d'obtenir une segmentation en ne se basant que sur les données de l'images par une succession d'opérations connues, mais mise en \oe uvre dans l'ordre nécessaire à l'optention d'une segmentation complète.
 L'extraction du volume intracrânien, la division des deux hémisphères cérébraux et la détection des noyaux gris est réalisée grâce à une segmentation par ligne de partage des eaux.
 Par la suite, l'extraction du cortex et de la matière blanche est réalisé par un algorithme de croissance de région avec des contraintes fortes telles que l'interdiction aux labels de LCR et de matière blanche d'être voisins.
