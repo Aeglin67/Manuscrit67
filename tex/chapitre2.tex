@@ -245,30 +245,30 @@ Aujourd'hui, l'algorithme des $C$-Moyennes floues (FCM), décrit à la section \re
 \subsection{Utilisation de la topologie}
 \label{subsec:topologie}
 
-La topologie est un vaste domaine des mathématiques, fondée par Euler grâce à la solution qu'il a apporté au problème des ponts de Konigsberg \cite{Euler:CASP:1741}.
+La topologie est un vaste domaine des mathématiques, fondée par Euler grâce à la solution qu'il a apporté au problème des ponts de K\"{o}nigsberg \cite{Euler:CASP:1741}.
 Elle étudie les déformations spatiales d'un objet par des transformations continues (ou déformations homotopiques), hors division ou fusion d'objets.
-La topologie d'un objet représente les caractéristiques qui doivent demeurer invariantes au cours de la transformation, c'est à dire conserver le même nombre de composantes connexes, de cavités et de tunnels.
+La topologie d'un objet représente les caractéristiques qui doivent demeurer invariantes au cours de la transformation, c'est à dire que l'objet final doit comporter le même nombre de composantes connexes, de cavités et de tunnels que l'objet initial.
 
 Cependant, l'application dans le domaine numérique (donc discrétisé), n'est pas immédiate car une transformation voulue comme continue peut rompre ces invariants topologiques en fonction de la définition de la connexité et de l'échantillonage.
-Une topologie digitale a donc été définie dans le but de comblé l'espace entre la topologie continue et les objets discrétisés.
+Une topologie digitale a donc été définie dans le but de combler l'espace entre la topologie continue et les objets discrets.
 La notion au c\oe ur de cette nouvelle topologie est le \emph{point simple}, qui représente un voxel pouvant être librement labélisé comme faisant parti de l'objet ou n'en faisant pas parti sans en changer la topologie.
 Cette notion nécessite la définition d'un système de voisinage (6-voisinage, 18-voisinage ou 26-voisinage).
 
-De nombreuse méthodologies ont introduits la notion de topologie dans le cadre de la segmentation des structures cérébrales \cite{Pham:SPM:2010}.
+De nombreuses méthodologies ont introduit la notion de topologie dans le cadre de la segmentation des structures cérébrales \cite{Pham:SPM:2010}.
 Elle est utilisée dans le but d'imposer des contraintes géométriques et structurelles aux différents tissus et structures recherchées.
-Un premier exemple est l'article de \cite{Mangin:JMIV:1995} qui utilise les déformations homotopiques pour obtenir une cartographie du cortex cérébral, le but final étant l'étude des variabilité inter-individuelles des sillons.
+Un premier exemple est l'article de \cite{Mangin:JMIV:1995} qui utilise les déformations homotopiques pour obtenir une cartographie du cortex cérébral, le but final étant l'étude des variabilités inter-individuelles des sillons.
 Une autre approche intéressante est celle de \cite{MacDonald:NeuroImage:2000}, qui segmente le cortex à l'aide de deux level-sets concurrents tout en imposant comme contraintes que ces deux surfaces ne peuvent pas se croiser, ainsi qu'une distance maximum entre ces deux surfaces (ce qui revient à imposer une épaisseur maximum au cortex).
 
 La méthode de \cite{Han:TMI:2002} se situe plus dans une approche de correction de la topologie.
-A partir d'une segmentation du cortex, le but est d'obtenir une surface cohérente topologiquement (c'est à dire sans tunnels, ni cavités qu'une pré-segmentation a toute les chances d'avoir créé).
-Cette correction est obtenue par la succession des opérations suivantes à différentes échelles : ouverture morphologique, dilation conditionnée au respect de la topologie obtenue (sauf si des tunnels sont bouchés), construction d'un graphe modélisant les relations de voisinage des différentes composantes connexes, puis élimination des cycles du graphe.
+A partir d'une segmentation du cortex, le but est d'obtenir une surface cohérente topologiquement (c'est à dire sans tunnels, ni cavités qu'une pré-segmentation a toute les chances d'avoir créés).
+Cette correction est obtenue par la succession des opérations suivantes à différentes échelles : ouverture morphologique, dilatation conditionnée au respect de la topologie obtenue (sauf si des tunnels sont bouchés), construction d'un graphe modélisant les relations de voisinage des différentes composantes connexes, puis élimination des cycles du graphe.
 Dans la même idée d'une combinaison de contraintes topologiques avec des opérateurs de morphologie mathématique, nous pouvons citer les travaux de \cite{Dokladal:PR:2003} qui effectuent une segmentation complète des tissus cérébraux.
 Chaque structures est extraite successivement selon des contraintes prédéfinies en fonction de connaissances antomatiques.
 
-Enfin, nous pouvons également citer les travaux de \cite{Bazin:TMI:2007} qui utilisent un algorithme de type FCM conjugué à un atlas anatomique prenant en compte les contraintes topologiques des différentes structures.
+Enfin, nous pouvons également citer les travaux de \cite{Bazin:TMI:2007} qui utilisent un algorithme de type FCM conjugué à un modèle anatomique prenant en compte les contraintes topologiques des différentes structures.
 L'évolution se fait selon des érosions et dilatations successives des différents labels.
 La vitesse de propagation de ces érosions et dilatations est calculée à partir de l'appartenance calculée par l'algorithme FCM.
-La suite de ces travaux (voir \cite{Bazin:MIA:2008}) montre une amélioration de l'algorithme par l'introduction d'un atlas statistique et par l'ajout de contraintes homéomorphiques permettant de prendre ainsi en compte plus facilement la topologie dans un environnement multi-objet.
+La suite de ces travaux (voir \cite{Bazin:MIA:2008}) montre une amélioration de l'algorithme par l'introduction d'un atlas statistique et par l'ajout de propriétés homéomorphiques permettant de prendre ainsi en compte plus facilement les contraintes topologiques dans un environnement multi-objet.
 
 Une dernière méthode à citer est celle de \cite{Miri:ICISP:2008} qui effectue une segmentation des tissus cérébraux à partir de quatre sphères concentriques évoluant par échange de points simples.
 % \cite{Mangin:JMIV:1995} : Représentation du cortex à partir de la squelettisation de l'ensemble LCR/Cortex.
