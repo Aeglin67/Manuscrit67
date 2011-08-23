@@ -328,10 +328,10 @@ Deux grandes familles de méthodes se dégagent : les approches séquentielles (eff
 Les approches séquentielles ont historiquement d'abord reposé sur des filtrage spatiaux ou homomorphiques \cite{Johnston:TMI:1996} considérant que les basses fréquences représentent le biais tandis que les hautes fréquence représentent les détails anatomiques.
 Cependant, malgré leur rapidité et leur facilité de mise en \oe uvre, ces approches peuvent corrompre certains détails importants tels que les contours.
 D'autres approches cherchent à minimiser l'entropie de l'histogramme en intensité de l'image.
-L'article de \cite{Mangin:MMBIA:2000} utilise cette approche avec une contrainte de lissage sur le champs de biais et une contrainte de similarité entre la moyenne de l'image originale et et celle de l'image restorée.
-Une technique consiste à réaliser un ajustement de surface en modélisant le champs de biais par des splines ou par un polynome, comme dans \cite{Styner:TMI:2000}, la correction se faisant alors voxel à voxel par division de l'image originale par le champs calculé.
+L'article de \cite{Mangin:MMBIA:2000} utilise cette approche avec une contrainte de lissage sur le champs de biais et une contrainte de similarité entre la moyenne de l'image originale et celle de l'image restorée.
+Une autre technique consiste à réaliser un ajustement de surface en modélisant le champs de biais par des splines ou par un polynome, comme dans \cite{Styner:TMI:2000}, la correction se faisant alors voxel à voxel par division de l'image originale par le champs calculé.
 
-Les méthodes couplées ont pour but original de segmenter les données, mais prennent intrinsinquement en compte le biais en intensité qui peut les affecter.
+Les méthodes couplées ont pour but original de segmenter les données, mais prennent intrinsèquement en compte le biais en intensité qui peut les affecter.
 Elles alternent donc des étapes de classification avec des étapes d'évaluation des paramètres du modèle de biais.
 Plusieurs modèles d'interaction du biais $b$ avec le signal idéal $\mathbf{\tilde{y}}$ et le bruit $n$ ont été proposés.
 Le plus courant consiste à tranformer les intensités dans le domaine logarithmique, transformant le champs de biais généralement considéré comme multiplicatif, en un artefact additif donnant le modèle suivant : 
