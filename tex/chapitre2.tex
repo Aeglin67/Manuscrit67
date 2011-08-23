@@ -293,8 +293,8 @@ L'utilisation d'un atlas anatomique est une façon alternative d'imposer des cont
 Il peut être utilisé seul, ou en colaboration avec d'autres outils permettant de prendre en compte le bruit présent dans l'image.
 
 Un premier exemple est l'utilisation qu'en fait \cite{Marroquin:TMI:2002}, permettant d'ajouter un \emph{a priori} spatial en plus de l'\emph{a priori} donné par les champs de Markov.
-L'article de \cite{Ashburner:NeuroImage:2005} présente une méthode reposant presque complètement sur le recalage d'un atlas et introduisant un \emph{a priori} sur les tissus combinant l'\emph{a priori} de l'atlas pondéré par la quantité de tissus présent dans un petit volume permettant une bonne résistance au bruit dans les régions où un tissus est prépondérant.
-Un autre exemple est donné par l'article de \cite{Zhou:TBE:2007} qui utilise des notions de connectivité floue combinée à un atlas pour obtenir une segmentation finale.
+L'article de \cite{Ashburner:NeuroImage:2005} présente une méthode reposant presque complètement sur le recalage d'un atlas et introduisant un \emph{a priori} sur les tissus combinant l'\emph{a priori} de l'atlas pondéré par la quantité de tissus présent dans un petit volume permettant une bonne résistance au bruit dans les régions où un tissu est prépondérant.
+Un autre exemple est donné par l'article de \cite{Zhou:TBE:2007} qui utilise des notions de connectivité floue combinées à un atlas pour obtenir une segmentation finale.
 Cependant, l'ensemble de ces méthodes restent dépendantes des méthodes de recalage utilisée pour aligner l'atlas au cas étudié.
 Une étude réalisée par \cite{Klein:NeuroImage:2009} a comparé plusieurs de ces méthodes sans permettre d'en dégager une qui soit au dessus du lot.
 
@@ -310,7 +310,7 @@ La comparaison de ces patchs conduit à un vote pondéré par la similarité entre c
 Seul un recalage affine est alors nécessaire pour amener les deux images dans les mêmes coordonnées.
 
 De manière générale, l'utilisation d'un atlas est intéressante grâce à l'\emph{a priori} anatomique et statistique qu'il permet d'introduire dans la segmentation.
-Cependant, l'utilisateur doit être conscient des différents problèmes qui peuvent survenir, que ce soit lors de sa construction, ou lors de son utilisation surtout à l'étape critique du recalage.
+Cependant, l'utilisateur doit être conscient des différents problèmes qui peuvent survenir, que ce soit lors de sa construction, ou lors de son utilisation surtout lors de l'étape critique du recalage.
 % De plus, différents travaux montrent qu'il est préférable d'utiliser un atlas particulier pour chaque type de cas rencontré (sujet sain ou présentant une pathologie particulière).
 % Méthodes faisant le recalage de l'atlas en même temps que la segmentation, et d'autres qui font d'abord le recalage puis la segmentation.
 
