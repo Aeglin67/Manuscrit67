@@ -426,7 +426,7 @@ L'algorithme FCM calcule une mesure de cette appartenance, via une fonction d'ap
 Soit une image $I : \Omega \rightarrow \mathbf{Y}$, où $\Omega$ est le support de l'image et $\mathbf{Y}$ l'espace des intensités.
 Il contient $N$ voxels, $\mathbf{x}_{j}$ et $\mathbf{y}_{j}$ représentent respectivement les coordonnées spatiales et l'intensité du voxel $j$.
 
-L'algorithme FCM effectue une série d'itération entre l'évaluation de la fonction d'appartenance floue $u_{jk}$ et le calcul des centroïdes des classes $\mathbf{v}_k$.
+L'algorithme FCM effectue une série d'itérations entre l'évaluation de la fonction d'appartenance floue $u_{jk}$ et le calcul des centroïdes des classes $\mathbf{v}_k$.
 La fonction d'appartenance est calculée en chaque voxel et pour chaque classe.
 Elle est contrainte de manière que $0 \leq u_{jk} \leq 1$ et que $\sum_{k=1}^{C} u_{jk} = 1$, où $C$ est le nombre de classes.
 Cette donnée est supposée connue.
@@ -451,25 +451,26 @@ De manière générale, le calcul de la similarité entre l'intensité des voxels et 
 
 Les paramètres à fixer pour l'algorithme FCM sont donc le nombre de classes $C$ et le choix de la métrique mesurant $D^2(\mathbf{y}_j, \mathbf{v}_k)$.
 A notre connaissance, aucune méthode ne permet de déterminer de façon fiable le nombre de classes de manière automatique.
-La question de la métrique sera discuté ultérieurement (section \ref{subsec:fcm:dd}).
+La question de la métrique sera discutée ultérieurement (section \ref{subsec:fcm:dd}).
 
 L'hypothèse fondamentale faite lors de l'utilisation de l'algorithme FCM en segmentation anatomique est que chaque tissu peut-être représenté par une unique valeure $\mathbf{v}_k$, qui serait uniforme sur l'ensemble du domaine de l'image.
 Les variations de cette \og vraie \fg{} valeur sont alors imputés au biais de l'image, au bruit et à l'effet de volume partiel (mélange de plusieurs tissus au sein d'un même voxel dont les proportions déterminent l'intensité du voxel).
-Dans le cas de la segmentation anatomique adulte, cette hypothèse est suffisante pour effectuée la segmentation d'une IRM, mais nécessite l'intégration de nouvelles données de manière à prendre en compte le biais et le bruit.
+Dans le cas de la segmentation anatomique adulte, cette hypothèse est suffisante pour effectuée la segmentation d'une IRM, mais nécessite l'intégration de modélisations complémentaires de manière à prendre en compte le biais et le bruit.
 
 \subsection{Autres métriques utilisées}
 \label{subsec:fcm:dd}
 
 Certains auteurs ont cherché à évaluer l'impact d'une définition alternative de la mesure de similarité entre l'intensité des voxels et les centroïdes des classes.
 Deux grandes voies ont été suivies, la première utilisant des opérateurs noyaux de manière à projeter les données dans un autre espace où la segmentation serait plus aisée et la deuxième utilisant la distance de Mahalanobis (utile en cas d'utilisation de données multi-spectrales).
+Des voies spécifiques ont également été suivies et sont présentées à la fin de cette section.
 
 \subsubsection{Projection dans un espace de dimension supérieure}
 
-Concernant l'utilisation des opérateurs noyaux, un état de l'art générale de leur utilisation en clustering est fournit par~\cite{Filippone:PR:2008}.
+Concernant l'utilisation des opérateurs noyaux, un état de l'art général de leur utilisation en clustering est fournit par~\cite{Filippone:PR:2008}.
 L'intêret des opérateurs noyaux est leur capacité à séparer des données non-linéaires en projetant les données dans un espace où une séparation linéaire serait possible.
 Une exemple de l'utilisation de ces opérateurs est le \emph{Support Vector Machine} (SVM) qui est un algorithme de classification supervisé.
 
-Formellement, les fonctions noyaux sont définis de la façon suivante.
+Formellement, les fonctions noyaux sont définies de la façon suivante.
 Soit $X=\{\mathbf{x}_1,\ldots,\mathbf{x}_n\}$ un ensemble non vide avec $\mathbf{x}_i \in R^d$.
 Une fonction $K : X \times X \rightarrow \mathbb{R}$ est un \emph{noyau défini positif} si et seulement si $K$ est symétrique ($K(\mathbf{x}_i,\mathbf{x}_j) = K(\mathbf{x}_j,\mathbf{x}_i)$) et respecte l'équation suivante :
 $$
@@ -528,7 +529,7 @@ Cette méthode est intéressante car elle utilise le même principe que la segmenta
 
 La prise en compte du biais en intensité introduit par les imageurs est un problème qui a eu des réponses spécifiques et adaptées à la formulation de l'algorithme FCM.
 On rappelle que le signal reçu est modélisé comme le produit du \og vrai \fg{} signal et d'un champ de biais, suposé varier lentement le long du support de l'image.
-Cependant, l'application d'une transformée logarithmic à l'espace des intensités  permet de modéliser le signal comme l'addition du vrai signal et du champ de biais, comme dans les travaux de~\cite{Ahmed:TMI:2002}.
+Cependant, l'application d'une transformée logarithmique à l'espace des intensités  permet de modéliser le signal comme l'addition du vrai signal et du champ de biais, comme dans les travaux de~\cite{Ahmed:TMI:2002}.
 % L'intensité est donc modélisée par : $\mathbf{y}_j = \mathbf{\dot{y}}_j + b_j$, où $\mathbf{\dot{y}}_j$ représente la \og vraie \fg{} intensité au voxel $j$ et $b_j$ représente le biais au voxel $j$.
 L'évaluation du biais représente alors une étape supplémentaire de l'algorithme FCM, après l'évaluation des fonctions d'appartenance et des centroïdes, et est faite de la façon suivante : $b_j = \mathbf{y}_{j} - \frac{\sum_{k=1}^{C}u^q_{jk}\mathbf{v}_k}{\sum_{k=1}^{C}u^q_{jk}}$.
 
@@ -538,7 +539,7 @@ Une régularisation permet de garantir la continuité entre les différentes coupes
 L'évaluation du biais est ainsi réduite au calcul des coefficients contrôlant les différentes surfaces.
 
 Un autre exemple d'estimation du biais est donné par les travaux de~\cite{Li:IPMI:2009}.
-Ils introduisent un modèle appelé un clustering des intensité local et cohérent (en anglais : \emph{coherent local intensity clustering} ou \emph{CLIC}) destiné à prendre en compte la similarité des intensité d'un voisinage.
+Ils introduisent un modèle appelé un clustering des intensités local et cohérent (en anglais : \emph{coherent local intensity clustering} ou \emph{CLIC}) destiné à prendre en compte la similarité des intensités d'un voisinage.
 Les voxels de ce voisinage sont pondérés à l'aide d'un noyau gaussien $K(\cdot)$ tronqué de la forme : 
 \begin{equation}
 K(\mathbf{u}) = 
@@ -552,7 +553,7 @@ K(\mathbf{u}) =
 où $\rho$ est le rayon du voisinage pris en compte.
 La fonction d'énergie à minimiser devient donc : 
 \begin{equation}
-J = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x}_j - \mathbf{x}_l) \lVert \mathbf{y}_{j} - b_{l}\mathbf{v}_{k} \rVert^2.
+J_{CLIC} = \sum_{j \in \Omega} \sum_{k = 1}^{C}u_{jk}^q \sum_{l \in \Omega} K(\mathbf{x}_j - \mathbf{x}_l) \lVert \mathbf{y}_{j} - b_{l}\mathbf{v}_{k} \rVert^2.
 \end{equation}
 L'avantage de cette formulation est que la prise en compte des intensités d'un voisinage autour du voxel courant permet également la correction du bruit de l'image, tout en ajoutant une pondération en fonction de la distance par rapport au voxel courant, partant du principe que seul les voxels les plus proches sont les plus pertinents à prendre en compte.
 
@@ -569,14 +570,14 @@ Par exemple, si un voxel est au milieu d'une zone de matière blanche, le process
 
 \subsubsection{Terme de régularisation}
 
-Dans cette optique, deux fonctions d'énergie ont été définies de manière indépendante.
-Elles définissent la fonction d'énergie comme la somme d'un terme d'attache aux données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation (inspiré du formalisme des champs de Markov) tenant compte des fonctions d'appartenance des voxels voisins destiné à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
-La première, appelée FCM robuste (en anglais : \emph{Robust FCM} ou \emph{RFCM})~\cite{Pham:CVIU:2001} ne prend en compte que les fonctions d'appartenance des voxels voisins pour contraindre la segmentation : 
+Dans cette optique, deux algorithmes ont été définis de manière indépendante.
+Ils définissent la fonction d'énergie comme la somme d'un terme d'attache-aux-données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation (inspiré du formalisme des champs de Markov) tenant compte des fonctions d'appartenance des voxels voisins destinées à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
+Le premier, appelé FCM robuste (en anglais : \emph{Robust FCM} ou \emph{RFCM})~\cite{Pham:CVIU:2001} ne prend en compte que les fonctions d'appartenance des voxels voisins pour contraindre la segmentation : 
 \begin{equation}
 J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \sum_{m \in M_k} u^q_{lm}  \label{eq:rfcm},
 \end{equation}
 où $N_j$ représente un voisinage du voxel courant $j$, $M_k = \{1,\ldots,C\} \backslash \{k\}$ et où $\beta$ contrôle les poids respectifs du terme d'attache aux données et du terme de régularisation.
-La deuxième méthodologie, appelée un FCM modifié (en anglais : \emph{Modified FCM} ou \emph{MFCM})~\cite{Ahmed:TMI:2002},  définie la fonction d'énergie de la façon suivante : 
+Le deuxième algorithme, appelé un FCM modifié (en anglais : \emph{Modified FCM} ou \emph{MFCM})~\cite{Ahmed:TMI:2002},  définit la fonction d'énergie de la façon suivante : 
 \begin{equation}
 J_{MFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{\lvert N_j \rvert} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2}  \label{eq:mfcm}. 
 \end{equation}
@@ -604,12 +605,12 @@ Le calcul des centroïdes doit prendre en compte le voisinage défini et est donc 
 
 \subsubsection{Accélération du processus de segmentation}
 
-L'exploration des différents voisinage étant couteuse en temps de calcul, des améliorations visant l'accélération de l'exécution ont été mise en place.
+L'exploration des différents voisinages étant coûteuse en temps de calcul, des améliorations visant l'accélération de l'exécution ont été mise en place.
 Les travaux de~\cite{Szilagyi:AICIEEE:2003} parviennent à ce but en définissant une image intermédiaire $\zeta$ de la manière suivante : 
 \begin{equation}
 \mathbf{\zeta}_{j} = \frac{1}{1+\beta} \left( \mathbf{y}_{j} + \frac{\beta}{\lvert N_j \rvert} \sum_{l \in N_j} \mathbf{y}_{l} \right) \label{eq:Szilagyi:Image}.
 \end{equation}
-L'avantage de l'image intermédiaire est quelle permet de prendre en compte le voisinage du voxel courant une fois pour toute, sans avoir à l'explorer à chaque itération de l'algorithme.
+L'avantage de l'image intermédiaire est qu'elle permet de prendre en compte le voisinage du voxel courant une fois pour toute, sans avoir à l'explorer à chaque itération de l'algorithme.
 De plus, afin de diminuer encore le nombre de fois où l'image est parcourue, un paramètre $\gamma_{p}$ est introduit indiquant le nombre de voxels de l'image à une intensité $p$ donnée (par conséquent, on a $\sum_{p = 0}^{p_{max}} \gamma_{p} = N$).
 La fonction d'énergie à minimiser s'exprime alors de la façon suivante : 
 \begin{equation}
@@ -625,7 +626,7 @@ De plus, les auteurs montrent que leur algorithme converge plus vite (en moins d
 
 Toujours en suivant la même idée d'accélérer l'exécution d'un algorithme FCM ayant un terme de régularisation, les travaux de~\cite{Chen:TSMC:2004} introduisent la moyenne ou la médiane du voisinage plutôt que le calcul d'une image complète pour se ramener au cas de l'algorithme FCM classique.
 De plus, ils ajoutent l'utilisation d'un noyau gaussien de manière à ajouter une robustesse au bruit et aux \emph{outliers}.
-Cet algorithme est appelé le KFCM\_S est la fonction coût à minimiser devient : 
+Cet algorithme est appelé le KFCM\_S et la fonction d'énergie à minimiser devient : 
 \begin{equation}
 J_{KFCM\_S} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{y}_j, \mathbf{v}_k)) + \beta \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{\overline{y}}_j, \mathbf{v}_k)),
 \end{equation}
@@ -677,7 +678,7 @@ Ce facteur, noté $G_{jk}$, est calculé de la façon suivante :
 \begin{equation}
 G_{jk} = \sum_{l \in N_{j},\mbox{ }j \neq l} \frac{1}{\lVert \mathbf{x}_j - \mathbf{x}_l \rVert + 1} (1 - u^{q}_{lk}) \lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2}.
 \end{equation}
-La fonction coût à minimiser devient alors : 
+La fonction d'énergie à minimiser devient alors : 
 \begin{equation}
 J_{FLICM} = \sum_{j \in \Omega} \sum_{k=1}^{C} (u_{jk}^{q} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2}_{2} + G_{jk}).
 \end{equation}
@@ -689,7 +690,7 @@ De plus, l'algorithme FLICM travaille directement sur l'image originale et prend
 %------------------------------------------------------------------------Maturation cérébrale----------------------------------------------------------------------------------------
 
 
-\section{Segmentation cérébrale pré et post-natales}
+\section{Segmentation cérébrale pré et post-natale}
 
 Cette section présente un état de l'art des techniques de segmentation dans le cadre de la maturation cérébrale.
 Elle concerne les méthodes employées pour effectuer une segmentation des tissus cérébraux dans les cas prénataux et post-nataux.
