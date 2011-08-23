@@ -11,7 +11,7 @@ Cependant, ces modèles doivent être aussi proche que possible de la réalité, sou
 
 Ce chapitre présente un état de l'art des différents types de méthodes développées pour répondre à la problématique de la segmentation cérébrale.
 Dans un premier temps, les grandes familles de méthodes sont identifiées et leur principale caractéristiques décrites.
-Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM (\emph{Fuzzy C-Means}), un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
+Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM (algorithme des C-moyennes floues ou \emph{Fuzzy C-Means} en anglais), un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
 Enfin, un état de l'art des techniques de segmentation utilisées dans le cadre de la maturation cérébrale est présenté.
 En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont du être dévelloppées pour répondre à cette problématique récente.
 
@@ -158,7 +158,7 @@ Un exemple de l'utilisation du \emph{Mean-Shift} pour la segmentation des tissus
 La segmentation est également contrainte par l'ajout de l'information fournie par la détection des contours de l'image.
 L'enjeu est ensuite de fusionner l'ensemble des régions détectées par le \emph{Mean-Shift} pour obtenir la segmentation finale.
 Cette étape est faite par l'analyse des régions adjacentes afin de fusionner les régions homogènes d'intensité proche, ainsi que par une étape de supression des petites régions.
-Les régions finales sont alors classées selon une méthode bayésienne avec un \emph{a priori} fourni par un atlas anatomique.
+Les régions finales sont alors classées selon une méthode bayésienne avec un \emph{a priori} fourni par un atlas statistique.
 L'article de \cite{Mayer:TMI:2009} repose sur une première étape toujours fondée sur un \emph{Mean-Shift} avec la prise en compte de l'intensité et des coordonnées spatiales.
 Cependant, après une étape de fusion des modes adjacents, la classification finale est effectuée selon un algorithme $k$-means pondéré par le nombre de voxels de chaque région.
 Le problème posé par la fusion des régions reste donc une question encore largement ouverte.
@@ -167,13 +167,15 @@ Le problème posé par la fusion des régions reste donc une question encore largem
 \subsubsection{Approches probabilistes}
 \label{subsubsec:gaussianMix}
 
+\paragraph{Mixtures de gaussiennes}
+
 Ces approches introduisent un \emph{a priori} sur la forme de la distribution, en la modélisant comme une mixture de gaussienne, le but étant de calculer les paramètres optimaux permettant de quantifier ce mélange.
 Soit $\mathbf{y}_j$ un vecteur de dimension $d$ représentant les données issues du voxel $j$ à classer.
 L'intensité de ce voxel est considérée comme la réalisation d'une variable aléatoire régie par un mélange de gaussienne : 
 \begin{equation}
 f(\mathbf{y}_j ; \theta) = \sum_{k=1}^{C} \alpha_{k} (2\pi)^{d/2} \lvert \Sigma_{k} \rvert^{\frac{1}{2}} \exp{(-\frac{1}{2}(\mathbf{y}_j - \mathbf{u}_k)^{t}\mathbf{\Sigma}_{k}^{-1}(\mathbf{y}_j - \mathbf{u}_k))},
 \end{equation}
-où $C$ est le nombre de classes recherchée, $\theta = (\alpha, \mathbf{u}, \mathbf{\Sigma})$, $\mathbf{u}_{k}$ est le vecteur moyenne de la $k^{\text{ième}}$ distribution gaussienne et $\mathbf{\Sigma}_{k}$ est sa matrice de covariance et $\alpha$ est la proportion du mélange.
+où $C$ est le nombre de classes recherchées, $\theta = (\alpha, \mathbf{u}, \mathbf{\Sigma})$, $\mathbf{u}_{k}$ est le vecteur moyenne de la $k^{\text{ième}}$ distribution gaussienne et $\mathbf{\Sigma}_{k}$ est sa matrice de covariance et $\alpha$ est la proportion du mélange.
 Les poids $\alpha_k$ sont positifs et vérifient la relation : 
 \begin{equation}
 \sum_{k=1}^{C} \alpha_{k} = 1.
@@ -188,6 +190,8 @@ Enfin, les travaux de \cite{Richard:AIM:2004} définissent une approche multi-age
 Cependant, l'algorithme EM est sensible au bruit, et nécessite l'introduction d'\emph{a priori} pour garantir une homogénéité spatiale des labels.
 De manière générale, les champs de Markov sont utilisés dans ce cadre.
 
+\paragraph{Régularisation par champs et chaînes de Markov}
+
 Les champs de Markov permettent de modéliser l'interaction spatiale entre les voxels.
 Soit $S$ un ensemble de sites $s$ et des variables aléatoires $X_s$ associée à ces sites.
 Le champ $X = (X_{s})_{s \in S}$ est un champ de Markov pour un système de voisinage $V_s$ donné si et seulement si :
@@ -201,7 +205,7 @@ P(X = x) = \frac{1}{Z} \exp{(-U(x))},
 avec $U(x) = \sum_{c \in C} V_c(x_s, s \in c)$ et où $Z$ est une constante de normalisation.
 $C$ est l'ensemble des cliques définies par le système de voisinage et $V_c$ un potentiel dépendant de la configuration de la clique $c$ \cite{Geman:PAMI:1984}.
 
-Les champs de Markov se sont révélés particulièrement bien adapté à la segmentation des tissus cérébraux dans un environnement bruité, comme le montre les publications de \cite{Held:TMI:1997}, \cite{VanLeemput2:TMI:1999}, \cite{Zhang:TMI:2001} et \cite{Shattuck:NeuroImage:2001}.
+Les champs de Markov se sont révélés être particulièrement bien adaptés à la segmentation des tissus cérébraux dans un environnement bruité, comme le montre les publications de \cite{Held:TMI:1997}, \cite{VanLeemput2:TMI:1999}, \cite{Zhang:TMI:2001} et \cite{Shattuck:NeuroImage:2001}.
 L'article de \cite{Marroquin:TMI:2002} présente une approche recherchant le MAP avec une régularisation par des champs de Markov cachés. 
 Un atlas anatomique est utilisé en complément de manière à obtenir des \emph{a priori} pertinents et avoir une initialisation automatique.
 Les travaux de \cite{Bricq:MIA:2008} utilisent une régularisation par chaîne de Markov, où le voisinage est pris en compte grâce à un parcours fractale de l'image.
@@ -234,7 +238,7 @@ L'algorithme démarre d'une position initiale et alterne une étape d'appariemment
 La convergence est atteinte lorsqu'aucune donnée ne change de classe.
 
 Cet algorithme a été utilisé en segmentation des tissus cérébraux \cite{Vemuri:IAACG:1995}. 
-Cependant, il est sensible à l'initialisation, ne tient pas compte d'un environnement bruité et étant donné le fort effet de volume partiel présent dans les images, l'appartenance binaire à une classe peut poser problème.
+Cependant, il est sensible à l'initialisation, ne tient pas compte d'un environnement bruité et étant donné le fort effet de volume partiel présent dans les IRM, l'appartenance binaire à une classe peut poser problème.
 Aujourd'hui, l'algorithme des $C$-Moyennes floues (FCM), décrit à la section \ref{sec:fcm}, lui est préféré.
 % Il est décrit à la section \ref{sec:fcm}.
 
