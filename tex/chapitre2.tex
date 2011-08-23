@@ -72,18 +72,18 @@ Ces outils restent donc délicats à utiliser et l'utilisation d'une information \
 \label{subsec:regionGrowing}
 
 Les méthodes évoquées ci-après utilisent des opérateurs de morphologie mathématique \cite{Najman:2010}. 
-Cette théorie cherche à extraire le contenu d'une image à partir de mesures fondées sur les formes structures des objets contenus dans les images étudiées. 
+Cette théorie cherche à extraire le contenu d'une image à partir de mesures fondées sur les formes des objets contenus dans les images étudiées. 
 Une élément structurant, caractérisant les propriétés recherchées, parcourent alors l'image et agit à la manière d'un filtre et doit donc être choisi en fonction de l'application recherchée.
 Nous rappellons tout d'abord la définition des deux opérateurs de base de la morphologie mathématique, qui sont la dilation et l'érosion par un élément structurant $B$.
 
-Une image $X$ est considérée comme une partie de l'ensemble $E \subseteq \mathbb{R}^n$ ou $\mathbb{Z}^{n}$.
-La dilatation se définit comme l'addition de Minkowski de l'image $X$ par l'élément structurant $B$, soit formellement : 
+Une image $I$ est considérée comme une partie de l'ensemble $E \subseteq \mathbb{R}^n$ ou $\mathbb{Z}^{n}$.
+La dilatation se définit comme l'addition de Minkowski de l'image $I$ par l'élément structurant $B$, soit formellement : 
 $$
-\delta_{B} : X \rightarrow X \oplus B = \bigcup_{b \in B} X_b = \bigcup_{x \in X} B_x = \{ x + b | x \in X, b \in B \}.
+\delta_{B} : I \rightarrow I \oplus B = \bigcup_{b \in B} I_b = \bigcup_{x \in I} B_x = \{ x + b | x \in I, b \in B \}.
 $$
-L'érosion se définit comme la soustraction de Minkowski de l'image $X$ par l'élément structurant $B$, soit formellement : 
+L'érosion se définit comme la soustraction de Minkowski de l'image $I$ par l'élément structurant $B$, soit formellement : 
 $$
-\varepsilon_{B} : X \rightarrow X \ominus B = \bigcap_{b \in B} X_{-b} =  \{ p \in E | B_p \in X \}.
+\varepsilon_{B} : I \rightarrow I \ominus B = \bigcap_{b \in B} I_{-b} =  \{ p \in E | B_p \in I \}.
 $$
 La différence entre une dilatation et une érosion par un élément structurant unitaire définit le gradient morphologique.
 
@@ -105,15 +105,15 @@ Cette segmentation est contrainte par des critères topologiques (position des ti
 
 % \cite{Stokking:NeuroImage:2000} : automatise complètement \cite{Hohne:JCAT:1992} par une détection automatique des seuils selon un algorithme de croissance de région.
 
-Enfin, nous pouvons citer des travaux récent, notamment ceux de \cite{Park:IWSCA:2007} définissant une approche automatique d'extraction du cerveau. 
+Enfin, nous pouvons citer des travaux récents, notamment ceux de \cite{Park:IWSCA:2007} définissant une approche automatique d'extraction du cerveau. 
 Le cerveau est tout d'abord extrait sur une coupe de l'image IRM et cette extraction est ensuite étendue à l'ensemble de l'image.
 Enfin, les travaux de \cite{Chiverton:CBM:2007} présente également une méthode automatique d'extraction du cerveau basée sur la morphologie statistique.
 
-Une autre catégorie de méthode est celle définie par un algorithme de segmentation appellé la ligne de partage des eaux (formalisé par \cite{Digabel:QAMSS:1978}).
+Une autre catégorie de méthodes est celle définie à partir d'un algorithme de segmentation appellé la ligne de partage des eaux (formalisé par \cite{Digabel:QAMSS:1978}).
 Cette méthodologie décrit les images en terme géographique, c'est-à-dire qu'une image peut être perçue comme un relief en assimilant les niveaux de gris à une altitude.
 La ligne de partage des eaux est alors la crête définissant la limite entre deux bassins versants.
 Deux classes principales d'implémentation de cette méthode existent : un algorithme récursif d'immersion et un autre basé sur des fonctions de distances géodésiques \cite{Roerdink:FI:2000}.
-Cependant, cette méthodologie nécessite d'être associé à une étape de fusion des régions car elle conduit généralement à une sur-segmentation de l'image considérée.
+Cependant, cette méthodologie nécessite d'être associée à une étape de fusion des régions car elle conduit généralement à une sur-segmentation de l'image considérée.
 
 Ce genre de méthodologie a été utilisée pour extraire le cerveau du reste de l'image.
 Un premier exemple est donné par l'article de \cite{Thiran:SP:1997}, qui introduit un mode de sélection simple de marqueurs, de manière à éviter la sur-segmentation due à la ligne de partage des eaux.
