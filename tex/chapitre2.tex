@@ -7,13 +7,13 @@ Elle représente une étape importante pour de nombreuses tâches, que ce soit dans
 
 Les méthodes de segmentation proposées doivent tenir des différentes caractéristiques et artefacts qui composent une IRM (voir la section \ref{intro:irm:carac}).
 Elles peuvent intégrée une modélisation \emph{a priori} sur le bruit, le biais, la localisation et les caractéristiques des tissus cérébraux, \ldots.
-Cependant, ces modèles doivent être aussi proche que possible de la réalité, sous peine d'introduire de multiples erreurs dans la segmentation, ce qui pourrait provoquer une mauvaise interprétation du contenu de l'image et mener à de fausse conclusion dans le cadre d'une étude ou d'un suivi clinique.
+Cependant, ces modèles doivent être aussi proche que possible de la réalité, sous peine d'introduire de multiples erreurs dans la segmentation, ce qui pourrait provoquer une mauvaise interprétation du contenu de l'image et mener à de fausses conclusions dans le cadre d'une étude ou d'un suivi clinique.
 
 Ce chapitre présente un état de l'art des différents types de méthodes développées pour répondre à la problématique de la segmentation cérébrale.
 Dans un premier temps, les grandes familles de méthodes sont identifiées et leur principale caractéristiques décrites.
-Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM \emph{Fuzzy C-Means}, un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
+Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM (\emph{Fuzzy C-Means}), un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
 Enfin, un état de l'art des techniques de segmentation utilisées dans le cadre de la maturation cérébrale est présenté.
-En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont du être dévelloppées pour répondre à ces problématiques récentes.
+En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont du être dévelloppées pour répondre à cette problématique récente.
 
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
@@ -29,23 +29,23 @@ Deux types de modèles déformables sont distingués : les modèles explicites et le
 
 Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
 Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une force externe (le terme d'attache-aux-données lié au contenu de l'image) et d'une force interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
-Les principaux problèmes des ces modèles sont leur forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou sépration de labels). 
+Les principaux problèmes de ces modèles sont leur forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou séparation de labels). 
 En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation.
 
-Ces modèles peuvent être utilisé comme une étape finale de la segmentation, destinée à corriger certains détails comme dans l'article de \cite{Stella-Atkins:TMI:1997}.
+Ces modèles peuvent être utilisés comme une étape finale de la segmentation, destinée à corriger certains détails comme dans l'article de \cite{Stella-Atkins:TMI:1997}.
 Un autre exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploit une formulation particulière du contour afin de mieux prendre en compte la complexité des structures.
-Plus récemment, l'article de \cite{Colliot:PR:2006}, définissant la force externe comme une combinaison du terme d'attache-aux-données et d'une information spatiale concernant la position des différents objets entre eux.
-Cette information spatiale est formalisée sous la forme de contraintes de localisation (angle et distance) exprimée de façon floue par rapport à une structure de référence.
-Cette méthodologie a été appliqué à la segmentation des noyaux gris autour des ventricules.
-Enfin, nous pouvons également citer les travaux de \cite{Wang:TBE:2009} utilisant un nouveau formalisme, appellée FVF (\emph{Fluid Vector Flow} en anglais), qui permet une meilleure segmentation de structure présentant une forte concavité.
+Plus récemment, l'article de \cite{Colliot:PR:2006}, définit la force externe comme une combinaison du terme d'attache-aux-données et d'une information spatiale concernant la position des différents objets entre eux.
+Cette information spatiale est formalisée sous la forme de contraintes de localisation (angle et distance) exprimées de façon floue par rapport à une structure de référence.
+Cette méthodologie a été appliquée à la segmentation des noyaux gris autour des ventricules.
+Enfin, nous pouvons également citer les travaux de \cite{Wang:TBE:2009} utilisant un nouveau formalisme, appellé FVF (\emph{Fluid Vector Flow} en anglais), qui permet une meilleure segmentation de structures présentant une forte concavité.
 
 % \cite{Xu:TIP:1998} : snakes et GVF.
 % \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
 
 Les modèles implicites sont des méthodes par ensemble de niveaux (\emph{levels-sets} en anglais) permettant d'intégrer naturellement les changements de topologie.
 Le contour est considéré comme l'ensemble de niveaux zéro d'une hypersurface (surface de dimension supérieure), notée $\Psi$.
-La modélisation ne prend donc pas en compte directement l'évolution du contour, mais bien celui de $\Psi$, sachant que le contour peut-être déduit de manière immédiate.
-Cette évolution est inspirée des travaux en propagations des ondes de \cite{Osher:JCP:1988}, formalisant l'équation d'évolution sous formes d'équations à dérivée partielle.
+La modélisation ne prend donc pas en compte directement l'évolution du contour, mais bien celui de $\Psi$, sachant que le contour peut en être déduit de manière immédiate.
+Cette évolution est inspirée des travaux en propagations des ondes de \cite{Osher:JCP:1988}, formalisant l'équation d'évolution sous forme d'équations à dérivées partielles.
 Elle se fait dans la direction de la normale à la surface et la vitesse de propagation est proportionnelle à la courbure.
 Elle est contrainte de manière à attirer la courbe vers l'objet à segmenter avec une régularisation spécifique.
 Deux solutions existent pour construire le modèle de propagation des ondes, à l'origine des \emph{level-sets} géométriques \cite{Casselles:NM:1993} et géodésiques \cite{Casselles:IJCV:1997}. 
@@ -57,14 +57,14 @@ Un modèle est d'abord recalé selon un procédé multigrille et multi-résolution av
 L'article de \cite{Han:TPAMI:2003} définit un nouveau type de \emph{levels sets} permettant de respecter les contraintes topologiques du modèle initial.
 Une application à la reconstruction de la surface corticale montre que l'ajout de ces contraintes permet de corriger des détails anatomiquement peu pertinents (tel que l'apparition de boucles, le cortex étant une structure très circonvoluée).
 
-Les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004} sont basés sur l'évolution de \emph{level-sets} concurrents \emph{via} une estimation du maximum \emph{a posteriori} prenant en compte la forme des objets à segmenter et leurs relations de voisinages.
+Les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004} sont basés sur l'évolution de \emph{level-sets} concurrents \emph{via} une estimation du maximum \emph{a posteriori} (MAP) prenant en compte la forme des objets à segmenter et leurs relations de voisinage.
 Les travaux de \cite{Yang:TMI:2004} proposent une application à la segmentation des structures internes du cerveau (ventricules, noyaux gris, \ldots{}) tandis que ceux de \cite{Duncan:NeuroImage:2004} proposent une segmentation du cortex par deux \emph{level-sets} représentant respectivement l'interface matière blanche/matière grise et la surface du cortex.
 
 Dans le même esprit d'utiliser plusieurs sources d'information pour guider le contour, l'article de \cite{Ciofolo:MIA:2009} définit une méthodologie décidant de la direction de propagation à partir d'un controlleur flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels, la position du contour dans l'image et par rapport à d'autres objets.
 Les expériences menées ont montré une bonne adaptabilité de cette méthode qui a été appliquée à la séparation des hémisphères cérébraux et du cervelet, ainsi qu'à la segmentation des différentes structures autour des ventricules.
 
 Toutes ces méthodes restent néanmoins trop dépendantes de l'initialisation du contour et des pré-traitements à effectuer.
-Les images peu contrastée ou présentant un biais en intensité peuvent devenir un problème, d'autant que la correction de biais tent à réduire le contraste dans certaines zones du cerveau (voir l'article de \cite{Colliot:PR:2006}).
+Les images peu contrastées ou présentant un biais en intensité peuvent devenir un problème, d'autant que la correction de biais tent à réduire le contraste dans certaines zones du cerveau (voir l'article de \cite{Colliot:PR:2006}).
 Ces outils restent donc délicats à utiliser et l'utilisation d'une information \emph{a priori} est nécessaire pour accompagner efficacement l'évolution des contours.
 
 
