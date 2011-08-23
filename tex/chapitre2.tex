@@ -2,15 +2,19 @@
 \label{chap:art}
 \minitoc
 
-Ce chapitre présente les différentes familles de méthodes développées pour répondre à la problématique de la segmentation cérébrale.
-La segmentation cérébrale consiste à trouver les régions homogènes de l'image. 
-Ces régions sont supposées être pertinentes, c'est à dire qu'elles doivent mettre en valeur des parties significatives de l'image, telles que les différents tissus cérébraux (LCR, matière grise et matière blanche).
+L'objectif de la segmentation en IRM cérébrale est de fournir une étiquette à chaque voxel de manière à permettre une interprétation automatisée du contenu de l'image.
+Elle représente une étape importante pour de nombreuses tâches, que ce soit dans un environnement clinique (par exemple le suivi des lésions provoquées par une maladie dégénérative type Parkinson ou Alzheimer) ou purement applicatif (par exemple : reconstruction du cortex en 3D, quantification des différentes structures du cerveau et évaluation de leur variabilité, \ldots).
 
-Les méthodes de segmentation doivent prendre en compte les principales caractéristiques des imageurs par résonnance magnétique (décrites à la section \ref{intro:irm}) afin de parvenir à un résultat pertinent.
-Plusieurs familles de méthodes ont été développées afin de répondre à ce problème, sans pour autant représenter des catégories rigides, de nombreux algorithmes se situant à la frontière de ces familles.
-Une première section présentera les grandes familles de segmentation classées selon le principe les régissant.
-Par la suite, la méthodologie FCM (\emph{Fuzzy C-Means} ou \emph{C-Moyennes floues}) sera détaillée car elle permet une approche tenant compte naturellement du volume partiel présent dans l'image.
-Enfin, une dernière section présentera un état de l'art des méthodes de segmentation dans le cadre de la maturation cérébrale.
+Les méthodes de segmentation proposées doivent tenir des différentes caractéristiques et artefacts qui composent une IRM (voir la section \ref{intro:irm:carac}).
+Elles peuvent intégrée une modélisation \emph{a priori} sur le bruit, le biais, la localisation et les caractéristiques des tissus cérébraux, \ldots.
+Cependant, ces modèles doivent être aussi proche que possible de la réalité, sous peine d'introduire de multiples erreurs dans la segmentation, ce qui pourrait provoquer une mauvaise interprétation du contenu de l'image et mener à de fausse conclusion dans le cadre d'une étude ou d'un suivi clinique.
+
+Ce chapitre présente un état de l'art des différents types de méthodes développées pour répondre à la problématique de la segmentation cérébrale.
+Dans un premier temps, les grandes familles de méthodes sont identifiées et leur principale caractéristiques décrites.
+Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM \emph{Fuzzy C-Means}, un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
+Enfin, un état de l'art des techniques de segmentation utilisées dans le cadre de la maturation cérébrale est présenté.
+En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont du être dévelloppées pour répondre à ces problématiques récentes.
+
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
 
