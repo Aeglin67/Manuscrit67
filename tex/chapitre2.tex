@@ -705,9 +705,9 @@ Cependant, cette étude ne prend pas en compte un élément capital, qui est la myé
 Les méthodes de segmentation dans les cas post-nataux se regroupent en deux grandes familles, qui sont l'estimation de la distribution en intensité des différents tissus à partir d'exemples issus de l'image et la classification par un algorithme EM avec potentiellement une régularisation par champs de Markov.
 
 Un premier exemple d'estimation de la distribution en intensité par des exemples est l'article de \cite{Prastawa:MIA:2005}.
-Afin de palier au défaut de l'article de \cite{Matsuzawa:CC:2001} qui ne prend pas en compte la myélinisation de la matière blanche au cours du temps, ils ont introduit une séparation de la matière blanche myélinisée et non myélinisée.
-Leur méthode repose sur trois étapes distinctes : l'estimation initiale de la distribution en intensité, la correction du biais, puis la correction de la segmentation.
-L'estimation initiale de la distribution en intensité est réalisé grâce à un seuillage d'un atlas anatomique préalablement recalé sur le cas à traiter.
+Afin de palier au défaut de l'article de \cite{Matsuzawa:CC:2001} qui ne prend pas en compte la myélinisation de la matière blanche au cours du temps, il a introduit une séparation de la matière blanche myélinisée et non myélinisée.
+Cette méthode repose sur trois étapes distinctes : l'estimation initiale de la distribution en intensité, la correction du biais, puis la correction de la segmentation.
+L'estimation initiale de la distribution en intensité est réalisé grâce à un seuillage d'un atlas statistique préalablement recalé sur le cas à traiter.
 Ce seuillage permet de collecter des échantillons de LCR, de matière grise et de matière blanche.
 L'estimation de la distribution en intensité du LCR et de la matière grise est faite directement, tandis que la distribution de la matière blanche myélinisée et non myélinisée est obtenue par élagage d'un arbre minimum construit à partir des échantillons des deux types de matière blanche.
 La correction du biais est obtenue selon la méthode de~\cite{VanLeemput1:TMI:1999}.
@@ -729,7 +729,7 @@ Une première étape élimine les tissus non-pertinents (tronc cérébral, cervelet, 
 Cette étape est réalisée par le recalage d'un atlas, choisi en fonction de l'âge de gestation du nouveau nés.
 La deuxième étape consiste en une segmentation basée sur un algorithme EM permettant une première segmentation du cortex et de la matière blanche.
 Cependant, les effets de volume partiel propres aux images de nouveaux nés nécessite une troisième étape permettant de détecter et de corriger les voxels ayant une mauvaise classification.
-Cela est réalisé par l'utilisation d'un algorithme EM intégrant des \emph{a priori} issu des champs de Markov.
+Cela est réalisé par l'utilisation d'un algorithme EM intégrant des \emph{a priori} issus des champs de Markov.
 Cependant, le poids de cette régularisation est modifié en fonction de l'environnement entourant le voxel.
 Par exemple, si un voxel est labélisé en temps que matière blanche mais qu'il est entouré de matière grise et de LCR, il est considéré comme étant un voxel de volume partiel et l'\emph{a priori} markovien sera modifié de manière à favoriser la matière grise et le LCR plutôt que la matière blanche.
 En résumé, la segmentation du cortex est obtenue par une restriction de la zone d'intêret où la segmentation est effectuée puis par l'utilisation d'\emph{a priori} markoviens locaux, permettant une segmentation plus fiable du cortex.
@@ -750,7 +750,7 @@ De plus, les éléments subcorticaux du volumes intracrânien sont enlevés à l'aide
 
 Une remarque importante doit être faite à propos des méthodologies présentées précédemment.
 Toutes ont besoin d'utiliser un atlas, soit comme outils statistique afin de bénéficier de l'\emph{a priori} spatial qu'il apporte, soit pour aider à la sélection d'échantillons dans l'image, soit pour exclure une partie du cerveau de la zone d'intêret pour la segmentation.
-La seule méthode n'utilisant pas d'atlas est celle de \cite{Merisaari:JNM:2009}, ce dernier ne présentant cependant pas de segmentation complète des tissus.
+La seule méthode n'utilisant pas d'atlas est celle de \cite{Merisaari:JNM:2009}, ce dernier ne présentant pas de segmentation complète des tissus.
 
 Cependant, une méthode parue récemment est parvenue à une segmentation sans atlas en utilisant des \emph{a priori} anatomiques génériques.
 L'article de~\cite{Gui:ISBI:2011} montre qu'il est possible d'obtenir une segmentation en ne se basant que sur les données de l'images par une succession d'opérations connues, mais mise en \oe uvre dans l'ordre nécessaire à l'optention d'une segmentation complète.
@@ -763,9 +763,9 @@ Si les noyaux gris ne sont pas discernables, la segmentation n'est pas possible.
 \subsection{Prénatal}
 \label{prenatal}
 
-Les images acquises \emph{in utero} présentent des difficultés supplémentaires, dues au temps d'acquisition plus faible et au conditions d'acquisition particulière (impossibilité d'immobiliser le patient, signal perturbé par les différents tissus de la mère, \ldots).
+Les images acquises \emph{in utero} présentent des difficultés supplémentaires, dues au temps d'acquisition plus faibles et au conditions d'acquisition particulières (impossibilité d'immobiliser le patient, signal perturbé par les différents tissus de la mère, \ldots).
 Cependant, l'étude de la maturation cérébrale \emph{in vivo} ainsi que la définition d'outils diagnostiques prénataux ont conduit à la mise en place d'outils permettant de traiter automatiquement ces images \cite{Studholme:ARBE:2010}.
-Des méthodes de reconstruction de volume ont également été définie afin d'obtenir des images isotropes à partir d'images de plus faibles résolutions et anisotropes~\cite{Kim:TMI:2010,Rousseau:AR:2006}.
+Des méthodes de reconstruction de volume ont également été définies afin d'obtenir des images isotropes à partir d'images de plus faibles résolutions et anisotropes~\cite{Kim:TMI:2010,Rousseau:AR:2006}.
 
 Les deux familles de méthodologie utilisées pour effectuer une segmentation du cerveau \emph{in vivo} sont les approches structurelles et les approches par mixtures de gaussienne.
 Les approches structurelles ont surtout été employées pour la segmentation du volume intracrânien ou du cerveau.
@@ -783,7 +783,7 @@ La première étape est une détection des yeux du f\oe tus à partir d'un modèle co
 A partir de cette localisation des yeux, la coupe sagittale passant au milieu du cerveau est reconstruite (l'orientation du sujet n'est pas connue) et une première segmentation du volume intracrânien est effectuée dans cette coupe.
 Cette première segmentation est alors utilisée pour contraindre la segmentation 3D dans une zone restreinte avant une segmentation complète par élagage d'un graphe.
 
-Une méthode plus récente~\cite{Gholipour:IJCARS:2011} a été dévelloppée avec pour objectif de réaliser une étude quantitative du volume intracrânien en supprimant le LCR péricérébral.
+Une méthode plus récente~\cite{Gholipour:IJCARS:2011} a été développée avec pour objectif de réaliser une étude quantitative du volume intracrânien en supprimant le LCR péricérébral.
 Plusieurs étapes sont nécessaires pour obtenir une segmentation de ce volume.
 Dans un premier temps, une classification des voxels en dix classes est réalisée de manière à prendre en compte le recouvrement des distributions en intensité.
 A cette étape, l'utilisateur doit sélectionner les labels représentant les tissus cérébraux à cause de la variabilité d'un cas à un autre.
@@ -804,13 +804,13 @@ Le but est cette fois de segmenter l'ensemble des tissus cérébraux en distinguan
 La première étape consiste en un algorithme EM divisant les voxels en huit classes (quatre classes pures et quatre classes de transition).
 Le modèle de Markov mis en \oe uvre est similaire à celui de~\cite{Ferrario:ESPC:2008} et est appliqué trois fois successivement.
 La première fois permet de labeliser tous les voxels voisins du fond de l'image comme étant du LCR, la deuxième permet de segmenter le cortex en imposant un critère d'épaisseur et la troisième permet de séparer les noyaux gris du cortex et de classer les voxels de transition encore présent.
-Cette méthode est intéressante car elle introduit des contraintes anatomiques, cependant la phase de régularisation déconnectée des données n'est pas sans poser quelques problèmes car rien ne garantie que la segmentation peut se corriger automatiquement si elle n'est pas guidée par les données de l'image.
+Cette méthode est intéressante car elle introduit des contraintes anatomiques, cependant la phase de régularisation déconnectée des données n'est pas sans poser quelques problèmes car rien ne garantit que la segmentation peut se corriger automatiquement si elle n'est pas guidée par les données de l'image.
 
 Une approche par atlas a été utilisée par~\cite{Habas:SPIE:2009}.
 Dans cet article, il introduit un \emph{a priori} supplémentaire sur le positionnement des tissus grâce à une connaissance anatomique précise.
-Sachant que le cerveau des f\oe tus se présente sous la forme d'une succession de couches, ils utilisent cette connaissance pour bâtir un \emph{a priori} spatial sous une forme laminaire à partir d'une segmentation des ventricules et du LCR péricérébral. 
+Sachant que le cerveau des f\oe tus se présente sous la forme d'une succession de couches, il utilise cette connaissance pour bâtir un \emph{a priori} spatial sous une forme laminaire à partir d'une segmentation des ventricules et du LCR péricérébral. 
 La connaissance des ventricules est issue d'un atlas anatomique construit spécifiquement pour cette application permettant d'avoir une connaissance des ventricules, de la matrice germinale, de la matière blanche, du cortex et du LCR péricérébral.
-L'ensemble de ces connaissances est intégrée dans un algorithme EM avec une régularisation par champs de Markov cachés.
+L'ensemble de ces connaissances est intégré dans un algorithme EM avec une régularisation par champs de Markov cachés.
 
 Une dernière méthodologie de segmentation des tissus est celle de~\cite{Habas:NeuroImage:2010}.
 Ils présentent la construction d'un atlas spatio-temporel afin de prendre les évolutions du cerveau au cours de la grossesse et de bénéficier d'un \emph{a priori} le plus pertinent possible.
@@ -834,11 +834,11 @@ Cela nécessite de poser plusieurs hypothèses sur la nature du biais, comme décri
 La correction du bruit montre de bonne performances, grâce à une prise en compte du voisinage du voxel courant, procédé directement inspiré des champs de Markov.
 Les efforts des différentes recherches ont surtout été de déterminer automatiquement le poids entre les termes d'attache-aux-données et de régularisation et d'accélérer le processus de segmentation, par la définition d'images intermédiaires notamment.
 
-Par ailleurs, l'étude des méthodologies dévelloppées dans le cadre de la maturation cérébrale révèle le besoin d'inclure des connaissances \emph{a priori} afin d'obtenir une segmentation efficace.
+Par ailleurs, l'étude des méthodologies développées dans le cadre de la maturation cérébrale révèle le besoin d'inclure des connaissances \emph{a priori} afin d'obtenir une segmentation efficace.
 Cette connaissance prend généralement la forme d'un atlas, mais peut prendre aussi la forme d'un ajustement des coefficients régissant le comportement des champs de Markov.
 L'utilisation de connaissances anatomiques génériques commence tout juste à être exploitée, que ce soit en modélisant le cerveau en couches, ou en utilisant ces \emph{a priori} afin d'obtenir une segmentation progressive des structures cérébrales.
 Ce type d'approche semble prometteur car il permet d'inclure des connaissances universelles et ne nécessite pas la délicate phase de construction et d'utilisation d'un atlas statistique.
 
 La contribution de cette thèse s'articule autour de deux points majeurs.
 Le premier est l'amélioration des performances de l'algorithmes FCM en prenant en compte la redondance de l'information dans l'image (voir le chapitre \ref{chap:nlfcm}).
-Le deuxième est une contribution à la segmentation du cortex d'un cerveau non mature (IRM \emph{in vivo}) par l'utilisation de connaissance anatomiques génériques, permettant ainsi de se passer d'un atlas statistique (voir le chapitre \ref{chap:foetale}).
+Le deuxième est une contribution à la segmentation du cortex d'un cerveau non mature (IRM \emph{in vivo} au cours de la grossesse) par l'utilisation de connaissance anatomiques génériques, permettant ainsi de se passer d'un atlas statistique (voir le chapitre \ref{chap:foetale}).
