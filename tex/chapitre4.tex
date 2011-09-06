@@ -2,26 +2,55 @@
 \label{chap:foetale}
 \minitoc
 
-Ce chapitre décrit une méthode de segmentation du cortex à partir d'images IRM f\oe tale.
-Etant donné les différences au niveau anatomique et de l'aspect des images entre les IRM adultes et les IRM f\oe tales, une nouvelle méthodologie a du être mise en place afin de prendre en compte les spécificités du cerveau des f\oe tus.
+Le but de ce chapitre est de présenter une méthode de segmentation du cortex d'un cerveau en maturation à partir d'IRM produites au cours de la grossesse.
+Une nouvelle méthodologie est nécessaire car les méthodes de classification (notamment FCM) ne permettent pas d'obtenir une segmentation complète des tissus cérébraux (contrairement aux cas adultes).
+Ce constat s'explique par les différences qui existent entre les IRM acquises dans le cas d'un adulte et celles acquises dans le cas d'un f\oe tus.
+Ces différences sont de plusieurs ordres.
 
-La méthode de segmentation doit prendre en compte les principales caractéristiques de ces images.
-Le modèle développé doit donc être adapté aux différents stades du développement cérébral et à l'aspect visuel des différents tissus.
-En effet, dans le cas d'une image pondérée en T2, nous pouvons observer que le cortex se présente sous la forme d'une bande sombre entre la MB et le LCR ($\mathbf{v}_{GM} < \mathbf{v}_{WM} < \mathbf{v}_{LCR}$), contrairement au cortex adulte dont l'intensité moyenne se situe entre celle du LCR et de la MB ($\mathbf{v}_{WM} < \mathbf{v}_{GM} < \mathbf{v}_{LCR}$ dans le cas d'une image pondérée en T2).
-Cette hyper-intensité de la matière blanche par rapport au cortex s'explique par l'absence de myéline à ce stade de la maturation cérébrale.
-L'inversion du contraste intervient dans les deux ans après la naissance avec la myélinisation, justifiant que certaines méthodes utilisées en segmentation néonatales soient proches de celles employées en segmentation f\oe tale.
+Tout d'abord, les protocoles d'acquisition entre ces deux types de cas sont assez différents, marqués notamment par un temps d'acquisition plus court dans le cas de du f\oe tus.
+(A inclure : mise en avant des différences du point de vue de l'acquisition => Meriam)
 
-Etant donné la faible dissociabilité des tissus, illustrée par l'impossibilité de distinguer les noyaux gris (matière grise interne) de la matière blanche, nous nous sommes concentrés sur la segmentation du cortex qui est une structure cérébrale mise en évidence sur les images IRM.
-L'objectif est d'obtenir une segmentation sans utiliser d'\emph{a priori} spatial sous forme d'atlas statistique. 
-En effet, l'utilisation d'un atlas peut s'avérer délicate à cause des problèmes de recalage de l'atlas vers les cas traités et aussi, les problèmes posés par la construction de l'atlas lui même. 
+Des différences sont également à signaler au niveau anatomique.
+Un cerveau adulte est un cerveau mature, se présentant notamment avec un cortex très circonvolué et une matière blanche complètement myélinisée.
+Dans un cas non mature, le cortex est une structure lisse où on peut observer la formation progressive des sillons.
+De plus, la matière blanche n'est presque pas myélinisée.
+Une autre différence anatomique est la présence d'une structure intermédiaire, la matrice germinale située autour des ventricules, où se forment les neurones avant leur migration vers le cortex.
+Cependant, cette structure disparait presque complètement après 26 semaines de grossesse, mais des traces peuvent être observés après cette date.
 
-Comme préciser à la section~\ref{prenatal}, \cite{BachCuedra:MICCAI:2009} a défini une méthodologie permettant de réaliser une segmentation sans atlas.
-Cependant, cet algorithme utilise plusieurs phases de régularisation successives déconnectées des données, risquant d'obtenir un résultat peu pertinent malgré les contraintes anatomiques imposés.
+% (Inclure une image IRM adulte et une image IRM enfant en T2 pour expliciter les différences de rendu + classification simple en trois classes).
+Ces différences au niveau acquisition et anatomique conduisent nécessairement à des différences d'aspect à l'image.
+La principale différence observable est l'étagement des intensités. 
+Dans le cadre d'une IRM T2 adulte, de manière générale, la moyenne des intensité des différents tissus suit la répartion suivante : $\mathbf{v}_{LCR} > \mathbf{v}_{MG} > \mathbf{v}_{MB}$, tandis qu'elle suit la répartition suivante dans le cas d'une IRM f\oe tale : $\mathbf{v}_{LCR} > \mathbf{v}_{MB} > \mathbf{v}_{MG}$, ce qui est principalement due à l'absence de myélinisation de la matière blanche pendant la grossesse.
+Dans le cadre d'une classification, l'effet de volume partiel (présence de plusieurs tissus dans un même voxel conduisant à une altération du signal) propre aux IRM conduit alors à des artefacts comme la présence d'une fine bande de voxels classés comme matière blanche entre le LCR et le cortex, ce qui est anatomiquement abérrant.
+De plus, le faible temps d'acquisition des IRM f\oe tale conduit à une plus faible dissociabilité des tissus, marquée par un fort recouvrement des distributions en intensité des différents tissus, notamment le cortex et la matière blanche, tandis qu'en général, les tissus cérébraux adultes sont bien plus dissociables.
 
-La méthode de segmentation définie ici reprend le principe d'une segmentation en plusieurs étapes tout en tenant compte de connaissances anatomiques.
-Cependant, ces connaissances sont intégrées dans une approche proche des données plutôt que de contraindre une régularisation spécifique.
+A la section~\ref{prenatal}, nous avons constaté que les réponses apportées aux différents problèmes posés par les IRM f\oe tales dans le cadre d'une segmentation complète des tissus conduisent à utiliser soit un atlas \cite{Habas:SPIE:2009, Habas:NeuroImage:2010} (dans le cadre d'une approche probabiliste) soit une étape spécifique de régularisation de la segmentation déconnectée des données avec quelques contraintes structurelles \cite{BachCuedra:MICCAI:2009}.
+Cependant, l'utilisation d'un atlas pose le problème de sa construction et de son utilisation (notamment celui de son recalage sur le cas courant comme nous l'avons vu à la section \ref{subsec:atlas}) et une étape de régularisation déconnectée des données nécessite un réglage particulièrement fin des différents paramètres contrôlant la régularisation afin de ne pas s'éloigner de la réalité de l'image.
+
+Notre méthode de segmentation reprend le principe d'une segmentation en plusieurs étapes (voir \cite{Dokladal:PR:2003} dans le cas d'une IRM adulte ou \cite{Ferrario:ESPC:2008, BachCuedra:MICCAI:2009} dans le cas d'une IRM f\oe tale), mais s'appuie essentiellement sur les données de l'image pour parvenir à une segmentation du cortex.
+La méthodologie conduisant à cette segmentation est décrite à la section \ref{sec:foetus:methodo} et les résultats issus de cette méthodologie sont présentés à la section \ref{sec:foetus:validation}.
+
+% Ce chapitre décrit une méthode de segmentation du cortex à partir d'images IRM f\oe tale.
+% Etant donné les différences au niveau anatomique et de l'aspect des images entre les IRM adultes et les IRM f\oe tales, une nouvelle méthodologie a du être mise en place afin de prendre en compte les spécificités du cerveau des f\oe tus.
+% 
+% La méthode de segmentation doit prendre en compte les principales caractéristiques de ces images.
+% Le modèle développé doit donc être adapté aux différents stades du développement cérébral et à l'aspect visuel des différents tissus.
+% En effet, dans le cas d'une image pondérée en T2, nous pouvons observer que le cortex se présente sous la forme d'une bande sombre entre la MB et le LCR ($\mathbf{v}_{GM} < \mathbf{v}_{WM} < \mathbf{v}_{LCR}$), contrairement au cortex adulte dont l'intensité moyenne se situe entre celle du LCR et de la MB ($\mathbf{v}_{WM} < \mathbf{v}_{GM} < \mathbf{v}_{LCR}$ dans le cas d'une image pondérée en T2).
+% Cette hyper-intensité de la matière blanche par rapport au cortex s'explique par l'absence de myéline à ce stade de la maturation cérébrale.
+% L'inversion du contraste intervient dans les deux ans après la naissance avec la myélinisation, justifiant que certaines méthodes utilisées en segmentation néonatales soient proches de celles employées en segmentation f\oe tale.
+% 
+% Etant donné la faible dissociabilité des tissus, illustrée par l'impossibilité de distinguer les noyaux gris (matière grise interne) de la matière blanche, nous nous sommes concentrés sur la segmentation du cortex qui est une structure cérébrale mise en évidence sur les images IRM.
+% L'objectif est d'obtenir une segmentation sans utiliser d'\emph{a priori} spatial sous forme d'atlas statistique. 
+% En effet, l'utilisation d'un atlas peut s'avérer délicate à cause des problèmes de recalage de l'atlas vers les cas traités et aussi, les problèmes posés par la construction de l'atlas lui même. 
+% 
+% Comme préciser à la section~\ref{prenatal}, \cite{BachCuedra:MICCAI:2009} a défini une méthodologie permettant de réaliser une segmentation sans atlas.
+% Cependant, cet algorithme utilise plusieurs phases de régularisation successives déconnectées des données, risquant d'obtenir un résultat peu pertinent malgré les contraintes anatomiques imposés.
+% 
+% La méthode de segmentation définie ici reprend le principe d'une segmentation en plusieurs étapes tout en tenant compte de connaissances anatomiques.
+% Cependant, ces connaissances sont intégrées dans une approche proche des données plutôt que de contraindre une régularisation spécifique.
 
 \section{Méthodologie}
+\label{sec:foetus:methodo}
 
 % \subsection{Notions de topologie}
 
@@ -186,6 +215,7 @@ La segmentation est effectuée en exécutant l'algorithme $k$-means topologique av
 Ainsi, une classe est caractérisée par un vecteur de centroïdes, composée de la valeur moyenne issue de l'image originale et la valeur moyenne issue du filtre \emph{Top-Hat}, permettant ainsi une meilleure discrimination du cortex. 
 
 \section{Validations}
+\label{sec:foetus:validation}
 
 % Les validations de cette méthodes de segmentation sont menées sur une base de 8 cas et son comportement est étudié aussi bien dans le cas d'image reconstruites que non-reconstruites.
 La validation est menée aussi bien sur des images \og brutes \fg{} (c'est à dire non reconstruites) que sur des volumes reconstruits.
