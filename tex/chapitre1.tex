@@ -43,13 +43,13 @@ Enfin, nous nous pencherons sur les différents artefacts présents dans une IRM e
 
 \begin{figure}[!t]
 \begin{center}
-\subfigure[]{\includegraphics[height=28mm]{eps/chapitre1/Spin_Repos.eps}}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Spin_Repos.eps}}
 \hspace{2mm}
-\subfigure[]{\includegraphics[height=28mm]{eps/chapitre1/Spin_Equilibre.eps}}\\
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Spin_Equilibre.eps}}\\
 % \hspace{2mm}
-\subfigure[]{\includegraphics[height=28mm]{eps/chapitre1/Spin_Excitation.eps}}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Spin_Excitation.eps}}
 \hspace{2mm}
-\subfigure[]{\includegraphics[height=28mm]{eps/chapitre1/Spin_Relaxation.eps}}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Spin_Relaxation.eps}}
 \hspace{-5mm}
 \caption[Principe de la RMN]{\emph{Principe de la RMN. (a) Etat initial : résultante $M$ nulle. (b) Etat d'équilibre : orientation des spins selon $B_0$. (c) Phase d'excitation : émission d'un signal RF et apparation d'un composante transversale $M_{xy}$. (d) Phase de relaxation : disparition de la composante $M_{xy}$ selon la constante caractéristique $T_2$ et croissance de la composante $M_z$ selon la constante caractéristique $T_1$.}}
 \label{fig:nlm:kernels}
@@ -135,9 +135,38 @@ Cette approximation est valide dans la matière grise, la matière blanche et dans
 
 \subsubsection{Le volume partiel}
 
+Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
+Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré.
+En IRM, cet effet se manifeste surtout à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \ldots{}) ou lorsque certaines structures sont beaucoup trop fine pour être prise en compte par l'imageur (petits vaisseaux sanguins, ramification du cortex, \ldots{}).
+
+\begin{figure}[!t]
+\begin{center}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_True.eps}}
+\hspace{2mm}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Discretisation.eps}}
+\hspace{2mm}
+\subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Final.eps}}
+\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM}}
+\label{fig:nlm:kernels}
+\end{center}
+\end{figure}
 
 
 \subsubsection{Le biais en intensité}
 
+Cet artefact se manisfeste par une hétérogénéité en intensité pour un même tissu cérébral.
+Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu en fonction de sa localisation.
+Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
+
+Ce biais représente une difficulté pour toute méthode de classification des voxels reposant sur leur intensité et supposant que l'intensité d'une classe est constante sur l'ensemble de l'image.
+La plupart de ces méthodes le prenne donc en compte soit en effectuant un pré-traitement, soit en la prenant directement en compte dans la classification.
+
 \subsubsection{Autres}
 
+% Nous pouvons encore signaler plusieurs types d'artefacts.
+Les artefacts de mouvement (pouvant être très problématique dans le cas de l'IRM f\oe tale) sont dus aux mouvements du patient pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
+L'impact de ces artefacts est variable selon le moment de l'acquisition mais il se traduit généralement par l'appartion d'images fantômes de la structure en mouvement.
+Ceci est particulièrement sensible en IRM f\oe tale ou l'on doit tenir compte non seulement des mouvements du f\oe tus (si il n'est pas sédaté), mais également de la respiration de la mère.
+
+Différentes techniques permettent de réduire l'influence de ces artefacts (par exemple : l'introduction de bobines de shim pour assurer l'homogénéité du champs $B_0$).
+Cependant, l'image finale sera toujours perturbée par un certain nombre d'entre eux, et les méthode de classification des éléments de l'image doivent en tenir compte.
