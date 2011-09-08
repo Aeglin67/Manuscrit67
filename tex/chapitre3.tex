@@ -42,7 +42,7 @@ où $d$ est la dimension de l'image $I$ et $\mathbf{x}_j$ est le vecteur correspo
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/Mean_Filter.eps}}
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/NL_Mean_Filter.eps}}
 \end{center}
-\caption{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
+\caption[Comparaison entre un débruitage par moyennes et par moyennes non-locales]{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
 \label{fig:mean_filter}
 \end{figure}
 
@@ -96,7 +96,7 @@ La relation linéaire entre $h$ et $\sigma$ est mise en évidence et ses paramètre
 \begin{center}
 \includegraphics[height=55mm]{eps/chapitre3/kernels.eps}
 \end{center}
-\caption{\emph{Différents noyaux utilisés dans le cadre des moyennes non-locales. Noir : noyau plat. Vert : noyau gaussien $K(x) = \exp{(-x)}$. Rouge : noyau compact polynomial de degré 4. Bleu : noyau compact polynomial de degré 6.}}
+\caption[Différents noyaux utilisés dans le cadre des moyennes non-locales]{\emph{Différents noyaux utilisés dans le cadre des moyennes non-locales. Noir : noyau plat. Vert : noyau gaussien $K(x) = \exp{(-x)}$. Rouge : noyau compact polynomial de degré 4. Bleu : noyau compact polynomial de degré 6.}}
 \label{fig:nlm:kernels}
 \end{figure}
 
@@ -409,7 +409,7 @@ On pose $n_j$ et $m_j$ tels que : $\lvert \Omega^{R_{d}}_{j} \rvert = (2 \cdot n
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/Brainweb_Bias_Couple_WM.eps}}
         \end{center}
 
-        \caption{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluation du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. $n_j = 4$ : $+$, $n_j = 5$ : $\diamond$, $n_j = 6$ : $\circ$, $n_j = 7$ : $\times$, $n_j = 8$ : $\bigtriangledown$, $n_j = 9$ : $\star$.}}
+        \caption[Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale]{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluation du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. $n_j = 4$ : $+$, $n_j = 5$ : $\diamond$, $n_j = 6$ : $\circ$, $n_j = 7$ : $\times$, $n_j = 8$ : $\bigtriangledown$, $n_j = 9$ : $\star$.}}
 
         \label{FIG:PARAM:BRAINWEB:BIAS}
 
@@ -445,7 +445,7 @@ La figure~\ref{FIG:VIEW:BRAINWEB:BIAS} illustre les performances du terme d'atta
 	\hline 
 \end{tabular}
 % \vspace{2mm}
-\caption{\emph{Application de différentes segmentations à une image pondérée en T1 présentant un biais en intensité de 20~\%. Comparaison des différents coefficient Dice pour la segmentation de la matière grise et de la matière blanche. Paramètres pour NL-FCM : $n_j = 8$ et $m_j = 8$. \label{TAB:DICE:BRAINWEB:BIAS}}}
+\caption[Coefficients Dice issus de l'application de différentes segmentations à une image pondérée en T1 présentant un biais en intensité de 20~\%]{\emph{Application de différentes segmentations à une image pondérée en T1 présentant un biais en intensité de 20~\%. Comparaison des différents coefficient Dice pour la segmentation de la matière grise et de la matière blanche. Paramètres pour NL-FCM : $n_j = 8$ et $m_j = 8$. \label{TAB:DICE:BRAINWEB:BIAS}}}
 \end{center}
 \end{table}
 
@@ -458,7 +458,7 @@ La figure~\ref{FIG:VIEW:BRAINWEB:BIAS} illustre les performances du terme d'atta
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_Bias_nlfcm.eps}}
         \end{center}
 
-        \caption{\emph{Résultats de la segmentation d'une image T1 présentant un biais en intensité. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par FCM non-local.}}
+        \caption[Résultats de la segmentation d'une image T1 présentant un biais en intensité]{\emph{Résultats de la segmentation d'une image T1 présentant un biais en intensité. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par FCM non-local.}}
 
         \label{FIG:VIEW:BRAINWEB:BIAS}
 
@@ -484,7 +484,7 @@ Enfin, différentes segmentations sont réalisées avec les paramètres optimaux obt
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/nlreg_Dice_HWVS.eps}\label{FIG:PARAM:BRAINWEB:NOISE:HWVS}}
         \end{center}
         
-        \caption{\emph{(a) Coefficient Dice en fonction du paramètre de lissage $\alpha$. (b) Coefficient Dice en fonction du rayon de la zone de recherche $\Omega^{R_{r}}_{j}$. LCR : $\bigtriangledown$, matière grise : $\times$, matière blanche : $\circ$.}}
+        \caption[Etude de l'influence du paramètre de lissage $\alpha$ et du rayon de la zone de recherche $\Omega^{R_{r}}_{j}$]{\emph{(a) Coefficient Dice en fonction du paramètre de lissage $\alpha$. (b) Coefficient Dice en fonction du rayon de la zone de recherche $\Omega^{R_{r}}_{j}$. LCR : $\bigtriangledown$, matière grise : $\times$, matière blanche : $\circ$.}}
         
         \label{FIG:PARAM:BRAINWEB:NOISE}
 
@@ -529,7 +529,7 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 	\hline 
 \end{tabular}
 % \vspace{2mm}
-\caption{\emph{Application de différentes segmentations à une image pondérée en T1 avec un bruit ricien de $9$~\%. Comparaison des différents coefficient Dice pour le LCR, la matière grise et la matière blanche.\label{TAB:DICE:BRAINWEB:NOISE}}}
+\caption[Coefficients Dice issus de différentes segmentations d'une image pondérée en T1 avec un bruit ricien de $9$~\%]{\emph{Application de différentes segmentations à une image pondérée en T1 avec un bruit ricien de $9$~\%. Comparaison des différents coefficient Dice pour le LCR, la matière grise et la matière blanche.\label{TAB:DICE:BRAINWEB:NOISE}}}
 \end{center}
 \end{table}
 
@@ -543,7 +543,7 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 \subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_truth_zoom.eps}\label{NLREG:ZOOM:TRUTH}}  
 \subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_rfcm_zoom.eps}\label{NLREG:ZOOM:RFCM}}  
 \subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_nlregfcm_zoom.eps}\label{NLREG:ZOOM:NLREG}}\\
-\caption{\emph{(a) Coupe axiale d'une image pondérée T1 avec un bruit ricien à $5$~\%. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM~\cite{Pham:CVIU:2001}. (e) Segmentation par NL-Reg. (f) Zoom sur la vérité terrain. (g) Zoom sur la segmentation par RFCM. (h) Zoom sur la segmentation par NL-Reg.}\label{FIG:VIEW:BRAINWEB:NOISE}}
+\caption[Aperçu de différentes segmentations d'une image pondérée en T1 avec un bruit ricien de $5$~\%]{\emph{(a) Coupe axiale d'une image pondérée en T1 avec un bruit ricien de $5$~\%. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM~\cite{Pham:CVIU:2001}. (e) Segmentation par NL-Reg. (f) Zoom sur la vérité terrain. (g) Zoom sur la segmentation par RFCM. (h) Zoom sur la segmentation par NL-Reg.}\label{FIG:VIEW:BRAINWEB:NOISE}}
 \end{center}
 \end{figure}
 
@@ -551,7 +551,7 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 \begin{center}
 \subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/GM_Noise_Dice_Brainweb.eps}}  
 \subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/WM_Noise_Dice_Brainweb.eps}}  
-\caption{\emph{Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, FCM : $\diamond$, RFCM : $\bigtriangledown$, NL-Reg : $\star$.}\label{FIG:DICE:BRAINWEB:NOISE}}
+\caption[Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, FCM : $\diamond$, RFCM : $\bigtriangledown$, NL-Reg : $\star$.}\label{FIG:DICE:BRAINWEB:NOISE}}
 \end{center}
 \end{figure}
 
@@ -585,7 +585,7 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_NLRFCM.eps}}
         \end{center}
 
-        \caption{\emph{Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par NL-Reg. (d) Segmentation par NL-FCM. (e) Segmentation par NL-R-FCM.}}
+        \caption[Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%]{\emph{Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par NL-Reg. (d) Segmentation par NL-FCM. (e) Segmentation par NL-R-FCM.}}
 
         \label{FIG:VIEW:BRAINWEB:ALL}
 
@@ -608,7 +608,7 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 	\hline 
 \end{tabular}
 \vspace{2mm}
-\caption{Application de différentes segmentation sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%. Comparaison des différents coefficient Dice pour la matière grise et la matière blanche (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:BRAINWEB:ALL}}
+\caption[Coefficients Dice issus différentes segmentation sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%]{Application de différentes segmentation sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%. Comparaison des différents coefficient Dice pour la matière grise et la matière blanche (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:BRAINWEB:ALL}}
 \end{center}
 \end{table}
 
@@ -619,7 +619,7 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/Brainweb_All_WM.eps}}\\
         \end{center}
 
-        \caption{\emph{Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, NL-Reg : $\diamond$, NL-FCM : $\bigtriangledown$, NL-R-FCM : $\star$ (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).}}
+        \caption[Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, NL-Reg : $\diamond$, NL-FCM : $\bigtriangledown$, NL-R-FCM : $\star$ (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).}}
 
         \label{FIG:DICE:BRAINWEB:ALL}
 
@@ -657,7 +657,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 	\hline 
 \end{tabular}
 \vspace{2mm}
-\caption{\emph{Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'image IBSR (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:IBSR}}}
+\caption[Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'image IBSR]{\emph{Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'image IBSR (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:IBSR}}}
 \end{center}
 \end{table}
 
@@ -673,7 +673,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_NLAll.eps}}
         \end{center}
 
-        \caption{\emph{Résultats de la segmentation du cas n\textdegree11 de la base IBSR. (a) Coupe d'une image T1. (b) Vérité-terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM. (e) Segmentation par NL-FCM. (f) Segmentation par NL-Reg. (g) Segmentation par NL-R-FCM.}}
+        \caption[Résultats de la segmentation du cas n\textdegree11 de la base IBSR]{\emph{Résultats de la segmentation du cas n\textdegree11 de la base IBSR. (a) Coupe d'une image T1. (b) Vérité-terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM. (e) Segmentation par NL-FCM. (f) Segmentation par NL-Reg. (g) Segmentation par NL-R-FCM.}}
 
         \label{FIG:VIEW:IBSR}
 
@@ -686,7 +686,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/IBSR_WM.eps}}
         \end{center}
 
-        \caption{\emph{Coefficients Dice issus de la segmentation de la base IBSR. (a) Matière grise. (b) Matière blanche. Légende : FCM : $+$, RFCM : $\diamond$, NL-Reg : $\times$, NL-FCM : $\circ$, NL-R-FCM : $\bigtriangledown$}}
+        \caption[Coefficients Dice issus de la segmentation de la base IBSR]{\emph{Coefficients Dice issus de la segmentation de la base IBSR. (a) Matière grise. (b) Matière blanche. Légende : FCM : $+$, RFCM : $\diamond$, NL-Reg : $\times$, NL-FCM : $\circ$, NL-R-FCM : $\bigtriangledown$}}
 
         \label{FIG:DICE:IBSR}
 
