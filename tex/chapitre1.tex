@@ -84,6 +84,8 @@ C'est ce signal qui doit être traité après transformée de Fourier, selon sa fréq
 
 \subsection{Formation des images et contrastes}
 
+\subsubsection{Le cas général}
+
 Les applications médicales courantes se basent sur l'excitation du proton d'hydrogène des molécules d'eau présents en grande quantité dans le corps humain.
 L'obtention d'une image en 2D ou 3D grâce à l'IRM se fait en différentiant les différentes parties d'une zone considérée grâce à des gradients directionnels appliqués dans les trois directions de l'espace par des bobines de gradients.
 Tout d'abord, un gradient de coupe (dans la direction de $z$) est appliqué afin de sélectionner la coupe que l'on cherche à acquérir.
@@ -97,8 +99,19 @@ Un TR court et un TE court permettent d'obtenir une image pondérée en T1, un TR 
 Différentes séquences ont été définis afin d'obtenir une image à partir de l'IRM.
 Ces séquences représentent différentes combinaisons d'ondes RF et d'impulsions de gradients.
 Chacune d'entre elles présente ses avantages et ses inconvénients en terme de temps d'acquisition et d'introduction d'artefacts (par exemple hypersignal des graisses, baisse du rapport signal à bruit, \ldots{}).
+
+\subsubsection{Le cas spécifique des f\oe tus}
+
 Dans le cadre de l'acquisition de données sur le f\oe tus, il a été mis en évidence que les séquences IRM classiques (spin-echo ou fast-spin-echo) était beaucoup trop lente et donc beaucoup trop sensibles aux mouvements des sujets.
-Cependant, des séquence reposant sur des echo de spin ultra-rapides on été développées et plusieurs publications montrent leur utilité dans le cadre de l'imagerie cérébrale f\oe tale \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006}.
+Cependant, des séquences reposant sur des echo de spin ultra-rapides on été développées et plusieurs publications montrent leur utilité dans le cadre de l'imagerie cérébrale f\oe tale \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006}.
+Ces séquences permettant d'acquérir une coupe en moins d'une seconde, elles permettent d'apporter une réponse aux mouvements du f\oe tus et à la respiration de la mère qui risquent de parasiter l'acquisition.
+Cependant, les techniques d'acquisition 3D ne sont pas encore suffisamment performantes (\cite{Studholme:ARBE:2010}), conduisant à réaliser des acquisitions sous formes de piles d'acquisitions 2D (l'épaisseur d'une coupe étant en général d'environ $3\mbox{ }mm$).
+L'épaisseur de coupes (nécessaire pour procurer une bonne résolution à la coupe acquise ainsi que pour bénéficier d'un bon rapport signal à bruit) empêche cependant de réaliser une réelle analyse 3D du cerveau.
+De plus, l'acquisition sous formes de piles 2D ne garantit pas une cohérence anatomique entre les coupes.
+Trois séries d'acquisitions sont alors réalisées (dans les directions axiales, sagittales et coronales), de manière à obtenir une vision complémentaire du volume cérébrale du cas étudié.
+
+Malgré ses défaults, l'IRM cérébrale de f\oe tus s'est révélée comme un outil important dans certains cas cliniques.
+Elle a notamment été utilisée pour réaliser des étude de population \cite{Grossman:NeuroImage:2006}, évaluer l'hypertrophie des ventricules \cite{Kazan-Tannus:AJR:2007}, identifier des malformations cérébrales \cite{Rolo:ArcPedObs:2011} ou encore pour identifier des infections \cite{Barkovich:ChildNervousSys:2003}.
 % Livre en ligne : \cite{Hornak:Online:1996}.
 
 % Comment obtient-on une image T1, T2 ou densité de protons.
@@ -108,6 +121,8 @@ Cependant, des séquence reposant sur des echo de spin ultra-rapides on été dével
 
 \subsection{Caractéristiques}
 \label{intro:irm:carac}
+
+Début d'une intro.
 
 \subsubsection{Le bruit}
 
