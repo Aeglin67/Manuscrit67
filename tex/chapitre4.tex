@@ -222,13 +222,37 @@ La deuxième étape est la segmentation proprement dite du cortex au sein de cette
 
 \subsubsection{Extraction du LCR}
 
-Cette phase nécessite de connaitre le volume intracrânien. 
-Celui ci peut être obtenu soit par une extraction automatique, soit par une segmentation manuelle.
+\begin{figure}
 
-L'initialisation des labels est faite par le calcul d'une carte de distance intra-crânienne depuis la surface extérieure du volume intracrânien (un voxel à $0$ signifie qu'il se situe hors de ce volume).
-Trois cercles concentriques sont alors définis à partir de cette carte de distance de manière à initialiser la segmentation et représentent respectivement : le LCR externe, le cerveau (matière blanche et matière grise) et le LCR interne (les ventricules).
+        \begin{center}
+	\subfigure[]{\includegraphics[height=30mm]{eps/chapitre4/process_LCR.eps}}\\
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Original.eps}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Distance.eps}\label{FIG:LCR:DISTANCE}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Init.eps}\label{FIG:LCR:INIT}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Final.eps}}
+        \end{center}
+
+        \caption[Segmentation LCR, Cerveau, Ventricules]{\emph{Séparation des ventricules et du LCR externe. (a) Shéma du processus. (b) Image Originale. (c) Carte de distance du volume intrâcranien. Les éléments en rouge sont les plus éloignés de la frontière du colume intracrânien. (d) Initialisation en fonction de la carte de distance. Le LCR externe est une bande d'un voxel d'épaisseur à la frontière du volume intracrânien. Les ventricules sont la région la plus au centre de ce volume et la limite est fixée à 80\% de la distance maximum. (e) Segmentation finale par le $k$-means topologique.}}
+
+        \label{FIG:LCR:STEPS}
+
+\end{figure}
+
+Lors de cette étape, l'objectif est d'obtenir une séparation du LCR externe des ventricules, de manière à exploiter le frontière entre le LCR externe de le cerveau pour la segmentation du cortex.
+Trois cercles concentriques représentant respectivement le LCR externe, le cerveau et les ventricules sont alors définis.
+
+L'initialisation de ces trois cercles est réalisée par le biais d'une carte de distance intracrânienne, définie à partir d'une segmentation du volume intracrânien et mesurant le distance la distance d'un voxel par rapport à la frontière extérieure de ce volume.
+L'intêret de l'utilisation d'une carte de distance est qu'elle permet de positionner la région correspondant aux ventricules à une distance suffisante du LCR externe, de manière à ne pas créer de confusion entre ces deux labels.
+
+% Cette phase nécessite de connaitre le volume intracrânien. 
+% Celui ci peut être obtenu soit par une extraction automatique, soit par une segmentation manuelle.
+
+% L'initialisation des labels est faite à partir d'une carte de distance intra-crânienne calculée depuis la surface extérieure du volume intracrânien (un voxel à $0$ signifie qu'il se situe hors de ce volume) (voir Figure \ref{FIG:LCR:DISTANCE}).
+% Trois cercles concentriques sont alors définis à partir de cette carte de distance de manière à initialiser la segmentation et représentent respectivement : le LCR externe, le cerveau (matière blanche et matière grise) et le LCR interne (les ventricules).
+
 Le LCR externe est initialisé comme une bande d'un voxel d'épaisseur à la frontière entre le volume intracrânien et le fond de l'image.
-Les ventricules, correspondant à la sphère interne, ont une taille fixée à 80\% de la distance intracrânienne maximum de manière à prendre en compte la taille du crâne étudié.
+Cette initialisation permet à ce label de s'étendre depuis l'extérieur du volume intracrânien sur l'ensemble des voxels correspondant au LCR externe.
+Les ventricules, correspondant à la sphère interne, ont une taille fixée à 80\% de la distance intracrânienne maximum de manière à prendre en compte la taille du crâne étudié (voir Figure \ref{FIG:LCR:INIT}).
 Ce modèle évolue alors suivant la méthode de segmentation décrite à la section \ref{sec:kmeans:topo} avec l'image originale en entrée de l'algorithme.
 
 \subsubsection{Extraction du cortex}
@@ -236,6 +260,8 @@ Ce modèle évolue alors suivant la méthode de segmentation décrite à la section \
 
 A partir de la segmentation du LCR externe, une zone d'intêret incluant le cortex est construite de part et d'autre de la frontière entre le LCR externe et le cerveau.
 Elle est représentée par une bande d'une épaisseur totale de 9 millimètres dont les deux premiers sont initialisés comme LCR, les cinq suivants comme cortex et les deux derniers comme matière blanche.
+Cette initialisation fût choisie car elle permet non seulement d'avoir une zone d'intêret incluant le cortex, mais permet également d'avoir une quantité de voxels suffisamment grande de LCR et de matière blanche afin qu'effectuer un $k$-means topologique en trois classes ait un sens.
+
 Afin d'assurer la cohérence de la segmentation finale, les voxels classés comme ventricules sont éliminés de cette zone d'intêret, de même que les voxels appartenant au tronc cérébral et au cervelet.
 Ces derniers sont supposés avoir été préalablement segmentés.
 Etant donné que notre étude cherche une segmentation du cortex, nous nous sommes appuyés sur la vérité terrain pour restraindre la zone d'intêret.
