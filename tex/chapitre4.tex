@@ -53,6 +53,7 @@ La méthodologie conduisant à cette segmentation est décrite à la section \ref{se
 \label{sec:foetus:methodo}
 
 % \subsection{Notions de topologie}
+\subsection{Motivations}
 
 \begin{figure}[!thbp]
 
@@ -71,23 +72,28 @@ La méthodologie conduisant à cette segmentation est décrite à la section \ref{se
 
 L'analyse des images à partir des vérités-terrain (notamment l'analyse des histogrammes) montre des distributions d'intensité très différentes entre les IRM adultes et les IRM f\oe tales (voir la figure~\ref{FIG:DISTRIB}).
 En effet, la distribution en intensité d'une IRM adulte révèle trois pics distincts correspondant respectivement au LCR, et aux matières grise et blanche.
-La grande majorité des méthodes de segmentation des tissus cérébraux se sont appuyés sur cette propriété, tout en utilisant différentes contraintes (atlas, régularisation, topologie, \ldots) afin d'obtenir un résultat anatomiquement correct.
+La grande majorité des méthodes de segmentation des tissus cérébraux se sont appuyés sur cette propriété (en ajoutant éventuellement des classes intermédiaires pour tenir compte du volume partiel), tout en utilisant différentes contraintes (atlas, régularisation, topologie, \ldots) afin d'obtenir un résultat anatomiquement correct.
 
-Cependant, l'observation de la distribution des IRM f\oe tales indique non seulement un important recouvrement entre le LCR et la matière blanche, mais montre également que la courbe représentant le cortex est presque entièrement inclue dans la courbe de la matière blanche.
-Ce constat explique pourquoi les méthodes de classification classiques (excepté celles contraintes par un atlas) ne parviennent pas à obtenir de résultats satisfaisant sur ces images.
+Cependant, l'observation de la distribution en intensité des IRM f\oe tales indique non seulement un important recouvrement entre le LCR et la matière blanche, mais montre également que la courbe représentant le cortex est presque entièrement inclue dans la courbe de la matière blanche.
+Ce constat explique pourquoi les méthodes de classification classiques ne parviennent pas à obtenir de résultats satisfaisant sur ces images.
 De manière générale, une classification (en trois classes ou plus) ne donne pas de résultats pertinents et des artefacts de segmentation dus à l'effet de volume partiel apparaissent (par exemple, des voxels classés comme matière blanche entre le LCR externe et le cortex, ce qui est anatomiquement incorrect).
 
-\begin{figure}[!thbp]
+\begin{figure}[!t]
 
         \begin{center}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex1_3Class.eps}}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex2_3Class.eps}}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex3_3Class.eps}}
         \end{center}
-
         \caption[Comparaison entre les distributions d'intensité dans plusieurs zones d'intêrets construites par dilatation de la segmentation manuelle du cortex]{\emph{Comparaison entre les distributions d'intensité dans plusieurs zones d'intêrets construites par dilatation de la segmentation manuelle du cortex. (a) Dilatation d'un voxel. (b) Dilatation de deux voxels. (c) Dilatation de trois voxels. Légende : LCR (vert), matière grise (bleu), matière blanche (rouge).}}
-
         \label{FIG:DISTRIB:CORTEX}
+        
+        \begin{center}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/classif_original.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/classif_2Class.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/classif_3Class.eps}}
+        \end{center}
+        \caption[Illustration de clustering en deux et trois classes]{\emph{Illustration de clustering en deux et trois classes. (a) Image originale. (b) Clustering en deux classes. (c) Clustering en trois classes.}}
 
 \end{figure}
 
@@ -102,22 +108,38 @@ Ces deux étapes reposent sur une même méthode de segmentation définie à partir d
 \subsection{$K$-means topologique}
 \label{sec:kmeans:topo}
 
-\begin{figure}[!thbp]
+\begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=45mm]{eps/chapitre4/inhomogeneity2.eps}\label{FIG:BIAS}}
+	\subfigure[]{\includegraphics[height=45mm]{eps/chapitre4/inhomogeneity2.eps} \label{FIG:KMEANS:BIAS}}
 	\subfigure[]{\includegraphics[height=45mm]{eps/chapitre4/topologie.eps}}
         \end{center}
 
         \caption[Principes du $K$-Means topologique]{\emph{(a) Calcul des centroïdes locaux par interpolation des moyennes de région les plus proches. (b) Modèle topologique. Du blanc au gris foncé, les labels sont 0, 1, 2 et 3, 0 étant le fond de l'image. Le voxel 1 ne peut pas changer de label car il y a plus de 3 labels différents dans son voisinage. Le voxel 2 peut changer de label. Le voxel 3 ne peut pas changer car le fond fait parti de son voisinage.}}
 
-%         \label{FIG:VIEW:IBSR}
+        \label{FIG:KMEANS:PRINCIPLE}
 
 \end{figure}
 
+\begin{figure}[!t]
+
+        \begin{center}
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Init.eps}\label{FIG:KMEANS:INIT}}
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Allowed1.eps}}
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Allowed2.eps}}\\
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed1.eps}}
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed2.eps}}
+	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed3.eps}}
+        \end{center}
+
+        \caption[Exemples de configurations finales autorisées ou non pour le $K$-Means topologique]{\emph{Exemples de configurations finales autorisées ou non pour le $K$-Means topologique. (a) Initialisation du modèle. (b) Configuration autorisée : les composantes du label 3 sont complètement incluses dans le label 2. (c) Configuration autorisée : les composantes du label 3 sont complètement incluses dans les composantes du label 2, elles mêmes incluses dans le label 1. (d) Configuration non autorisée : le label 3 est en contact avec le label 1. (e) Configuration non autorisée : le label 2 est en contact avec le fond de l'image. (f) Configuration non autorisée : le label 3 n'est pas complètement inclus dans le label 2. }}
+
+        \label{FIG:KMEAN:ALLOWED}
+
+\end{figure}
 
 % Le but de cette section est de définir une méthodologie permettant de prendre en compte les contraintes anatomiques décrites plus haut.
-Pour ce faire, un modèle reposant sur trois cercles concentriques est défini. 
+Un modèle reposant sur trois cercles concentriques, chacun représentant une structure particulière, est défini. 
 Il tient compte du biais en intensité et introduit des contraintes géométriques pour prendre en compte les problèmes dus au volume partiel.
 Ce modèle est appelé le $k$-means topologique.
 
@@ -126,17 +148,8 @@ Rappelons tout d'abord que la segmentation par l'algorithme $k$-means est équiva
 J_{k\mbox{-}means} = \sum_{\mathbf{y}_{j} \in S_k} \sum_{k=0}^{K} \Vert \mathbf{y}_{j} - \mathbf{v}_{k} \Vert_2^{2},
 \end{equation}
 où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centroïde de la classe $k$, $S_k$ est l'ensemble des voxels inclus dans la classe $k$ et $K$ est le nombre de classes recherchées.
-
-Tout comme l'algorithme FCM, le $k$-means ne prend pas en compte le biais en intensité présent dans les IRM.
-Des centroïdes locaux $\mathbf{v}_{jk}$ sont donc introduits afin de prendre en compte cette réalité sans pour autant nécessiter de connaissance particulière sur ce biais.
-Ces centroïdes locaux sont calculés de la façon suivante (voir la figure \ref{FIG:BIAS}) : 
-\begin{enumerate}
- \item Le domaine de l'image $\Omega$ est divisé en sous-volumes $r$,
-\item Pour chaque sous-volume $r$ et pour chaque classe, une moyenne $\mathbf{v}_{rk}$ est calculée,
-\item Chaque moyenne locale $\mathbf{v}_{jk}$ découle d'une interpolation des 4 (2D) ou 8 (3D) plus proches moyennes de région les plus proches (selon que l'image traitée soit reconstruite ou non). 
-\end{enumerate}
-
-La minimisation de la fonction coût est obtenue par un échange de voxels à la frontière des tissus respectant les conditions suivantes : 
+Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le shéma classique de minimisation alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
+L'optimisation se fait selon un échange de voxels à la frontière des tissus, imposant un basculement d'un élément vers un autre si il respecte certains critères qui sont : 
 \[
 \left\{
 \begin{array}{l}
@@ -154,19 +167,40 @@ La première condition garantit que deux labels normallement non connexes ne part
 Les contraintes géométriques sont ainsi préservées.
 De la même manière, la deuxième condition rend la labellisation des voxels voisins du fond de l'image invariante. 
 La troisième condition permet la minimisation de la fonction coût.
-% Cette formulation garantie l'invariance de la topologie en imposant le respect de l'intégrité des cercles concentriques et préserve les frontières du fond de l'image.
 
 La formulation des contraintes géométriques ne correspond pas exactement à celle des points simples car elle ne conserve pas la topologie des composantes connexes.
 En effet, des tests préliminaires ont révélé que les points simples imposent une trop grande rigidité lors du processus de segmentation, bloquant l'évolution des différents labels.
-Ces contraintes géométriques sont donc conçues de manière à laisser un label se séparer en plusieurs composantes de manière à coller le plus possible à la réalité de l'image et gagner ainsi en flexibilité.
+Ces contraintes géométriques sont donc conçues de manière à laisser un label se séparer en plusieurs composantes (voir Figure~\ref{FIG:KMEAN:ALLOWED}), de manière respecter la réalité anatomique des structures que l'on cherche à segmenter (par exemple les ventricules dans le cas d'une segmentation 2D) et gagner ainsi en flexibilité.
 De la même façon, la réunion de deux composantes est autorisée, comportement interdit par les points simples.
 Néanmoins, les contraintes géométriques sont conservées (par exemple, un label complètement inclus dans un autre le restera même si il est divisé en plusieurs composantes).
 
-L'algorithme évolue donc selon un échange de voxels aux frontières de manière séquentielle.
-Chaque frontière est considérée l'une après l'autre.
-La convergence est atteinte lorsqu'aucun changement de label n'est effectué.
+% L'algorithme évolue donc selon un échange de voxels aux frontières de manière séquentielle.
+% Chaque frontière est considérée l'une après l'autre.
+% La convergence est atteinte lorsqu'aucun changement de label n'est effectué.
 
-\subsection{Pipeline de segmentation}
+Tout comme l'algorithme FCM, le $k$-means ne prend pas en compte le biais en intensité présent dans les IRM.
+Des centroïdes locaux $\mathbf{v}_{jk}$ sont donc introduits afin de prendre en compte cette réalité sans pour autant nécessiter de connaissance particulière sur ce biais.
+Ils sont calculés de la façon suivante (voir la figure \ref{FIG:KMEANS:BIAS}) : 
+\begin{enumerate}
+\item Le domaine de l'image $\Omega$ est divisé en sous-volumes $r$,
+\item Pour chaque sous-volume $r$ et pour chaque classe, une moyenne $\mathbf{v}_{rk}$ est calculée,
+\item Chaque moyenne locale $\mathbf{v}_{jk}$ découle d'une interpolation des 4 (2D) ou 8 (3D) plus proches moyennes de région les plus proches (selon que l'image traitée soit reconstruite ou non). 
+\end{enumerate}
+
+En résumé, l'algorithme présenté ici suit le shéma d'optimisation suivant : 
+\begin{enumerate}
+\item Initialisation des labels (comme à la figure \ref{FIG:KMEANS:INIT}) et introduction d'un première évaluation des centroïdes (par exemple, par un clustering classique).
+\item \'Evolution des labels selon un échange de voxels aux frontières de manière séquentielle en respectant les contraintes citées ci-dessus, jusqu'à ce qu'aucun changement ne soit enregistré.
+\item \'Evaluation des centroïdes des classes, tel que décrit ci-dessus.
+\item Répéter les étapes 2 et 3 jusqu'à convergence finale (c'est à dire, aucun changement enregistré après l'évaluation des centroïdes).
+\end{enumerate}
+
+
+% Les échanges de voxels aux frontières des tissus doivent respecter les conditions suivantes : 
+
+% Cette formulation garantie l'invariance de la topologie en imposant le respect de l'intégrité des cercles concentriques et préserve les frontières du fond de l'image.
+
+\subsection{Processus de segmentation}
 
 \begin{figure}[!thbp]
 
@@ -175,7 +209,7 @@ La convergence est atteinte lorsqu'aucun changement de label n'est effectué.
 	\includegraphics[height=45mm]{eps/chapitre4/process.eps}
         \end{center}
 
-        \caption[Shéma du processus de segmentation]{\emph{Shéma du processus de segmentation.}}
+        \caption[Shéma du processus de segmentation]{\emph{Shéma du processus de segmentation. A partir de l'image originale, le $k$-means topologique permet de réaliser une segmentation séparant le LCR externe, le cerveau et les ventricules. A partir de la frontière entre le LCR externe et le cerveau, une zone d'intêret incluant le cortex est définie. Le cortex est alors segmenter par un $k$-means topologique incluant l'intensité des voxels ainsi qu'une image issue du filtrage \og Top-Hat \fg{} de l'image originale.}}
 
         \label{FIG:FOE:PROCESS}
 
@@ -188,7 +222,10 @@ La deuxième étape est la segmentation proprement dite du cortex au sein de cette
 
 \subsubsection{Extraction du LCR}
 
-Cette phase est initialisée par le calcul d'une carte de distance intra-crânienne depuis la surface extérieure du cerveau (un voxel à $0$ signifie qu'il se situe hors du volume intracrânien).
+Cette phase nécessite de connaitre le volume intracrânien. 
+Celui ci peut être obtenu soit par une extraction automatique, soit par une segmentation manuelle.
+
+L'initialisation des labels est faite par le calcul d'une carte de distance intra-crânienne depuis la surface extérieure du volume intracrânien (un voxel à $0$ signifie qu'il se situe hors de ce volume).
 Trois cercles concentriques sont alors définis à partir de cette carte de distance de manière à initialiser la segmentation et représentent respectivement : le LCR externe, le cerveau (matière blanche et matière grise) et le LCR interne (les ventricules).
 Le LCR externe est initialisé comme une bande d'un voxel d'épaisseur à la frontière entre le volume intracrânien et le fond de l'image.
 Les ventricules, correspondant à la sphère interne, ont une taille fixée à 80\% de la distance intracrânienne maximum de manière à prendre en compte la taille du crâne étudié.
