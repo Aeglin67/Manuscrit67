@@ -124,12 +124,12 @@ Ces deux étapes reposent sur une même méthode de segmentation définie à partir d
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Init.eps}\label{FIG:KMEANS:INIT}}
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Allowed1.eps}}
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_Allowed2.eps}}\\
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed1.eps}}
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed2.eps}}
-	\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/KMeans_NAllowed3.eps}}
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_Init.eps}\label{FIG:KMEANS:INIT}}
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_Allowed1.eps}}
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_Allowed2.eps}}\\
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_NAllowed1.eps}}
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_NAllowed2.eps}}
+	\subfigure[]{\includegraphics[height=35mm]{eps/chapitre4/KMeans_NAllowed3.eps}}
         \end{center}
 
         \caption[Exemples de configurations finales autorisées ou non pour le $K$-Means topologique]{\emph{Exemples de configurations finales autorisées ou non pour le $K$-Means topologique. (a) Initialisation du modèle. (b) Configuration autorisée : les composantes du label 3 sont complètement incluses dans le label 2. (c) Configuration autorisée : les composantes du label 3 sont complètement incluses dans les composantes du label 2, elles mêmes incluses dans le label 1. (d) Configuration non autorisée : le label 3 est en contact avec le label 1. (e) Configuration non autorisée : le label 2 est en contact avec le fond de l'image. (f) Configuration non autorisée : le label 3 n'est pas complètement inclus dans le label 2. }}
@@ -148,7 +148,7 @@ Rappelons tout d'abord que la segmentation par l'algorithme $k$-means est équiva
 J_{k\mbox{-}means} = \sum_{\mathbf{y}_{j} \in S_k} \sum_{k=0}^{K} \Vert \mathbf{y}_{j} - \mathbf{v}_{k} \Vert_2^{2},
 \end{equation}
 où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centroïde de la classe $k$, $S_k$ est l'ensemble des voxels inclus dans la classe $k$ et $K$ est le nombre de classes recherchées.
-Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le shéma classique de minimisation alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
+Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le shéma classique de minimisation de la fonction coût alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
 L'optimisation se fait selon un échange de voxels à la frontière des tissus, imposant un basculement d'un élément vers un autre si il respecte certains critères qui sont : 
 \[
 \left\{
@@ -241,7 +241,7 @@ La deuxième étape est la segmentation proprement dite du cortex au sein de cette
 Lors de cette étape, l'objectif est d'obtenir une séparation du LCR externe des ventricules, de manière à exploiter le frontière entre le LCR externe de le cerveau pour la segmentation du cortex.
 Trois cercles concentriques représentant respectivement le LCR externe, le cerveau et les ventricules sont alors définis.
 
-L'initialisation de ces trois cercles est réalisée par le biais d'une carte de distance intracrânienne, définie à partir d'une segmentation du volume intracrânien et mesurant le distance la distance d'un voxel par rapport à la frontière extérieure de ce volume.
+L'initialisation de ces trois cercles est réalisée par le biais d'une carte de distance intracrânienne, définie à partir d'une segmentation du volume intracrânien et mesurant le distance d'un voxel par rapport à la frontière extérieure de ce volume.
 L'intêret de l'utilisation d'une carte de distance est qu'elle permet de positionner la région correspondant aux ventricules à une distance suffisante du LCR externe, de manière à ne pas créer de confusion entre ces deux labels.
 
 % Cette phase nécessite de connaitre le volume intracrânien. 
@@ -261,13 +261,14 @@ Ce modèle évolue alors suivant la méthode de segmentation décrite à la section \
 \begin{figure}
 
         \begin{center}
+	\subfigure[]{\includegraphics[height=50mm]{eps/chapitre4/process_Cortex.eps}}\\
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Original.eps}}
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_TopHat.eps}\label{FIG:CORTEX:TOPHAT}}
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Init.eps}\label{FIG:CORTEX:INIT}}
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Final.eps}}
         \end{center}
 
-        \caption[Segmentation du cortex - Méthodologie]{\emph{Segmentation du cortex. (a) Image originale. (b) En rouge, résultat du filtre \og Top-Hat \fg{} dans la zone d'intêret définie à partir de la frontière entre le LCR externe et le cerveau. (c) Zone d'intêret et initialisation des labels CSF, cortex et matière blanche. (d) Segmentation finale obtenue par le $k$-means topologique.}}
+        \caption[Segmentation du cortex - Méthodologie]{\emph{Segmentation du cortex. (a) Schéma du processus. (b) Image originale. (c) En rouge, résultat du filtre \og Top-Hat \fg{} dans la zone d'intêret définie à partir de la frontière entre le LCR externe et le cerveau. (d) Zone d'intêret et initialisation des labels CSF, cortex et matière blanche. (e) Segmentation finale obtenue par le $k$-means topologique.}}
 
 \end{figure}
 
