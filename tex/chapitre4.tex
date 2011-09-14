@@ -258,24 +258,38 @@ Ce modèle évolue alors suivant la méthode de segmentation décrite à la section \
 \subsubsection{Extraction du cortex}
 \label{pipe:cortex}
 
-A partir de la segmentation du LCR externe, une zone d'intêret incluant le cortex est construite de part et d'autre de la frontière entre le LCR externe et le cerveau.
-Elle est représentée par une bande d'une épaisseur totale de 9 millimètres dont les deux premiers sont initialisés comme LCR, les cinq suivants comme cortex et les deux derniers comme matière blanche.
-Cette initialisation fût choisie car elle permet non seulement d'avoir une zone d'intêret incluant le cortex, mais permet également d'avoir une quantité de voxels suffisamment grande de LCR et de matière blanche afin qu'effectuer un $k$-means topologique en trois classes ait un sens.
+\begin{figure}
+
+        \begin{center}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Original.eps}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_TopHat.eps}\label{FIG:CORTEX:TOPHAT}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Init.eps}\label{FIG:CORTEX:INIT}}
+	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/Cortex_Seg_Final.eps}}
+        \end{center}
+
+        \caption[Segmentation du cortex - Méthodologie]{\emph{Segmentation du cortex. (a) Image originale. (b) En rouge, résultat du filtre \og Top-Hat \fg{} dans la zone d'intêret définie à partir de la frontière entre le LCR externe et le cerveau. (c) Zone d'intêret et initialisation des labels CSF, cortex et matière blanche. (d) Segmentation finale obtenue par le $k$-means topologique.}}
+
+\end{figure}
+
+
+\`A partir de la segmentation du LCR externe, une zone d'intêret incluant le cortex est construite de part et d'autre de la frontière entre le LCR externe et le cerveau.
+Elle est représentée par une bande d'une épaisseur totale de 9 millimètres dont les deux premiers sont initialisés comme LCR, les cinq suivants comme cortex et les deux derniers comme matière blanche (voir Figure \ref{FIG:CORTEX:TOPHAT}).
+Cette initialisation fût choisie car elle permet non seulement d'avoir une zone d'intêret incluant le cortex, mais permet également d'avoir une quantité de voxels de LCR et de matière blanche significative, de manière à pouvoir appliquer le $k$-means topologique.
 
 Afin d'assurer la cohérence de la segmentation finale, les voxels classés comme ventricules sont éliminés de cette zone d'intêret, de même que les voxels appartenant au tronc cérébral et au cervelet.
 Ces derniers sont supposés avoir été préalablement segmentés.
-Etant donné que notre étude cherche une segmentation du cortex, nous nous sommes appuyés sur la vérité terrain pour restraindre la zone d'intêret.
+Etant donné que notre étude cherche une segmentation du cortex, nous nous sommes appuyés sur la vérité terrain pour restreindre la zone d'intêret.
 
-Cependant, comme précisé précédemment, l'information fournie par l'image originale est insuffisante pour permettre l'extraction du cortex, même au sein de cette zone réduite.
-Pour mettre un valeur le cortex, un opérateur de morphologie mathématique, le \emph{Top-Hat}~\cite{Najman:2010}, est utilisé.
+Cependant, comme précisé précédemment, l'information fournie par l'intensité des voxels est insuffisante pour permettre l'extraction du cortex, même au sein de cette zone réduite.
+Pour mettre en valeur le cortex, un opérateur de morphologie mathématique, le \emph{Top-Hat}~\cite{Najman:2010}, est donc utilisé.
 Cet opérateur est défini de la manière suivante.
 Soit $\varphi_{B}$ la fermeture morphologique de l'image $I$ par un élément structurant $B$.
 Le filtre \emph{Top-Hat} est définit par la fonction : $T_d(I) = \varphi_B(I) - I$.
-En d'autres termes, ce filtre révèle les zones sombres de l'image, ce qui correspond visuellement au cortex dans l'acquisition des IRM en pondération T2.
+En d'autres termes, ce filtre révèle les zones sombres de l'image, ce qui correspond visuellement au cortex dans l'acquisition des IRM en pondération T2 (voir Figure \ref{FIG:CORTEX:TOPHAT}).
 %  qui forme une bande sombre située entre le LCR externe et la matière blanche.
 
 La segmentation est effectuée en exécutant l'algorithme $k$-means topologique avec deux entrées, que sont l'image originale et l'image filtrée par le \emph{Top-Hat}.
-Ainsi, une classe est caractérisée par un vecteur de centroïdes, composée de la valeur moyenne issue de l'image originale et la valeur moyenne issue du filtre \emph{Top-Hat}, permettant ainsi une meilleure discrimination du cortex. 
+Ainsi, une classe est caractérisée par un vecteur de centroïdes $\mathbf{v}_{k}$, composée de la valeur moyenne issue de l'intensité des voxels $v_{k}^{I}$ et la valeur moyenne issue du filtre \emph{Top-Hat} $v_{k}^{TH}$ (on a donc $\mathbf{v}_{k} = (v_{k}^{I},v_{k}^{TH} )$),  permettant ainsi une meilleure discrimination du cortex.
 
 \section{Validations}
 \label{sec:foetus:validation}
