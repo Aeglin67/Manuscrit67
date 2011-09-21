@@ -315,10 +315,10 @@ La validation est menée aussi bien sur des images \og brutes \fg{} (c'est à dire
 
 \subsubsection{Caractéristiques et paramètres}
 
-Les expériences sont menées sur huit cas acquis avec une machine IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des spins d'écho ultra-rapides.
+Les expériences sont menées sur huit cas acquis avec une machine IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des séquences d'écho de spins ultra-rapides.
 Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiales, coronales et sagitales.
 L'âge des différents f\oe tus s'étend de 27 à 32 semaines d'aménorrhée (SA). 
-La table~\ref{TAB:UNBUILD:CHARAC} résume les caractéristiques des images.
+Le tableau~\ref{TAB:UNBUILD:CHARAC} résume les caractéristiques des images.
 
 \begin{table}[!t]
 
@@ -388,23 +388,27 @@ Etant donné que ces images sont anisotropes, le $k$-means topologique évolue en 
 Les régions utilisées pour le calcul des moyennes de régions sont d'une taille $32\times32\times1$.
 Ceci permet d'avoir un bon compromis entre la nécessaire représentation des différents tissus dans chaque sous-volume et la prise en compte de l'inhomogénéité de l'image.
 L'élément structurant utilisé pour l'opérateur \emph{Top-Hat} est une cube de taille $5\times5\times1$, ce qui donne un cube de $3.71\times3.71\times3.45$ mm$^3$ (ou $3.71\times3.71\times4.6$ mm$^3$).
-Le cortex se présentant sous la forme d'une mince bande sombre, cette taille est suffisante pour mettre en avant le cortex par un filtre \og Top-Hat \fg{}.
+Le cortex se présentant sous la forme d'une mince bande sombre, cette taille est suffisante pour le mettre en avant par un filtre \og Top-Hat \fg{}.
 
 Afin d'améliorer les performances de l'algorithme générale, un filtrage non-local est effectué en pré-traitement avec une zone de recherche de taille $11\times11\times3$ et des patchs de taille $3\times3\times1$ de manière à éliminer une partie du bruit présent dans les images.
 
 \subsubsection{Résultats}
 
 Chaque acquisition dispose d'au moins une segmentation manuelle réalisée par des experts médicaux servant de vérité terrain.
-Dans les cas où plus d'une vérité terrain est disponible, une comparaison quantitative est effectuée entre ces vérités terrain de manière à évaluer le degré d'accord des experts entre eux.
+Dans les cas où plus d'une vérité terrain est disponible, une comparaison quantitative est effectuée entre ces vérités terrains de manière à évaluer le degré d'accord des experts entre eux.
 Toutes les évaluations sont réalisées grâce au coefficient Dice défini à la section~\ref{sec:nlfcm:validations}.
 
-La table~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
+\paragraph{Evaluation quantitative}
+
+Le tableau~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
 Les coefficients dice moyens pour chacune des trois orientations sont : 60.26 pour l'axiale, 61.27 pour la coronale et 48.79 pour la sagittale.
 Nous pouvons constater que les résultats sont globalement similaires pour une segmentation d'images acquises selon les direction axiales et coronales, mais ils illustrent une mauvaise adéquation de la méthode avec la direction sagittale.
-Ce constat est cependant peu surprenant, étant donné l'apparence des structures cérébrales vues dans une direction sagitale.
-La zone du corps caleux est particulièrement inadaptée au modèles développé, tandis que les directions axiales et coronales sont adaptée au modèles.
+Ce constat est cependant peu surprenant, étant donné l'apparence des structures cérébrales vues dans une direction sagittale.
+La zone du corps caleux est particulièrement inadaptée au modèle développé, tandis que les directions axiales et coronales sont adaptées au modèles.
 Les valeurs des écarts-types montrent cependant une grande variabilité dans les résultats de la segmentation, qui peut s'expliquer largement par la qualité de l'image traité (présence d'un bruit plus ou moins important, cortex plus ou moins net, présence d'un hypersignal au sein de la matière blanche, \ldots).
-Une plus grande dispersion est observée dans la direction sagittale, confirmant la plus faible adéquation du modèle à cette direction, tandis que les résultats obtenus en axial et coronale sont similaires.
+Une plus grande dispersion est observée dans la direction sagittale, confirmant la plus faible adéquation du modèle à cette direction, tandis que les résultats obtenus en axial et coronal sont similaires.
+
+\paragraph{Evaluation qualitative}
 
 Ces résultats semblent prometteurs, et sont confirmés par une évaluation qualitative des segmentations.
 La figure~\ref{FIG:CORTEX:UNBUILD:VIEW} confirme la pertinence du modèle proposé malgré une sous-segmentation dans certaines zones.
@@ -417,7 +421,7 @@ Les coupes supérieures permettent de distinguer nettement les ventricules du LCR
 
 Dans le cas des images orientées dans la direction coronale, l'observation des résultats coupe à coupe confirme la bonne adaptation du modèle à cette orientation.
 En effet, dans la plupart des coupes, les ventricules sont séparés du LCR externe.
-Cependant, une ambiguité est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évalué l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
+Cependant, une ambiguité est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
 % Cela s'explique par la non-adaptation du modèle à cette vue particulière, notamment concernant la zone entre les deux hémisphères cérébraux.
 
 \begin{table}[!t]
@@ -487,8 +491,10 @@ Cas (SA) & Coupe & Dice 3D & Dice maximum \\
 \caption[Coefficients Dice issus de la segmentation du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité terrain et les segmentations automatiques. Coefficient global et coefficient maximum obtenue en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
 \end{table}
 
+\paragraph{Evaluation croisée entre experts et segmentation manuelle}
+
 Dans les cas où plusieurs segmentations manuelles sont disponibles pour un même cas, nous avons effectué une comparaison de ces segmentations afin d'évaluer la variabilité entre deux experts humains pour la segmentation d'une même structure.
-La table~\ref{TAB:DICE:UNBUILD:EXP} rapporte les résultats de cette comparaison ainsi que les coefficients Dice entre la segmentation automatique et les différentes segmentations manuelles.
+Le tableau~\ref{TAB:DICE:UNBUILD:EXP} rapporte les résultats de cette comparaison ainsi que les coefficients Dice entre la segmentation automatique et les différentes segmentations manuelles.
 Nous pouvons observer que les coefficients Dice mesurant le taux de recouvrement entre deux segmentations ont une valeur autour de 60\%, illustrant la variabilité existant entre deux experts pour l'évaluation du cortex.
 Cet écart peut s'expliquer pour plusieurs raisons.
 Nous pouvons évoquer la finesse d'une structure comme le cortex qui dans la plupart des cas a une épaisseur de quelques voxels seulement.
@@ -571,11 +577,13 @@ Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:MIA:2010} à par
 \subsubsection{Caractéristiques et paramètres}
 
 Pour cette étude, nous disposons de six cas.
-Les images reconstruites présentent ont pour dimensions $256\times256\times88$ à $256\times256\times117$ voxels.
-La résolution des voxels est de $0.742\times0.742\times0.742\mbox{ }mm^3$.
+% La méthode de reconstruction utilisée est celle de \cite{Rousseau:AR:2006}.
+% Pour chaque cas, un volume 3D est reconstruit à partir d'acquisition dans trois directions différentes : axiale, coronale et sagittale.
+Les images reconstruites ont pour dimensions $256\times256\times88$ à $256\times256\times117$ voxels.
+La résolution des voxels est de $0.742\times0.742\times0.742$ mm$^3$.
 
 Un 6-voisinage 3D est utilisé pour mettre en oeuvre l'algorithme de $k$-means topologique.
-Empiriquement, un élément structurant de taille $5\times5\times5$ est utilisé pour l'opérateur \emph{Top-Hat}.
+Empiriquement, un élément structurant de taille $5\times5\times5$ est utilisé pour l'opérateur \emph{Top-Hat}, ce qui correspond à cube de dimensions $3.71\times3.71\times3.71$ mm$^3$.
 L'initialisation des différents labels, aussi bien à l'étape d'extraction du LCR qu'à l'étape de segmentation du cortex, est la même que pour les images non-reconstruites.
 
 \subsubsection{Résultats}
@@ -583,12 +591,26 @@ L'initialisation des différents labels, aussi bien à l'étape d'extraction du LCR
 L'évaluation de l'algorithme de segmentation est effectuée par une comparaison entre une segmentation manuelle du cortex servant de vérité terrain et le résultat de la segmentation automatique.
 L'influence de l'initialisation du cortex est testée afin de montrer la convergence de l'algorithme.
 Les résultats correspondants à cette étude de la convergence sont montrés à la figure~\ref{FIG:CORTEX:BUILD:INIT}.
-Ils illustrent une faible sensibilité à l'initialisation de l'algorithme de segmentation.
+Cette figure présente deux courbes correspondant respectivement à l'évolution du coefficient de similarité Dice lors de l'initialisation de l'algorithme en fonction de l'épaisseur initiale du cortex, et l'évolution du coefficient mesurant la similarité de la segmentation finale en fonction de cette épaisseur.
+Une épaisseur initiale de $3$ ou $4$ mm présente un coefficient Dice relativement élévé (autour de 68\%), ce qui n'entraine pas un gain très significatif lors du processus de segmentation (Dice autour de $75$\%).
+Cependant, une initialisation à $2$ ou $5$ mm présente une plus faible similarité avec la vérité terrain, mais la valeur finale reste très proche de celle obtenue avec une initialisation à $4$ mm.
+Ainsi, le coefficient Dice passe d'environ $48$\% à environ $72$\% dans le cas d'une initialisation à $2$ mm d'épaisseur.
+Ces résultats illustrent une faible sensibilité à l'initialisation de l'algorithme de segmentation.
 
-La table~\ref{TAB:CORTEX:BUILD} montre les résultats de la segmentation sur chacun des cas traités.
+Le tableau~\ref{TAB:CORTEX:BUILD} montre les résultats de la segmentation sur chacun des cas traités, ainsi que la moyenne des coefficients Dice et l'écart-type.
 Une sensible amélioration par rapport à la segmentation des images non-reconstruites est notable.
+En effet, la moyenne des coefficients de similarité est bien plus élévée que dans le cas d'images non reconstruites (au mieux $61$\% contre environ $75$\%) avec une dispersion bien plus réduite (au mieux $7$\% contre environ $2$\%).
+Ceci peut s'expliquer par les effets de l'algorithme de reconstruction qui tend à corriger les imperfections de l'image (correction du bruit, du biais et de certains artefacts de mouvement).
+De plus, le traitement d'un volume 3D tend à réduire le problème présenté par l'épaisseur des coupes des images non-reconstruites, notamment un effet de volume partiel plus important. 
+Des détails supplémentaires sur le cortex sont disponibles et permettent de mieux conduire la segmentation.
+
 La figure~\ref{FIG:CORTEX:BUILD:VIEW} présente une illustration des résultats de la segmentation. 
 Un phénomène de sous-segmentation est toujours visible sur certaines parties de l'image, mais l'apport des contraintes géométriques est bien mis en évidence par l'absence d'erreurs dues aux effets du volume partiel (présence de matière blanche entre le LCR et le cortex).
+Aucune discontinuité du cortex n'est observée, ce qui favorise le processus de segmentation de cette structure.
+Cette continuité permet d'observer une meilleure prise en compte des sillons et d'envisager leur suivi au cours de la grossesse.
+Cependant, de même que pour les images non-reconstruites, les contraintes géométriques imposées par le modèles conduisent à la présence de faux positifs pour la segmentation du cortex.
+Ce phénomène est particulièrement visible dans la région du cerveau ou le tronc cérébrale rejoint le corps calleux.
+Le principale problème est toujours une séparation des ventricules du LCR externe qui peut être aléatoire et à l'absence de critères permettant de diminuer la probabilité d'apparition de voxels classés comme cortex dans cette zone.
 
 \begin{figure}[!tb]
 \centering
@@ -619,15 +641,15 @@ Un phénomène de sous-segmentation est toujours visible sur certaines parties de 
 \begin{center}
 \small{
 % \small
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-Case (GA)& \hspace{1mm} 1 (28) \hspace{1mm} & \hspace{1mm} 2 (30) \hspace{1mm} & \hspace{1mm} 3 (26) \hspace{1mm} & \hspace{1mm} 4 (32) \hspace{1mm} & \hspace{1mm} 5 (27) \hspace{1mm} & \hspace{1mm} 6 (30) \hspace{1mm}\\
+Cas (GA) & 1 (28) & 2 (30) & 3 (26) & 4 (32) & 5 (27) & 6 (30) & Moyenne $\pm$ écart-type\\
 \hline
 % $Sen$ & 77.83 & 80.61 & 77.78 & 78.61 & 86.29 & 78.84\\
 % \hline
 % $Sen$ with regularization & 80.19 & 82.79 & 74.08 & 72.69 & 85.45 & 75.59\\
 % \hline
-$Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61\\
+$Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61 &  75.12 $\pm$ 1.93\\
 % \hline
 % \hspace{1mm} $DSC$ with regularization  \hspace{1mm} & 71.02 & 71.37 & 77.76 & 71.86 & 75.78 & 75.23\\
 \hline
@@ -641,7 +663,7 @@ $Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61\\
 
 \end{table}
 
-Ces résultats confirment la possibilité de segmenter le cortex de manière fiable malgré l'absence d'\emph{a priori} issus d'un atlas ou d'une étape de régularisation spécifique. 
+Ces résultats sont donc des résultats préliminaires confirmant la possibilité de segmenter le cortex de manière fiable malgré l'absence d'\emph{a priori} issus d'un atlas ou d'une étape de régularisation spécifique. 
 Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a priori} anatomiques qui pourraient se présenter sous forme d'arbres et de relations floues entre les différentes structures.
 
 Cependant, comme précisé à la section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
