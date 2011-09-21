@@ -586,6 +586,9 @@ Un 6-voisinage 3D est utilisé pour mettre en oeuvre l'algorithme de $k$-means to
 Empiriquement, un élément structurant de taille $5\times5\times5$ est utilisé pour l'opérateur \emph{Top-Hat}, ce qui correspond à cube de dimensions $3.71\times3.71\times3.71$ mm$^3$.
 L'initialisation des différents labels, aussi bien à l'étape d'extraction du LCR qu'à l'étape de segmentation du cortex, est la même que pour les images non-reconstruites.
 
+La segmentation du tronc cérébral et du cervelet consiste en la reconstruction des vérités-terrains issues des images non-reconstruites.
+La vérité-terrain du cortex est obtenue par une segmentation manuelle.
+
 \subsubsection{Résultats}
 
 L'évaluation de l'algorithme de segmentation est effectuée par une comparaison entre une segmentation manuelle du cortex servant de vérité terrain et le résultat de la segmentation automatique.
@@ -664,9 +667,22 @@ $Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61 &  75.12 $\pm$ 1.93\\
 \end{table}
 
 Ces résultats sont donc des résultats préliminaires confirmant la possibilité de segmenter le cortex de manière fiable malgré l'absence d'\emph{a priori} issus d'un atlas ou d'une étape de régularisation spécifique. 
-Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a priori} anatomiques qui pourraient se présenter sous forme d'arbres et de relations floues entre les différentes structures.
+Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a priori} anatomiques.
 
 Cependant, comme précisé à la section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
 Une méthode d'extraction automatique du volume intracrânien, basée sur des opérateurs de morphologie mathématique, existe~\cite{Anquez:ISBI:2009} et la séparation des deux hémisphères et du cervelet est une opération déjà réalisée dans des cas adultes, qui pourrait être adaptée aux images reconstruites en IRM f\oe tale.
 
 \section{Conclusion}
+
+Ce chapitre a présenté une méthode de segmentation du cortex en IRM f\oe tale.
+Le principe est d'utiliser des \emph{a priori} anatomiques génériques sous forme de contraintes géométriques et de s'appuyer exclusivement sur les données de l'images pour obtenir la segmentation finale.
+Les résultats obtenus montrent la pertinence de cette approche, notamment dans le cadre de cas bénéficiant de la reconstruction d'un volume 3D à partir des acquisitions originales.
+
+Cependant, plusieurs limitations ne permettent pas d'utiliser cet algorithme en routine clinique ou pour des études de population.
+En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élévés pour satisfaire à ce genre de travaux.
+Les causes en sont en partie les contraintes géométriques du modèle, qui malgré leur apport dans la correction du volume partiel, introduisent des faux positifs dans la détection du cortex dans d'autres zones du cerveau.
+Ceci démontre que des \emph{a priori} supplémentaires sont nécessaires afin de mieux orienter le processus de segmentation.
+Des méthodes formalisant les relations spatiales entre différents objets et exprimant leur position relative de façon floue existent et semblent tout indiquer pour être introduit dans le processus de segmentation.
+
+De plus, comme dit précédemment, cette méthodologie s'appuie sur une extraction préalable du volume intracranien et sur la segmentation du cervelet et du tronc cérébrale.
+La définition d'un outil d'extraction de ces structures est donc indispensable dans la perspective d'obtenir un processus de segmentation complet des structures cérébrales.
