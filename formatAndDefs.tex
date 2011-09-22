@@ -5,7 +5,7 @@
 \usepackage{subfigure}
 % \usepackage{setspace}
 \usepackage{url}
-\usepackage[left=1.2in,right=1.0in,top=1.0in,bottom=1.0in,includefoot,includehead,headheight=13.6pt]{geometry}
+\usepackage[left=1.0in,right=0.8in,top=1.0in,bottom=1.0in,includefoot,includehead,headheight=13.6pt]{geometry}
 \renewcommand{\baselinestretch}{1.05}
 
 % Table of contents for each chapter
@@ -27,60 +27,62 @@
 
 %------------------------------------------- Commande pour générer le pdf en dvipdf ---------------------------------------------------------------------------------------
 
-% % My pdf code
-% 
-% \usepackage{ifpdf}
-% 
-% \ifpdf
-%   \usepackage[pdftex]{graphicx}
-%   \DeclareGraphicsExtensions{.jpg}
-%   \usepackage[a4paper,pagebackref,hyperindex=true]{hyperref}
-% \else
-%   \usepackage{graphicx}
-%   \DeclareGraphicsExtensions{.ps,.eps}
-%   \usepackage[a4paper,dvipdfm,pagebackref,hyperindex=true]{hyperref}
-% \fi
-% 
-% \graphicspath{{.}{images/}}
-% 
-% %nicer backref links
-% \renewcommand*{\backref}[1]{}
-% \renewcommand*{\backrefalt}[4]{%
-% \ifcase #1 %
-% (Non cité.)%
-% \or
-% (Cité en page~#2.)%
-% \else
-% (Cité en pages~#2.)%
-% \fi}
-% \renewcommand*{\backrefsep}{, }
-% \renewcommand*{\backreftwosep}{ et~}
-% \renewcommand*{\backreflastsep}{ et~}
-% 
-% % Links in pdf
-% \usepackage{color}
-% \definecolor{linkcol}{rgb}{0,0,0.4} 
-% \definecolor{citecol}{rgb}{0.5,0,0} 
-% 
-% % Change this to change the informations included in the pdf file
-% 
-% \hypersetup
-% {
-% bookmarksopen=true,
-% pdftitle="Création et utilisation d'atlas anatomiques numériques pour la radiothérapie",
-% pdfauthor="Olivier COMMOWICK", %auteur du document
-% pdfsubject="Segmentation d'images par atlas et création d'atlas", %sujet du document
-% %pdftoolbar=false, %barre d'outils non visible
-% pdfmenubar=true, %barre de menu visible
-% pdfhighlight=/O, %effet d'un clic sur un lien hypertexte
-% colorlinks=true, %couleurs sur les liens hypertextes
-% pdfpagemode=None, %aucun mode de page
-% pdfpagelayout=SinglePage, %ouverture en simple page
-% pdffitwindow=true, %pages ouvertes entierement dans toute la fenetre
-% linkcolor=linkcol, %couleur des liens hypertextes internes
-% citecolor=citecol, %couleur des liens pour les citations
-% urlcolor=linkcol %couleur des liens pour les url
-% }
+% My pdf code
+
+% My pdf code
+
+\usepackage{ifpdf}
+
+\ifpdf
+  \usepackage[pdftex]{graphicx}
+  \DeclareGraphicsExtensions{.jpg}
+  \usepackage[a4paper,pagebackref,hyperindex=true]{hyperref}
+\else
+  \usepackage{graphicx}
+  \DeclareGraphicsExtensions{.ps,.eps}
+  \usepackage[a4paper,dvipdfm,pagebackref,hyperindex=true]{hyperref}
+\fi
+
+\graphicspath{{.}{images/}}
+
+%nicer backref links
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+\ifcase #1 %
+(Non cité.)%
+\or
+(Cité en page~#2.)%
+\else
+(Cité en pages~#2.)%
+\fi}
+\renewcommand*{\backrefsep}{, }
+\renewcommand*{\backreftwosep}{ et~}
+\renewcommand*{\backreflastsep}{ et~}
+
+% Links in pdf
+\usepackage{color}
+\definecolor{linkcol}{rgb}{0,0,0.4} 
+\definecolor{citecol}{rgb}{0.5,0,0} 
+
+% Change this to change the informations included in the pdf file
+
+\hypersetup
+{
+bookmarksopen=true,
+pdftitle="Création et utilisation d'atlas anatomiques numériques pour la radiothérapie",
+pdfauthor="Olivier COMMOWICK", %auteur du document
+pdfsubject="Segmentation d'images par atlas et création d'atlas", %sujet du document
+%pdftoolbar=false, %barre d'outils non visible
+pdfmenubar=true, %barre de menu visible
+pdfhighlight=/O, %effet d'un clic sur un lien hypertexte
+colorlinks=true, %couleurs sur les liens hypertextes
+pdfpagemode=None, %aucun mode de page
+pdfpagelayout=SinglePage, %ouverture en simple page
+pdffitwindow=true, %pages ouvertes entierement dans toute la fenetre
+linkcolor=linkcol, %couleur des liens hypertextes internes
+citecolor=citecol, %couleur des liens pour les citations
+urlcolor=linkcol %couleur des liens pour les url
+}
 
 %------------------------------------------------------Fin des définitions PDF-------------------------------------------------
 
