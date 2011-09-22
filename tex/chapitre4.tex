@@ -400,30 +400,6 @@ Toutes les évaluations sont réalisées grâce au coefficient Dice défini à la sect
 
 \paragraph{Evaluation quantitative}
 
-Le tableau~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
-Les coefficients dice moyens pour chacune des trois orientations sont : 60.26 pour l'axiale, 61.27 pour la coronale et 48.79 pour la sagittale.
-Nous pouvons constater que les résultats sont globalement similaires pour une segmentation d'images acquises selon les direction axiales et coronales, mais ils illustrent une mauvaise adéquation de la méthode avec la direction sagittale.
-Ce constat est cependant peu surprenant, étant donné l'apparence des structures cérébrales vues dans une direction sagittale.
-La zone du corps caleux est particulièrement inadaptée au modèle développé, tandis que les directions axiales et coronales sont adaptées au modèles.
-Les valeurs des écarts-types montrent cependant une grande variabilité dans les résultats de la segmentation, qui peut s'expliquer largement par la qualité de l'image traité (présence d'un bruit plus ou moins important, cortex plus ou moins net, présence d'un hypersignal au sein de la matière blanche, \ldots).
-Une plus grande dispersion est observée dans la direction sagittale, confirmant la plus faible adéquation du modèle à cette direction, tandis que les résultats obtenus en axial et coronal sont similaires.
-
-\paragraph{Evaluation qualitative}
-
-Ces résultats semblent prometteurs, et sont confirmés par une évaluation qualitative des segmentations.
-La figure~\ref{FIG:CORTEX:UNBUILD:VIEW} confirme la pertinence du modèle proposé malgré une sous-segmentation dans certaines zones.
-De manière générale, de moins bons résultats sont observés aux niveaux de la segmentation des coupes sagittales, comme attendu au vu des résultats quantitatifs.
-La sous-segmentation est observée dans des zones ou le contraste entre le cortex et les tissus environnants est la moins prononcée, conduisant à une moins bonne efficacité du filtre \og Top Hat \fg{} pour révéler le cortex.
-
-Dans le cas des images orientées dans la direction axiale, l'observation des résultats coupe à coupe montre une bonne adéquation du modèle à l'anatomie cérébrale dans la partie supérieure du cerveau, c'est à dire au dessus des troisièmes et quatrièmes ventricules.
-En effet, ces ventricules sont reliés au LCR externe, introduisant une ambiguité quand à la localisation de la limite entre ventricules et LCR externe.
-Les coupes supérieures permettent de distinguer nettement les ventricules du LCR externe, ce qui est compatible avec le modèle présenté.
-
-Dans le cas des images orientées dans la direction coronale, l'observation des résultats coupe à coupe confirme la bonne adaptation du modèle à cette orientation.
-En effet, dans la plupart des coupes, les ventricules sont séparés du LCR externe.
-Cependant, une ambiguité est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
-% Cela s'explique par la non-adaptation du modèle à cette vue particulière, notamment concernant la zone entre les deux hémisphères cérébraux.
-
 \begin{table}[!t]
 \begin{center}
 
@@ -477,7 +453,7 @@ Cas (SA) & Coupe & Dice 3D & Dice maximum \\
 \multirow{3}*{8(27)} 
         & Axial & 70.81 & 78.65\\ \cline{2-4}
         & Coronal & 66.17 & 74.31\\ \cline{2-4}
-        & Sagital & 23.86 & 44.32\\
+        & Sagital & 53.37 & 78.24\\
 \hline
 \hline
  \multirow{3}*{Moyenne $\pm$ écart-type} 
@@ -490,6 +466,58 @@ Cas (SA) & Coupe & Dice 3D & Dice maximum \\
 \end{center}
 \caption[Coefficients Dice issus de la segmentation du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité terrain et les segmentations automatiques. Coefficient global et coefficient maximum obtenue en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
 \end{table}
+
+Le tableau~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
+Les coefficients dice moyens pour chacune des trois orientations sont : 60.26 pour l'axiale, 61.27 pour la coronale et 48.79 pour la sagittale.
+Nous pouvons constater que les résultats sont globalement similaires pour une segmentation d'images acquises selon les direction axiales et coronales, mais ils illustrent une mauvaise adéquation de la méthode avec la direction sagittale.
+
+Ce constat est cependant peu surprenant, étant donné l'apparence des structures cérébrales vues dans une direction sagittale.
+La zone du corps caleux est particulièrement inadaptée au modèle développé, tandis que les directions axiales et coronales sont adaptées au modèles.
+Les valeurs des écarts-types montrent cependant une grande variabilité dans les résultats de la segmentation, qui peut s'expliquer largement par la qualité de l'image traitée (présence d'un bruit plus ou moins important, cortex plus ou moins net, présence d'un hypersignal au sein de la matière blanche, \ldots).
+
+Une plus grande dispersion est observée dans la direction sagittale, confirmant la plus faible adéquation du modèle à cette direction, tandis que les résultats obtenus dans les directions axiales et coronales présentent une dispersion similaires.
+L'ensemble des résultats quantitatifs tendent à montrer une meilleure adéquation du modèle aux directions coronale et axiale. 
+Cependant, la valeur du coefficient Dice incite à une observation plus précise des résultats.
+
+\paragraph{Evaluation qualitative}
+
+\begin{figure*}[!t]
+\centering
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/TAB_Ar_Cortex_Truth.eps}} \label{cortex:truth}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ESC_Mi_Cortex_Truth.eps}} \label{cortex2:truth}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ARS_Hu_Cortex_Truth.eps}} \label{cortex3:truth}\\
+
+% \vspace{-3mm}
+
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/TAB_Ar_Cortex_Seg.eps} \label{cortex:final}}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ESC_Mi_Cortex_Seg.eps} \label{cortex2:final}}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ARS_Hu_Cortex_Seg.eps} \label{cortex3:final}}\\
+
+% \vspace{-5mm}
+
+\caption[Extraction du cortex (images non reconstruites)]{
+\emph{Extraction du cortex. (a, b, c): vérités-terrains, (d, e, f) : régions d'intêret avec la segmentation finale. Rouge : LCR, vert : cortex, bleu : matière blanche et noyaux gris.}
+\label{FIG:CORTEX:UNBUILD:VIEW}}
+\vspace{-6mm}
+\end{figure*}
+
+La figure~\ref{FIG:CORTEX:UNBUILD:VIEW} présente les résultats de certaines segmentation en coupe axiale.
+Elle confirme la pertinence du modèle proposé malgré une sous-segmentation dans certaines zones.
+De manière générale, de moins bons résultats sont observés aux niveaux de la segmentation des coupes sagittales, comme attendu au vu des résultats quantitatifs.
+La sous-segmentation est observée dans des zones ou le contraste entre le cortex et les tissus environnants est la moins prononcée, conduisant à une moins bonne efficacité du filtre \og Top Hat \fg{} pour révéler le cortex.
+
+Dans le cas des images orientées dans la direction axiale, l'observation des résultats coupe à coupe montre une bonne adéquation du modèle à l'anatomie cérébrale dans la partie supérieure du cerveau, c'est à dire au dessus des troisièmes et quatrièmes ventricules.
+En effet, ces ventricules sont reliés au LCR externe, introduisant une ambiguité quand à la localisation de la limite entre ventricules et LCR externe.
+Les coupes supérieures permettent de distinguer nettement les ventricules du LCR externe, ce qui est compatible avec le modèle présenté.
+
+Dans le cas des images orientées dans la direction coronale, l'observation des résultats coupe à coupe confirme la bonne adaptation du modèle à cette orientation.
+En effet, dans la plupart des coupes, les ventricules sont séparés du LCR externe.
+Cependant, une ambiguité est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
+% Cela s'explique par la non-adaptation du modèle à cette vue particulière, notamment concernant la zone entre les deux hémisphères cérébraux.
+
+
 
 \paragraph{Evaluation croisée entre experts et segmentation manuelle}
 
@@ -546,27 +574,6 @@ En conclusion, l'ensemble des résultats illustre néanmoins la possibilité d'obte
 Cette segmentation est obtenue à partir d'une méthode mélant des connaissance anatomiques et des données structurelles afin d'obtenir une segmentation du cortex.
 Cependant, l'effet de volume partiel ainsi que la faible dissociabilité des tissus rend la tache particulièrement difficile, même pour des experts.
 
-\begin{figure*}[!t]
-\centering
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/TAB_Ar_Cortex_Truth.eps}} \label{cortex:truth}
-\hspace{0.1mm}
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ESC_Mi_Cortex_Truth.eps}} \label{cortex2:truth}
-\hspace{0.1mm}
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ARS_Hu_Cortex_Truth.eps}} \label{cortex3:truth}\\
-
-% \vspace{-3mm}
-
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/TAB_Ar_Cortex_Seg.eps} \label{cortex:final}}
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ESC_Mi_Cortex_Seg.eps} \label{cortex2:final}}
-\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/ARS_Hu_Cortex_Seg.eps} \label{cortex3:final}}\\
-
-% \vspace{-5mm}
-
-\caption[Extraction du cortex (images non reconstruites)]{
-\emph{Extraction du cortex. (a, b, c): vérités-terrains, (d, e, f) : régions d'intêret avec la segmentation finale. Rouge : LCR, vert : cortex, bleu : matière blanche et noyaux gris.}
-\label{FIG:CORTEX:UNBUILD:VIEW}}
-\vspace{-6mm}
-\end{figure*}
 
 \subsection{Images reconstruites}
 
