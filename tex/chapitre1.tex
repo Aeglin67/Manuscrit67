@@ -2,7 +2,7 @@
 \label{chap:intro}
 \minitoc
 
-Chapitre destiné à introduire les notions fondamentale ayant guidées les travaux.
+% Chapitre destiné à introduire les notions fondamentale ayant guidées les travaux.
 
 %--------------------------------------------------------------------------------------------------Présentation------------------------------------------------------------------------------------------------------------------------
 
@@ -21,25 +21,53 @@ L'apport du traitement d'image dans ce domaine fût fondamental car il a permis l
 De nombreux outils ont été développés au cours des dernières années, notamment des méthodes de segmentation des tissus cérébraux (liquide céphalo-rachidien (LCR), matière grise et matière blanche), des structures cérébrales (ventricules, thalamus, \ldots{}) et de lésions cérébrales dans la cas de maladie dégénérative telle que la maladie d'Alzheimer ou la sclérose en plaque.
 Ces outils ont permis un gain de temps considérable, notamment dans le cadre d'études nécessitant la segmentation de plusieurs dizaines de cas.
 
-La segmentation automatique de données issues d'IRM f\oe tale s'est développée ces cinq dernières années.
+La segmentation automatique de données issues d'IRM f\oe tale s'est développée ces cinq dernières années, une fois qu'il fût établie qu'il n'existe pas de contre-indications à l'exposition du f\oe tus aux importants champs magnétiques employés lors d'un examen par IRM.
 Cependant, ces méthodes se heurtent à plusieurs problèmes fondamentaux.
 Outre les artefacts \og classiques \fg{} rencontrés dans le cadre de l'IRM (biais en intensité, bruit et effet de volume partiel), elles doivent tenir compte d'une plus faible résolution, rendu nécessaire par des temps d'acquisition plus court.
-Ces temps d'acquisition sont imposés non-seulement pour éviter au maximum les artefacts de bruit, mais également par mesure de sécurité, les effets du champs magnétique sur le développement cérébral étant inconnus.
+Ces temps d'acquisition sont nécessaires surtout pour éviter les artefacts de mouvement issus de la respiration de la mère ou des mouvements du f\oe tus.
+% Ces temps d'acquisition sont imposés non-seulement pour éviter au maximum les artefacts de bruit, mais également par mesure de sécurité, les effets du champs magnétique sur le développement cérébral étant inconnus.
 
-Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c ois Rousseau.
+Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c cois Rousseau.
 Ce projet a pour objectif l'analyse et la modélisation du développement cérébral chez le f\oe tus et le nouveau-né, à l'aide d'images IRM anatomique et de diffusion.
 
 \subsection{Objectifs}
 
 Ce travail de thèse comporte deux volets distincts.
 Dans un premier temps, l'objectif est de définir une nouvelle méthode de segmentation basée sur une nouvelle approche tenant compte des redondances de l'image.
-L'objectif est de démontrer que l'intégration de cette approche dite des \og moyennes non-locales \fg{} au sein d'un algorithme de partionnement préexistant permet de corriger les effets du biais en intensité et du bruit sur la segmentation.
+L'objectif est de démontrer que l'intégration de cette approche dite des \og moyennes non-locales \fg{} au sein d'un algorithme de partionnement préexistant permet de corriger les effets du biais en intensité et du bruit présent dans l'image sur la segmentation.
 
 Dans un deuxième temps, une méthode de segmentation des tissus cérébraux en IRM f\oe tale doit être proposée, l'objectif à long terme étant d'être en mesure de conduire des études sur l'évolution des différentes structures cérébrales.
 Les travaux se sont concentrés sur la segmentation du cortex pour sa capacité à traduire le degré de la maturation cérébrale en fonction de son plissement \cite{Levine:Radiology:1999}.
 Ceci a conduit à définir un algorithme de segmentation à partir d'un algorithme de partionnement connu en ajoutant des contraintes goémétriques de manière à guider le plus efficacement la segmentation.
 
+\subsection{Contributions}
+
+La méthode générale de segmentation que nous proposons est une extension de l'algorithme de partitionnement des C-Moyennes Floues (\emph{Fuzzy C-Means} en anglais, ou FCM) en utilisant la redondance de l'information dans l'image grâce aux moyennes non-locales.
+Nous montrons que cette nouvelle méthodologie permet d'apporter une réponse efficace au problème du biais en intensité et à celui du bruit, grâce à des expériences sur les bases d'images BrainWeb et IBSR.
+Les résultats obtenus sont comparés aux méthodes SPM5 (Statistical Parametric Mapping) \cite{Ashburner:NeuroImage:2005}, EMS (Expectation-Maximization Segmentation) \cite{VanLeemput1:TMI:1999} et HMC (Hidden Markov Chains) \cite{Bricq:MIA:2008}.
+
+Nous définissons également une nouvelle méthode de segmentation du cortex en IRM f\oe tale, faisant appel à des contraintes géométriques pour guider l'algorithme de partionnement $k$-means.
+Ces contraintes, ajoutée à l'utilisation d'opérateurs structurels issus de la morphologie mathématique, permet de mettre en valeur l'information nécessaire à la segmentation du cortex.
+Les validations sont conduites sur des images directement issues de l'imageur, bénéficiant de vérités-terrains tracées par des experts médicaux, ainsi que sur des images recontruites de manière à bénéficier d'un volume ayant des voxels isotropes et mélant les informations issues de plusieurs images.
+
 \subsection{Organisation du manuscrit}
+
+Le manuscrit est organisé en cinq chapitres présentant les contributions essentielles de la thèse.
+La suite du présent chapitre présente certaines notions d'anatomie cérébrale, ainsi que les différentes étapes de la maturation cérébrale.
+Les principes fondamentaux de l'IRM sont également présentés, tout en indiquant les spécificités des séquences d'acquisition dans le cas d'IRM f\oe tales.
+
+Le chapitre \ref{chap:art} rapelle les grandes familles de méthodes de segmentation.
+Une présentation plus complète de l'algorithme FCM et de ses extensions est également réalisée dans le but de mettre en valeur les axes de recherche développés autour de cette méthode.
+Enfin, une présentation des méthodes de segmentation employées dans le cas d'IRM de nouveaux-nés ou de f\oe tus est également faite et insiste sur les spécificités des méthodes développées autour de cette problématique.
+
+Le chapitre \ref{chap:nlfcm} commence par présenter les moyennes non-locales et leurs différentes applications.
+La suite du chapitre est consacrée à la définition d'une extension de l'algorithme FCM grâce aux moyenne non-locales et se poursuit par l'étude de leur apport à cette algorithme dans le cadre de la segmentation d'IRM.
+L'algorithme FCM revenant à minimiser une fonctionnelle composée d'un terme d'attache aux données et d'un terme de régularisation, la correction du biais en intensité est obtenue par l'introduction des moyennes non-locales dans le terme d'attache aux données et la correction du bruit par leur introduction dans le terme de régularisation.
+
+Le chapitre \ref{chap:foetale} décrit la méthode proposée pour la segmentation du cortex en IRM f\oe tale. 
+Il présente les motivations qui ont conduit à introduire des contraintes géométriques dans la méthode de segmentation, ainsi que les différents outils employés pour mettre en valeur le cortex.
+
+Enfin, le chapitre \ref{chap:conclusion} présente les conclusions et les perspectives de ce travail de thèse.
 
 %------------------------------------------------------------------------Anatomie et maturation cérébrale----------------------------------------------------------------------------------------
 
