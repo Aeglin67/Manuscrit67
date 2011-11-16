@@ -579,7 +579,7 @@ Cependant, l'effet de volume partiel ainsi que la faible dissociabilité des tiss
 
 L'intêret d'utiliser des images reconstruites est d'obtenir des segmentations de meilleures qualités et plus précise de manière à permettre une étude plus avancée des propriétés des tissus cérébraux chez le f\oe tus.
 Ces images sont isotropes, permettant de réaliser une réelle segmentation en 3D et non coupe à coupe comme dans la section précédente.
-Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:MIA:2010} à partir de trois acquisitions respectivement axiale, coronale et sagitale.
+Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:AR:2006} à partir de trois acquisitions respectivement axiale, coronale et sagitale.
 
 \subsubsection{Caractéristiques et paramètres}
 
@@ -678,6 +678,23 @@ Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a pr
 
 Cependant, comme précisé à la section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
 Une méthode d'extraction automatique du volume intracrânien, basée sur des opérateurs de morphologie mathématique, existe~\cite{Anquez:ISBI:2009} et la séparation des deux hémisphères et du cervelet est une opération déjà réalisée dans des cas adultes, qui pourrait être adaptée aux images reconstruites en IRM f\oe tale.
+
+\section{Segmentation de volumes recontruits par l'apport de la super-résolution}
+
+\begin{figure}[!tb]
+\centering
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR.eps}} \label{axial:truth}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR.eps} \label{axial2:truth}}
+
+\caption[Comparaison entre une image reconstruite selon \cite{Rousseau:AR:2006} et \cite{Rousseau:MIA:2010}]{
+\emph{Comparaison entre une image reconstruite selon (a) \cite{Rousseau:AR:2006} et (b) \cite{Rousseau:MIA:2010}. Les principales différences sont un meilleur contraste entre les tissus du à un moins fort lissage.}
+\label{FIG:COMPARE:HR:SR}}
+% \vspace{-6mm}
+\end{figure}
+
+Cette section présente des résultats préliminaires issues de la segmentation de volumes reconstruits selon la méthode de \cite{Rousseau:MIA:2010} incluant une approche de super-resolution visant à permettre à un plus grand nombre de détails d'être révélés.
+Les images issues de cette approche se révèlent être plus facilement exploitable car l'effet de lissage de la précédente méthode de reconstruction est moins accentué et les contrastes entre les tissus est plus important, comme illustré à la figure~\ref{FIG:COMPARE:HR:SR}.
+Nous présentons une analyse quantitative des résultats ainsi qu'une étude succinte de l'apparition des différents sillons  cérébraux au cours de la grossesse.
 
 \section{Conclusion}
 
