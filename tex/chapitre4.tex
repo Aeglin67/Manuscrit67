@@ -683,10 +683,10 @@ Une méthode d'extraction automatique du volume intracrânien, basée sur des opéra
 
 \begin{figure}[!tb]
 \centering
-\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR.eps}} \label{axial:truth}
-\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR.eps} \label{axial2:truth}}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR.eps}} \label{HR}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR.eps} \label{SR}}
 
-\caption[Comparaison entre une image reconstruite selon \cite{Rousseau:AR:2006} et \cite{Rousseau:MIA:2010}]{
+\caption[Comparaison entre une image reconstruite selon deux procédés de reconstruction différents]{
 \emph{Comparaison entre une image reconstruite selon (a) \cite{Rousseau:AR:2006} et (b) \cite{Rousseau:MIA:2010}. Les principales différences sont un meilleur contraste entre les tissus du à un moins fort lissage.}
 \label{FIG:COMPARE:HR:SR}}
 % \vspace{-6mm}
@@ -695,6 +695,75 @@ Une méthode d'extraction automatique du volume intracrânien, basée sur des opéra
 Cette section présente des résultats préliminaires issues de la segmentation de volumes reconstruits selon la méthode de \cite{Rousseau:MIA:2010} incluant une approche de super-resolution visant à permettre à un plus grand nombre de détails d'être révélés.
 Les images issues de cette approche se révèlent être plus facilement exploitable car l'effet de lissage de la précédente méthode de reconstruction est moins accentué et les contrastes entre les tissus est plus important, comme illustré à la figure~\ref{FIG:COMPARE:HR:SR}.
 Nous présentons une analyse quantitative des résultats ainsi qu'une étude succinte de l'apparition des différents sillons  cérébraux au cours de la grossesse.
+
+\subsection{Analyse des résultats}
+
+\begin{figure}[!tb]
+\centering
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_Original.eps}} \label{HR:Original}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_Seg.eps}} \label{HR:Seg} \\
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_Original.eps}} \label{SR:Original}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_Seg.eps}} \label{SR:Seg}
+
+\caption[Comparaison entre les segmentations d'images reconstruites selon deux procédés de reconstruction différents]{
+\emph{Comparaison entre les segmentations d'images reconstruites selon (a) \cite{Rousseau:AR:2006} et (c) \cite{Rousseau:MIA:2010}. (b) et (d) sont les segmentations respectives de (a) et (c). Le principal effet notable est la correction de la sursegmentation du cortex.}
+\label{FIG:COMPARE:HR:SR:SEG}}
+% \vspace{-6mm}
+\end{figure}
+
+\begin{figure}[!tb]
+\centering
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_WM.eps}} \label{HR:WM}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_WMandCortex.eps}} \label{HR:WMandCortex} \\
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_WM.eps}} \label{SR:WM}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_WMandCortex.eps}} \label{SR:WMandCortex}
+
+\caption[Visualisation 3D des segmentations d'images reconstruites selon deux procédés de reconstruction différents]{
+\emph{Visualisation des segmentations d'images reconstruites selon \cite{Rousseau:AR:2006} (première ligne) et \cite{Rousseau:MIA:2010} (deuxième ligne). (a) et (c) représentent la surface de la matière blanche. (b) et (d) représentent la surface du cortex.}
+\label{FIG:COMPARE:HR:SR:3D}}
+% \vspace{-6mm}
+\end{figure}
+
+L'utilisation de la super-résolution favorise une meilleure segmentation du cortex par le meilleur contraste existant entre le cortex et les tissus environnants, notamment la matière blanche.
+Ceci favorise l'efficacité du filtre \emph{Top-Hat} pour la révélation du cortex.
+La figure~\ref{FIG:COMPARE:HR:SR:SEG} montre la différence entre la segmentation d'une image simplement reconstruite et une image reconstruite selon la super-résolution.
+Le principal effet notable de l'utilisation de la super-résolution est la correction de la sursegmentation. 
+En effet, le cortex bénéficiant d'un meilleur contraste par rapport à la matière blanche, le filtre \emph{Top-Hat} gagne en efficacité et permet à l'algorithme de segmentation d'être mieux guidé.
+
+Cependant l'absence de vérité terrain à l'heure actuelle sur ces images ne permet pas d'évaluer quantitativement le gain réalisé grâce à l'emploie de la super-résolution.
+Cependant, une illustration est donnée par la représentation en 3D de la surface du cortex et de la surface de la matière blanche (voir figure~\ref{FIG:COMPARE:HR:SR:3D}) dans le cas d'une image reconstruite selon les méthode de \cite{Rousseau:AR:2006} et \cite{Rousseau:MIA:2010}.
+Cet exemple montre que la super-résolution permet à l'algorithme de mieux détecter les limites entre la matière blanche et la cortex et ainsi de reconstruire une frontière plus nette entre ces deux tissus et donc d'obtenir des résultats qui devraient permettre à terme de conduire des études sur l'épaisseur du cortex au cours de la grossesse.
+
+\subsection{Apparition des sillons corticaux au cours du temps}
+
+\begin{figure}[!tb]
+\centering
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/DER_An_3D.eps}\label{DER:3D}}
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_01_3D.eps}\label{TAB01:3D}} 
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/AYD_Na_3D.eps}\label{AYD:3D}}  \\
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_3D.eps}\label{TAB02:3D}} 
+\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/HER_Au_3D.eps}\label{HER:3D}} 
+
+\caption[Evolution des sillons corticaux au cours de la grossesse]{
+\emph{Evolution des sillons corticaux au cours de la grossesse. Temps d'aménorrhée : (a) 26 semaines, (b) 27 semaines, (c) 28 semaines, (d) 30 semaines, (e) 32 semaines.}
+\label{FIG:TIME:3D}}
+% \vspace{-6mm}
+\end{figure}
+
+Notre méthode de segmentation donnant de bons résultats concernant l'évaluation de la surface du cortex, la base de données diponible permet de réaliser une observation de l'apparition des sillons corticaux au cours du temps.
+Cinq cas, acquis à respectivement 26, 27, 28, 30 et 32 semaines sont présentés afin d'illustrer cette évolution.
+
+La figure~\ref{DER:3D} montre le cortex tel qu'il apparait à 26 semaines d'aménorrhée.
+Nous pouvons observer qu'à ce stade de la grossesse, seul l'\emph{insula}, le sillon latéral ainsi qu'une ébauche de sillon central sont observables. 
+Par la suite, d'autres sillons viennent s'ajouter, marquant ainsi différentes étapes du développement du f\oe tus.
+La figure~\ref{TAB01:3D} montre l'apparition du sillon frontal supérieur et du sillon temporal supérieur sur un cas à 27 semaines d'aménorrhée.
+Le développement du cerveau se poursuit pendant les semaines suivantes, marquée par l'apparition de nouveaux sillons, tels que le sillon postcentral et le sillon frontal inférieur comme illustré à la figure~\ref{TAB02:3D} (30 semaines d'aménorrhée).
+Au cours des semaines suivantes, le cerveau continue de se complexifier, ce qui se matérialise par l'apparition de sillons secondaires, comme illustré par la figure~\ref{HER:3D} (32 semaines d'aménorrhée).
+
+On peut observer cependant que la figure~\ref{AYD:3D} semble présenter un retard dans son développement, notamment vis-à-vis de la figure~\ref{TAB01:3D}, qui à une semaine d'aménorrhée de moins présente une gyration plus avancée.
+Néanmoins, l'observation d'un tel écart dans le développement est tout à fait normal.
+En effet, il est courant d'observer un écart de deux semaines entre l'apparation d'un sillon chez certains patients et sa présence dans 75\% des cas \cite{Glenn:SemPer:2009}.
+De manière générale, l'observation de l'apparation des sillons est conforme aux observations médicales, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
 
 \section{Conclusion}
 
