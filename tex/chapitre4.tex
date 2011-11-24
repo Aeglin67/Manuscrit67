@@ -14,12 +14,12 @@ Un cerveau adulte est un cerveau mature, se présentant notamment avec un cortex 
 Dans un cas non mature, le cortex est une structure lisse où on peut observer la formation progressive des sillons.
 De plus, la matière blanche n'est presque pas myélinisée.
 Une autre différence anatomique est la présence d'une structure intermédiaire, la matrice germinale située autour des ventricules, où se forment les neurones avant leur migration vers le cortex.
-Cependant, cette structure disparait presque complètement après 26 semaines de grossesse, mais des traces peuvent être observés après cette date.
+Cependant, cette structure disparaît presque complètement après 26 semaines de grossesse, mais des traces peuvent être observés après cette date.
 
 % (Inclure une image IRM adulte et une image IRM enfant en T2 pour expliciter les différences de rendu + classification simple en trois classes).
 Ces différences au niveau acquisition et anatomique conduisent nécessairement à des différences d'aspect à l'image.
-La différence la plus notable est l'inversion des contrastes entre la matière blanche et la matière grise par rapport à une image adulte (le cortex apparait plus foncé que la matière blanche dans  le cas adulte et plus clair dans le cas d'un f\oe tus si l'image est pondérée T1).
-Dans le cadre d'une classification, l'effet de volume partiel (présence de plusieurs tissus dans un même voxel conduisant à une altération du signal) propre aux IRM conduit alors à des artefacts comme la présence d'une fine bande de voxels classés comme matière blanche entre le LCR et le cortex, ce qui est anatomiquement abérrant (voir la figure~\ref{FIG:DISTRIB}).
+La différence la plus notable est l'inversion des contrastes entre la matière blanche et la matière grise par rapport à une image adulte (le cortex apparaît plus foncé que la matière blanche dans  le cas adulte et plus clair dans le cas d'un f\oe tus si l'image est pondérée T1).
+Dans le cadre d'une classification, l'effet de volume partiel (présence de plusieurs tissus dans un même voxel conduisant à une altération du signal) propre aux IRM conduit alors à des artefacts comme la présence d'une fine bande de voxels classés comme matière blanche entre le LCR et le cortex, ce qui est anatomiquement aberrant (voir la figure~\ref{FIG:DISTRIB}).
 De plus, le faible temps d'acquisition des IRM f\oe tale conduit à une plus faible dissociabilité des tissus, marquée par un fort recouvrement des distributions en intensité des différents tissus, notamment le cortex et la matière blanche, tandis qu'en général, les tissus cérébraux adultes sont bien plus dissociables.
 
 A la section~\ref{prenatal}, nous avons constaté que les réponses apportées aux différents problèmes posés par les IRM f\oe tales dans le cadre d'une segmentation complète des tissus conduisent à utiliser soit un atlas \cite{Habas:SPIE:2009, Habas:NeuroImage:2010} (dans le cadre d'une approche probabiliste) soit une étape spécifique de régularisation de la segmentation déconnectée des données avec quelques contraintes structurelles \cite{BachCuedra:MICCAI:2009}.
@@ -29,7 +29,7 @@ Notre méthode de segmentation reprend le principe d'une segmentation en plusieur
 La méthodologie conduisant à cette segmentation est décrite à la section \ref{sec:foetus:methodo} et les résultats issus de cette méthodologie sont présentés à la section \ref{sec:foetus:validation}.
 
 % Ce chapitre décrit une méthode de segmentation du cortex à partir d'images IRM f\oe tale.
-% Etant donné les différences au niveau anatomique et de l'aspect des images entre les IRM adultes et les IRM f\oe tales, une nouvelle méthodologie a du être mise en place afin de prendre en compte les spécificités du cerveau des f\oe tus.
+% Étant donné les différences au niveau anatomique et de l'aspect des images entre les IRM adultes et les IRM f\oe tales, une nouvelle méthodologie a du être mise en place afin de prendre en compte les spécificités du cerveau des f\oe tus.
 % 
 % La méthode de segmentation doit prendre en compte les principales caractéristiques de ces images.
 % Le modèle développé doit donc être adapté aux différents stades du développement cérébral et à l'aspect visuel des différents tissus.
@@ -72,10 +72,10 @@ La méthodologie conduisant à cette segmentation est décrite à la section \ref{se
 
 L'analyse des images à partir des vérités-terrain (notamment l'analyse des histogrammes) montre des distributions d'intensité très différentes entre les IRM adultes et les IRM f\oe tales (voir la figure~\ref{FIG:DISTRIB}).
 En effet, la distribution en intensité d'une IRM adulte révèle trois pics distincts correspondant respectivement au LCR, et aux matières grise et blanche.
-La grande majorité des méthodes de segmentation des tissus cérébraux se sont appuyés sur cette propriété (en ajoutant éventuellement des classes intermédiaires pour tenir compte du volume partiel), tout en utilisant différentes contraintes (atlas, régularisation, topologie, \ldots) afin d'obtenir un résultat anatomiquement correct.
+La grande majorité des méthodes de segmentation des tissus cérébraux se sont appuyés sur cette propriété (en ajoutant éventuellement des classes intermédiaires pour tenir compte du volume partiel), tout en utilisant différentes contraintes (atlas, régularisation, topologie, \ldots) afin d'obtenir un résultat anatomiquement correct (voir Sections~\ref{subsec:classif} et \ref{sec:fcm}).
 
 Cependant, l'observation de la distribution en intensité des IRM f\oe tales indique non seulement un important recouvrement entre le LCR et la matière blanche, mais montre également que la courbe représentant le cortex est presque entièrement inclue dans la courbe de la matière blanche.
-Ce constat explique pourquoi les méthodes de classification classiques ne parviennent pas à obtenir de résultats satisfaisant sur ces images.
+Ce constat explique pourquoi les méthodes de classification classiques, fondées sur un partitionnement des intensités, ne parviennent pas à obtenir de résultats satisfaisant sur ces images.
 De manière générale, une classification (en trois classes ou plus) ne donne pas de résultats pertinents (comme illustré à la figure~\ref{FIG:CLASSIF:FOETUS}) et des artefacts de segmentation dus à l'effet de volume partiel apparaissent (par exemple, des voxels classés comme matière blanche entre le LCR externe et le cortex, ce qui n'est pas anatomiquement pertinent).
 
 \begin{figure}[!t]
@@ -85,21 +85,21 @@ De manière générale, une classification (en trois classes ou plus) ne donne pas 
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/classif_2Class.eps}}
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/classif_3Class.eps}}
         \end{center}
-        \caption[Illustration de clustering en deux et trois classes]{\emph{Illustration de clustering en deux et trois classes. (a) Image originale. (b) Partitionnement en deux classes. Légende ; Rouge : CSF, Vert : Cerveau. (c) Partitionnement en trois classes. Légende ; Rouge : CSF, Jaune : Matière blanche, Bleu : Matière grise. On peut observer l'apparition d'une mince bande de voxels classés en matière blanche entre la région classée comme LCR et la région classé comme amtière grise.}\label{FIG:CLASSIF:FOETUS}}
+        \caption[Illustration de clustering en deux et trois classes]{\emph{Illustration de clustering en deux et trois classes. (a) Image originale. (b) Partitionnement en deux classes. Légende ; Rouge : CSF, Vert : Cerveau. (c) Partitionnement en trois classes. Légende ; Rouge : CSF, Jaune : Matière blanche, Bleu : Matière grise. On peut observer l'apparition d'une mince bande de voxels classés en matière blanche entre la région classée comme LCR et la région classé comme matière grise.}\label{FIG:CLASSIF:FOETUS}}
         
         \begin{center}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex1_3Class.eps}}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex2_3Class.eps}}
 	\subfigure[]{\includegraphics[height=34mm]{eps/chapitre4/Hist_Cortex3_3Class.eps}}
         \end{center}
-        \caption[Comparaison entre les distributions d'intensité dans plusieurs zones d'intêrets construites par dilatation de la segmentation manuelle du cortex]{\emph{Comparaison entre les distributions d'intensité dans plusieurs zones d'intêrets construites par dilatation de la segmentation manuelle du cortex. (a) Dilatation d'un voxel. (b) Dilatation de deux voxels. (c) Dilatation de trois voxels. Légende : LCR (vert), matière grise (bleu), matière blanche (rouge).} \label{FIG:DISTRIB:CORTEX}}
+        \caption[Comparaison entre les distributions d'intensité dans plusieurs zones d'intêret construites par dilatation de la segmentation manuelle du cortex]{\emph{Comparaison entre les distributions d'intensité dans plusieurs zones d'intêret construites par dilatation de la segmentation manuelle du cortex. (a) Dilatation d'un voxel. (b) Dilatation de deux voxels. (c) Dilatation de trois voxels. Légende : LCR (vert), matière grise (bleu), matière blanche (rouge).} \label{FIG:DISTRIB:CORTEX}}
 
 \end{figure}
 
 L'impossibilité de réaliser une segmentation directe des tissus cérébraux à partir de méthodes de partitionnement globale conduit nécessairement à la définition d'approches plus locales et progressives.
-Dans cette idée, nous avons fait le choix d'une extraction du cortex car il s'agit de la structure qui apparait le mieux sur ces images, se présentant sous la forme d'une bande sombre entre la matière blanche et le LCR externe.
-Une analyse de différentes zones d'intêrets construites autour du cortex révèle des distributions en intensité des différents tissus bien plus favorable à une opération de partitionnement (par $k$-means ou par FCM). 
-Cependant, le recouvrement de ces distributions reste important, laissant penser que l'information d'intensité seule n'est pas suffisante, et le problème posé par l'effet de volume partiel (apparation de voxels classés comme matière blanche entre le LCR et le cortex) n'est pas résolu.
+Dans cette idée, nous avons fait le choix d'une extraction du cortex car il s'agit de la structure qui apparaît le mieux sur ces images, se présentant sous la forme d'une bande sombre entre la matière blanche et le LCR externe.
+Une analyse de différentes zones d'intêret construites autour du cortex révèle des distributions en intensité des différents tissus bien plus favorable à une opération de partitionnement (par $k$-means ou par FCM). 
+Cependant, le recouvrement de ces distributions reste important, laissant penser que l'information d'intensité seule n'est pas suffisante, et le problème posé par l'effet de volume partiel (apparition de voxels classés comme matière blanche entre le LCR et le cortex) n'est pas résolu.
 C'est pourquoi, l'introduction de contraintes géométriques est nécessaire pour contraindre l'évolution du processus et obtenir une segmentation finale anatomiquement cohérente.
 
 Le principe de la méthode définie par la suite est donc le suivant.
@@ -158,7 +158,7 @@ Rappelons tout d'abord que la segmentation par l'algorithme $k$-means est équiva
 J_{k\mbox{-}means} = \sum_{\mathbf{y}_{j} \in S_k} \sum_{k=0}^{K} \Vert \mathbf{y}_{j} - \mathbf{v}_{k} \Vert_2^{2},
 \end{equation}
 où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centroïde de la classe $k$, $S_k$ est l'ensemble des voxels inclus dans la classe $k$ et $K$ est le nombre de classes recherchées (voir la section~\ref{subsubsec:kMeans}).
-Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le shéma classique de minimisation de la fonction coût alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
+Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le schéma classique de minimisation de la fonction coût alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
 L'optimisation se fait selon un échange de voxels à la frontière des tissus, imposant un basculement d'un élément d'une classe $k$ vers une autre classe $k'$ si il respecte certains critères, qui sont : 
 \[
 \left\{
@@ -173,15 +173,15 @@ où $N_j$ est un voisinage autour du voxel $j$, $C_{N_j}$ est l'ensemble des labe
 
 Les deux premières conditions vérifient l'éligibilité d'un voxel au changement de label. 
 Ce changement ne peut se faire que si exactement deux labels se trouvent dans le voisinage du voxel courant $j$ et si l'un de ces labels n'est pas le fond de l'image.
-La première condition garantit que deux labels normallement non connexes ne partagent pas de frontière communes.
+La première condition garantit que deux labels normalement non connexes ne partagent pas de frontière communes.
 Les contraintes géométriques sont ainsi préservées.
-De la même manière, la deuxième condition rend la labellisation des voxels voisins du fond de l'image invariante. 
+De la même manière, la deuxième condition rend la labélisation des voxels voisins du fond de l'image invariante. 
 La troisième condition permet la minimisation de la fonction coût.
 
 La formulation des contraintes géométriques ne correspond pas exactement à celle des points simples car elle ne conserve pas la topologie des composantes connexes.
 En effet, des tests préliminaires ont révélé que les points simples imposent une trop grande rigidité lors du processus de segmentation, bloquant l'évolution des différents labels.
 Ces contraintes géométriques sont donc conçues de manière à laisser un label se séparer en plusieurs composantes (voir Figure~\ref{FIG:KMEAN:ALLOWED}), de manière respecter la réalité anatomique des structures que l'on cherche à segmenter (par exemple les ventricules dans le cas d'une segmentation 2D) et gagner ainsi en flexibilité.
-De la même façon, la réunion de deux composantes est autorisée, comportement interdit par les points simples.
+De la même façon, la fusion de deux composantes est autorisée, comportement interdit par les points simples.
 Néanmoins, les contraintes géométriques sont conservées (par exemple, un label complètement inclus dans un autre le restera même si il est divisé en plusieurs composantes).
 
 % L'algorithme évolue donc selon un échange de voxels aux frontières de manière séquentielle.
@@ -197,7 +197,7 @@ Ils sont calculés de la façon suivante (voir la figure \ref{FIG:KMEANS:BIAS}) :
 \item Chaque moyenne locale $\mathbf{v}_{jk}$ découle d'une interpolation des 4 (2D) ou 8 (3D) plus proches moyennes de région les plus proches (selon que l'image traitée soit reconstruite ou non). 
 \end{enumerate}
 
-En résumé, l'algorithme présenté ici suit le shéma d'optimisation suivant : 
+En résumé, l'algorithme présenté ici suit le schéma d'optimisation suivant : 
 \begin{enumerate}
 \item Initialisation des labels (comme à la figure \ref{FIG:KMEANS:INIT}) et introduction d'un première évaluation des centroïdes (par exemple, par un clustering classique).
 \item \'Evolution des labels selon un échange de voxels aux frontières de manière séquentielle en respectant les contraintes citées ci-dessus, jusqu'à ce qu'aucun changement ne soit enregistré.
@@ -219,7 +219,7 @@ En résumé, l'algorithme présenté ici suit le shéma d'optimisation suivant :
 	\includegraphics[height=45mm]{eps/chapitre4/process.eps}
         \end{center}
 
-        \caption[Shéma général du processus de segmentation]{\emph{Shéma du processus de segmentation. A partir de l'image originale, le $k$-means topologique permet de réaliser une segmentation séparant le LCR externe, le cerveau et les ventricules. A partir de la frontière entre le LCR externe et le cerveau, une zone d'intêret incluant le cortex est définie. Le cortex est alors segmenter par un $k$-means topologique incluant l'intensité des voxels ainsi qu'une image issue du filtrage \og Top-Hat \fg{} de l'image originale.}}
+        \caption[Schéma général du processus de segmentation]{\emph{Schéma du processus de segmentation. A partir de l'image originale, le $k$-means topologique permet de réaliser une segmentation séparant le LCR externe, le cerveau et les ventricules. A partir de la frontière entre le LCR externe et le cerveau, une zone d'intêret incluant le cortex est définie. Le cortex est alors segmenter par un $k$-means topologique incluant l'intensité des voxels ainsi qu'une image issue du filtrage \og Top-Hat \fg{} de l'image originale.}}
 
         \label{FIG:FOE:PROCESS}
 
@@ -242,7 +242,7 @@ La deuxième étape est la segmentation proprement dite du cortex au sein de cette
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Final.eps}\label{FIG:LCR:FINAL}}
         \end{center}
 
-        \caption[Segmentation LCR, Cerveau, Ventricules]{\emph{Séparation des ventricules et du LCR externe. (a) Shéma du processus. (b) Image Originale. (c) Carte de distance du volume intrâcranien. Les éléments en rouge sont les plus éloignés de la frontière du colume intracrânien. (d) Initialisation en fonction de la carte de distance. Le LCR externe est une bande d'un voxel d'épaisseur à la frontière du volume intracrânien. Les ventricules sont la région la plus au centre de ce volume et la limite est fixée à 80\% de la distance maximum. (e) Segmentation finale par le $k$-means topologique.}}
+        \caption[Segmentation LCR, Cerveau, Ventricules]{\emph{Séparation des ventricules et du LCR externe. (a) Schéma du processus. (b) Image Originale. (c) Carte de distance du volume intracrânien. Les éléments en rouge sont les plus éloignés de la frontière du volume intracrânien. (d) Initialisation en fonction de la carte de distance. Le LCR externe est une bande d'un voxel d'épaisseur à la frontière du volume intracrânien. Les ventricules sont la région la plus au centre de ce volume et la limite est fixée à 80\% de la distance maximum. (e) Segmentation finale par le $k$-means topologique.}}
 
         \label{FIG:LCR:STEPS}
 
@@ -254,7 +254,7 @@ Trois cercles concentriques représentant respectivement le LCR externe, le cerve
 L'initialisation de ces trois cercles est réalisée par le biais d'une carte de distance intracrânienne, définie à partir d'une segmentation du volume intracrânien et mesurant le distance d'un voxel par rapport à la frontière extérieure de ce volume (voir la figure~\ref{FIG:LCR:DISTANCE}).
 L'intêret de l'utilisation d'une carte de distance est qu'elle permet de positionner la région correspondant aux ventricules à une distance suffisante du LCR externe, de manière à ne pas créer de confusion entre ces deux régions lors du processus de segmentation.
 
-% Cette phase nécessite de connaitre le volume intracrânien. 
+% Cette phase nécessite de connaître le volume intracrânien. 
 % Celui ci peut être obtenu soit par une extraction automatique, soit par une segmentation manuelle.
 
 % L'initialisation des labels est faite à partir d'une carte de distance intra-crânienne calculée depuis la surface extérieure du volume intracrânien (un voxel à $0$ signifie qu'il se situe hors de ce volume) (voir Figure \ref{FIG:LCR:DISTANCE}).
@@ -306,7 +306,7 @@ Ainsi, une classe est caractérisée par un vecteur de centroïdes $\mathbf{v}_{k}$
 \label{sec:foetus:validation}
 
 % Les validations de cette méthodes de segmentation sont menées sur une base de 8 cas et son comportement est étudié aussi bien dans le cas d'image reconstruites que non-reconstruites.
-La validation est menée dans un premier temps sur des images \og brutes \fg{} (c'est à dire non reconstruites), puis sur des volumes reconstruits.
+La validation est menée dans un premier temps sur des images \og brutes \fg{} (c'est à dire non reconstruites), puis sur des volumes reconstruits, tout d'abord selon la méthode de \cite{Rousseau:AR:2006}, puis selon celle de \cite{Rousseau:MIA:2010}, incluant une approche de super-résolution permettant d'obtenir des images moins floues.
 % L'extension de la méthodologie des données 2D à 3D est immédiate.
 
 \subsection{Images non reconstruites}
@@ -314,7 +314,7 @@ La validation est menée dans un premier temps sur des images \og brutes \fg{} (c
 \subsubsection{Caractéristiques et paramètres}
 
 Les expériences sont menées sur huit cas acquis avec une machine IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des séquences d'écho de spins ultra-rapides.
-Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiales, coronales et sagitales.
+Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiales, coronales et sagittales.
 L'âge des différents f\oe tus s'étend de 27 à 34 semaines d'aménorrhée (SA). 
 Le tableau~\ref{TAB:UNBUILD:CHARAC} résume les caractéristiques des images.
 
@@ -330,53 +330,53 @@ Cas & Coupe & Taille de l'image & Taille des voxels en mm\\
 \multirow{3}*{Cas n\textdegree1} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree2} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree3} 
         & Axial & $512\times512\times20$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
         & Coronal & $512\times512\times20$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
-        & Sagital & $512\times512\times17$ & $0.742\times0.742\times3.45$\\
+        & Sagittal & $512\times512\times17$ & $0.742\times0.742\times3.45$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree4} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times3.45$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times3.45$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree5} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree6} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree7} 
         & Axial & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
         & Coronal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\ \cline{2-4}
-        & Sagital & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
+        & Sagittal & $512\times512\times19$ & $0.742\times0.742\times4.6$\\
 \hline
 \hline
 \multirow{3}*{Cas n\textdegree8} 
         & Axial & $512\times512\times20$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
         & Coronal & $512\times512\times17$ & $0.742\times0.742\times3.45$\\ \cline{2-4}
-        & Sagital & $512\times512\times17$ & $0.742\times0.742\times3.45$\\
+        & Sagittal & $512\times512\times17$ & $0.742\times0.742\times3.45$\\
 \hline
  
 \end{tabular}
-\caption[Caractéristiques des images utilisées lors de la validation (images non-reconstruites)]{\emph{Caractéristiques des images utilisées lors de la validation. L'importance de l'anistropie conduit à une segmentation orientée 2D.}\label{TAB:UNBUILD:CHARAC}}
+\caption[Caractéristiques des images utilisées lors de la validation (images non-reconstruites)]{\emph{Caractéristiques des images utilisées lors de la validation. L'importance de l'anisotropie conduit à une segmentation orientée 2D.}\label{TAB:UNBUILD:CHARAC}}
 \end{center}
 
 \end{table}
@@ -386,7 +386,7 @@ Etant donné que ces images sont anisotropes, le $k$-means topologique évolue en 
 Les régions utilisées pour le calcul des moyennes de régions sont d'une taille $32\times32\times1$.
 Ceci permet d'avoir un bon compromis entre la nécessaire représentation des différents tissus dans chaque sous-volume et la prise en compte de l'inhomogénéité de l'image.
 L'élément structurant utilisé pour l'opérateur \emph{Top-Hat} est une cube de taille $5\times5\times1$, ce qui donne un cube de $3.71\times3.71\times3.45$ mm$^3$ (ou $3.71\times3.71\times4.6$ mm$^3$).
-Le cortex se présentant sous la forme d'une mince bande sombre, cette taille est suffisante pour le mettre en avant par un filtre \og Top-Hat \fg{}.
+Le cortex se présentant sous la forme d'une mince bande sombre, cette taille est suffisante pour le mettre en valeur par un filtre \og Top-Hat \fg{}.
 
 Afin d'améliorer les performances de l'algorithme générale, un filtrage non-local est effectué en pré-traitement avec une zone de recherche de taille $11\times11\times3$ et des patchs de taille $3\times3\times1$ de manière à éliminer une partie du bruit présent dans les images.
 
@@ -409,55 +409,55 @@ Cas (SA) & Coupe & Dice 3D & Dice maximum \\
 \multirow{3}*{1(33)} 
         & Axial & 58.20 & 65.13\\ \cline{2-4}
         & Coronal & 58.55 & 68.64\\ \cline{2-4}
-        & Sagital & 51.91 & 68.07\\
+        & Sagittal & 51.91 & 68.07\\
 \hline
 \hline
 \multirow{3}*{2(28)} 
         & Axial & 65.20 & 77.77\\ \cline{2-4}
         & Coronal & 66.97 & 76.36\\ \cline{2-4}
-        & Sagital & 61.90 & 74.14 \\
+        & Sagittal & 61.90 & 74.14 \\
 \hline
 \hline
 \multirow{3}*{3(30)} 
         & Axial & 56.14 & 75.20\\ \cline{2-4}
         & Coronal & 63.81 & 76.87\\ \cline{2-4}
-        & Sagital & 52.07 & 69.06\\
+        & Sagittal & 52.07 & 69.06\\
 \hline
 \hline
 \multirow{3}*{4(26)} 
         & Axial & 72.53 & 81.74\\ \cline{2-4}
         & Coronal & 72.01 & 82.15\\ \cline{2-4}
-        & Sagital & 61.32 & 73.90\\
+        & Sagittal & 61.32 & 73.90\\
 \hline
 \hline
 \multirow{3}*{5(34)} 
         & Axial & 53.51 & 61.54\\ \cline{2-4}
         & Coronal & 48.38 & 61.05\\ \cline{2-4}
-        & Sagital & 43.94 & 55.32\\
+        & Sagittal & 43.94 & 55.32\\
 \hline
 \hline
 \multirow{3}*{6(32)} 
         & Axial & 58.80 & 72.16\\ \cline{2-4}
         & Coronal & 61.04 & 74.90\\ \cline{2-4}
-        & Sagital & 49.33 & 66.47\\
+        & Sagittal & 49.33 & 66.47\\
 \hline
 \hline
 \multirow{3}*{7(-)} 
         & Axial & 46.89 & 57.68\\ \cline{2-4}
         & Coronal & 53.20 & 62.69\\ \cline{2-4}
-        & Sagital & 45.97 & 59.77\\
+        & Sagittal & 45.97 & 59.77\\
 \hline
 \hline
 \multirow{3}*{8(27)} 
         & Axial & 70.81 & 78.65\\ \cline{2-4}
         & Coronal & 66.17 & 74.31\\ \cline{2-4}
-        & Sagital & 53.37 & 78.24\\
+        & Sagittal & 53.37 & 78.24\\
 \hline
 \hline
  \multirow{3}*{Moyenne $\pm$ écart-type} 
         & Axial & 60.26 $\pm$ 8.17 & -\\ \cline{2-4}
         & Coronal & 61.27 $\pm$ 7.22 & -\\ \cline{2-4}
-        & Sagital & 48.79 $\pm$ 11.2 & -\\
+        & Sagittal & 48.79 $\pm$ 11.2 & -\\
 \hline
 \end{tabular}
 
@@ -505,12 +505,12 @@ De manière générale, de moins bons résultats sont observés aux niveaux de la seg
 La sous-segmentation est observée dans des zones ou le contraste entre le cortex et les tissus environnants est la moins prononcée, conduisant à une moins bonne efficacité du filtre \og Top Hat \fg{} pour révéler le cortex.
 
 Dans le cas des images orientées dans la direction axiale, l'observation des résultats coupe à coupe montre une bonne adéquation du modèle à l'anatomie cérébrale dans la partie supérieure du cerveau, c'est à dire au dessus des troisièmes et quatrièmes ventricules.
-En effet, ces ventricules sont reliés au LCR externe, introduisant une ambiguité quand à la localisation de la limite entre ventricules et LCR externe.
+En effet, ces ventricules sont reliés au LCR externe, introduisant une ambiguïté quand à la localisation de la limite entre ventricules et LCR externe.
 Les coupes supérieures permettent de distinguer nettement les ventricules du LCR externe, ce qui est compatible avec le modèle présenté.
 
 Dans le cas des images orientées dans la direction coronale, l'observation des résultats coupe à coupe confirme la bonne adaptation du modèle à cette orientation.
 En effet, dans la plupart des coupes, les ventricules sont séparés du LCR externe.
-Cependant, une ambiguité est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
+Cependant, une ambiguïté est introduite là ou le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendu de ce dernier et donc à définir une zone d'intêret trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
 % Cela s'explique par la non-adaptation du modèle à cette vue particulière, notamment concernant la zone entre les deux hémisphères cérébraux.
 
 
@@ -542,25 +542,25 @@ Cas (SA) & Coupe & Exp 1 - Exp 2 & Seg - Exp 1 & Seg - Exp 2\\
 \multirow{3}*{3(30)} 
         & Axial & 61.10 & 63.64 & 56.14\\ \cline{2-5}
         & Coronal & - & - & -\\ \cline{2-5}
-        & Sagital & 61.71 & 54.84 & 52.07\\
+        & Sagittal & 61.71 & 54.84 & 52.07\\
 \hline
 \hline
 \multirow{3}*{4(26)} 
         & Axial & 68.21 & 72.53 & 59.81\\ \cline{2-5}
         & Coronal & 74.41 & 72.01 & 70.31\\ \cline{2-5}
-        & Sagital & 68.73 & 61.32 & 60.25\\
+        & Sagittal & 68.73 & 61.32 & 60.25\\
 \hline
 \hline
 \multirow{3}*{5(34)} 
         & Axial & 60.99 & 48.09 & 53.51\\ \cline{2-5}
         & Coronal & 56.82 & 48.38 & 49.35\\ \cline{2-5}
-        & Sagital & 47.46 & 40.75 & 43.94\\
+        & Sagittal & 47.46 & 40.75 & 43.94\\
 \hline
 \hline
 \multirow{3}*{6(32)} 
         & Axial & 60.97 & 65.84 & 58.80\\ \cline{2-5}
         & Coronal & - & - & -\\ \cline{2-5}
-        & Sagital & 59.06 & 49.33 & 43.10\\
+        & Sagittal & 59.06 & 49.33 & 43.10\\
 \hline
 \end{tabular}
 \caption[Comparaison croisées entre les segmentations manuelles et automatiques (images non reconstruites)]{\emph{Comparaison croisées entre les segmentations manuelles et automatiques : Expert 1 contre expert 2, segmentation automatique contre expert 1, segmentation automatique contre expert 2.}\label{TAB:DICE:UNBUILD:EXP}}
@@ -568,7 +568,7 @@ Cas (SA) & Coupe & Exp 1 - Exp 2 & Seg - Exp 1 & Seg - Exp 2\\
 \end{table}
 
 En conclusion, l'ensemble des résultats illustre néanmoins la possibilité d'obtenir une segmentation du cortex comparable à celle d'experts médicaux.
-Cette segmentation est obtenue à partir d'une méthode mélant des connaissance anatomiques et des données structurelles afin d'obtenir une segmentation du cortex.
+Cette segmentation est obtenue à partir d'une méthode mêlant des connaissance anatomiques et des données structurelles afin d'obtenir une segmentation du cortex.
 Cependant, l'effet de volume partiel ainsi que la faible dissociabilité des tissus rend la tache particulièrement difficile, même pour des experts.
 
 
@@ -576,7 +576,7 @@ Cependant, l'effet de volume partiel ainsi que la faible dissociabilité des tiss
 
 L'intêret d'utiliser des images reconstruites est d'obtenir des segmentations de meilleure qualité et plus précises de manière à permettre une étude plus avancée des propriétés des tissus cérébraux chez le f\oe tus.
 Ces images sont isotropes, permettant de réaliser une réelle segmentation en 3D et non coupe à coupe comme dans la section précédente.
-Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:AR:2006} à partir de trois acquisitions respectivement axiale, coronale et sagitale.
+Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:AR:2006} à partir de trois acquisitions respectivement axiale, coronale et sagittale.
 
 \subsubsection{Caractéristiques et paramètres}
 
@@ -599,14 +599,14 @@ L'évaluation de l'algorithme de segmentation est effectuée par une comparaison e
 L'influence de l'initialisation du cortex est testée afin de montrer la convergence de l'algorithme.
 Les résultats correspondants à cette étude de la convergence sont montrés à la figure~\ref{FIG:CORTEX:BUILD:INIT}.
 Cette figure présente deux courbes correspondant respectivement à l'évolution du coefficient de similarité Dice lors de l'initialisation de l'algorithme en fonction de l'épaisseur initiale du cortex, et l'évolution du coefficient mesurant la similarité de la segmentation finale en fonction de cette épaisseur.
-Une épaisseur initiale de $3$ ou $4$ mm présente un coefficient Dice relativement élévé (autour de 68\%), ce qui n'entraine pas un gain très significatif lors du processus de segmentation (Dice autour de $75$\%).
+Une épaisseur initiale de $3$ ou $4$ mm présente un coefficient Dice relativement élevé (autour de 68\%), ce qui n'entraîne pas un gain très significatif lors du processus de segmentation (Dice autour de $75$\%).
 Cependant, une initialisation à $2$ ou $5$ mm présente une plus faible similarité avec la vérité terrain, mais la valeur finale reste très proche de celle obtenue avec une initialisation à $4$ mm.
 Ainsi, le coefficient Dice passe d'environ $48$\% à environ $72$\% dans le cas d'une initialisation à $2$ mm d'épaisseur.
 Ces résultats illustrent une faible sensibilité à l'initialisation de l'algorithme de segmentation.
 
 Le tableau~\ref{TAB:CORTEX:BUILD} montre les résultats de la segmentation sur chacun des cas traités, ainsi que la moyenne des coefficients Dice et l'écart-type.
 Une sensible amélioration par rapport à la segmentation des images non-reconstruites est notable.
-En effet, la moyenne des coefficients de similarité est bien plus élévée que dans le cas d'images non reconstruites (au mieux $61$\% contre environ $75$\%) avec une dispersion bien plus réduite (au mieux $7$\% contre environ $2$\%).
+En effet, la moyenne des coefficients de similarité est bien plus élevée que dans le cas d'images non reconstruites (au mieux $61$\% contre environ $75$\%) avec une dispersion bien plus réduite (au mieux $7$\% contre environ $2$\%).
 Ceci peut s'expliquer par les effets de l'algorithme de reconstruction qui tend à corriger les imperfections de l'image (correction du bruit, du biais et de certains artefacts de mouvement).
 De plus, le traitement d'un volume 3D tend à réduire le problème présenté par l'épaisseur des coupes des images non-reconstruites, notamment un effet de volume partiel plus important. 
 Des détails supplémentaires sur le cortex sont disponibles et permettent de mieux conduire la segmentation.
@@ -676,7 +676,7 @@ Ils ouvrent la voie à une segmentation des tissus par l'utilisation d'\emph{a pr
 Cependant, comme précisé à la section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
 Une méthode d'extraction automatique du volume intracrânien, basée sur des opérateurs de morphologie mathématique, existe~\cite{Anquez:ISBI:2009} et la séparation des deux hémisphères et du cervelet est une opération déjà réalisée dans des cas adultes, qui pourrait être adaptée aux images reconstruites en IRM f\oe tale.
 
-\subsection{Segmentation de volumes recontruits par l'apport de la super-résolution}
+\subsection{Segmentation de volumes reconstruits par l'apport de la super-résolution}
 
 \begin{figure}[!tb]
 \centering
@@ -689,9 +689,9 @@ Une méthode d'extraction automatique du volume intracrânien, basée sur des opéra
 % \vspace{-6mm}
 \end{figure}
 
-Cette section présente des résultats préliminaires issues de la segmentation de volumes reconstruits selon la méthode de \cite{Rousseau:MIA:2010} incluant une approche de super-resolution visant à permettre à un plus grand nombre de détails d'être révélés.
+Cette section présente des résultats préliminaires issues de la segmentation de volumes reconstruits selon la méthode de \cite{Rousseau:MIA:2010} incluant une approche de super-résolution visant à permettre à un plus grand nombre de détails d'être révélés.
 Les images issues de cette approche se révèlent être plus facilement exploitable car l'effet de lissage de la précédente méthode de reconstruction est moins accentué et les contrastes entre les tissus est plus important, comme illustré à la figure~\ref{FIG:COMPARE:HR:SR}.
-Nous présentons une analyse quantitative des résultats ainsi qu'une étude succinte de l'apparition des différents sillons  cérébraux au cours de la grossesse.
+Nous présentons une analyse qualitative des résultats ainsi qu'une étude succincte de l'apparition des différents sillons  cérébraux au cours de la grossesse.
 
 \subsubsection{Analyse des résultats}
 
@@ -703,7 +703,7 @@ Nous présentons une analyse quantitative des résultats ainsi qu'une étude succin
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_Seg.eps}} \label{SR:Seg}
 
 \caption[Comparaison entre les segmentations d'images reconstruites selon deux procédés de reconstruction différents]{
-\emph{Comparaison entre les segmentations d'images reconstruites selon (a) \cite{Rousseau:AR:2006} et (c) \cite{Rousseau:MIA:2010}. (b) et (d) sont les segmentations respectives de (a) et (c). Le principal effet notable est la correction de la sursegmentation du cortex.}
+\emph{Comparaison entre les segmentations d'images reconstruites selon (a) \cite{Rousseau:AR:2006} et (c) \cite{Rousseau:MIA:2010}. (b) et (d) sont les segmentations respectives de (a) et (c). Le principal effet notable est la correction de la sur-segmentation du cortex.}
 \label{FIG:COMPARE:HR:SR:SEG}}
 % \vspace{-6mm}
 \end{figure}
@@ -724,7 +724,7 @@ Nous présentons une analyse quantitative des résultats ainsi qu'une étude succin
 L'utilisation de la super-résolution favorise une meilleure segmentation du cortex par le meilleur contraste existant entre le cortex et les tissus environnants, notamment la matière blanche.
 Ceci favorise l'efficacité du filtre \emph{Top-Hat} pour la révélation du cortex.
 La figure~\ref{FIG:COMPARE:HR:SR:SEG} montre la différence entre la segmentation d'une image simplement reconstruite et une image reconstruite selon la super-résolution.
-Le principal effet notable de l'utilisation de la super-résolution est la correction de la sursegmentation. 
+Le principal effet notable de l'utilisation de la super-résolution est la correction de la sur-segmentation. 
 En effet, le cortex bénéficiant d'un meilleur contraste par rapport à la matière blanche, le filtre \emph{Top-Hat} gagne en efficacité et permet à l'algorithme de segmentation d'être mieux guidé.
 
 Cependant l'absence de vérité terrain à l'heure actuelle sur ces images ne permet pas d'évaluer quantitativement le gain réalisé grâce à l'emploie de la super-résolution.
@@ -747,20 +747,20 @@ Cet exemple montre que la super-résolution permet à l'algorithme de mieux détect
 % \vspace{-6mm}
 \end{figure}
 
-Notre méthode de segmentation donnant de bons résultats concernant l'évaluation de la surface du cortex, la base de données diponible permet de réaliser une observation de l'apparition des sillons corticaux au cours du temps.
+Notre méthode de segmentation donnant de bons résultats concernant l'évaluation de la surface du cortex, la base de données disponible permet de réaliser une observation de l'apparition des sillons corticaux au cours du temps.
 Cinq cas, acquis à respectivement 26, 27, 28, 30 et 32 semaines sont présentés afin d'illustrer cette évolution.
 
-La figure~\ref{DER:3D} montre le cortex tel qu'il apparait à 26 semaines d'aménorrhée.
+La figure~\ref{DER:3D} montre le cortex tel qu'il apparaît à 26 semaines d'aménorrhée.
 Nous pouvons observer qu'à ce stade de la grossesse, seul l'\emph{insula}, le sillon latéral ainsi qu'une ébauche de sillon central sont observables. 
 Par la suite, d'autres sillons viennent s'ajouter, marquant ainsi différentes étapes du développement du f\oe tus.
 La figure~\ref{TAB01:3D} montre l'apparition du sillon frontal supérieur et du sillon temporal supérieur sur un cas à 27 semaines d'aménorrhée.
 Le développement du cerveau se poursuit pendant les semaines suivantes, marquée par l'apparition de nouveaux sillons, tels que le sillon postcentral et le sillon frontal inférieur comme illustré à la figure~\ref{TAB02:3D} (30 semaines d'aménorrhée).
 Au cours des semaines suivantes, le cerveau continue de se complexifier, ce qui se matérialise par l'apparition de sillons secondaires, comme illustré par la figure~\ref{HER:3D} (32 semaines d'aménorrhée).
 
-On peut observer cependant que la figure~\ref{AYD:3D} semble présenter un retard dans son développement, notamment vis-à-vis de la figure~\ref{TAB01:3D}, qui à une semaine d'aménorrhée de moins présente une gyration plus avancée.
+On peut observer cependant que la figure~\ref{AYD:3D} semble présenter un retard dans son développement, notamment vis-à-vis de la figure~\ref{TAB01:3D}, qui à une semaine d'aménorrhée de moins présente une giration plus avancée.
 Néanmoins, l'observation d'un tel écart dans le développement est tout à fait normal.
-En effet, il est courant d'observer un écart de deux semaines entre l'apparation d'un sillon chez certains patients et sa présence dans 75\% des cas \cite{Glenn:SemPer:2009}.
-De manière générale, l'observation de l'apparation des sillons est conforme aux observations médicales, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
+En effet, il est courant d'observer un écart de deux semaines entre l'apparition d'un sillon chez certains patients et sa présence dans 75\% des cas \cite{Glenn:SemPer:2009}.
+De manière générale, l'observation de l'apparition des sillons est conforme aux observations médicales, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
 
 \section{Conclusion}
 
@@ -769,10 +769,10 @@ Le principe est d'utiliser des \emph{a priori} anatomiques génériques sous forme
 Les résultats obtenus montrent la pertinence de cette approche, notamment dans le cadre de cas bénéficiant de la reconstruction d'un volume 3D à partir des acquisitions originales.
 
 Cependant, plusieurs limitations ne permettent pas d'utiliser cet algorithme en routine clinique ou pour des études de population.
-En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élévés pour satisfaire à ce genre de travaux.
+En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élevés pour satisfaire à ce genre de travaux.
 Les causes en sont en partie les contraintes géométriques du modèle, qui malgré leur apport dans la correction du volume partiel, introduisent des faux positifs dans la détection du cortex dans d'autres zones du cerveau.
 Ceci démontre que des \emph{a priori} supplémentaires sont nécessaires afin de mieux orienter le processus de segmentation.
 Des méthodes formalisant les relations spatiales entre différents objets et exprimant leur position relative de façon floue existent et semblent tout indiquer pour être introduit dans le processus de segmentation.
 
-De plus, comme dit précédemment, cette méthodologie s'appuie sur une extraction préalable du volume intracranien et sur la segmentation du cervelet et du tronc cérébrale.
+De plus, comme dit précédemment, cette méthodologie s'appuie sur une extraction préalable du volume intracrânien½ et sur la segmentation du cervelet et du tronc cérébrale.
 La définition d'un outil d'extraction de ces structures est donc indispensable dans la perspective d'obtenir un processus de segmentation complet des structures cérébrales.
