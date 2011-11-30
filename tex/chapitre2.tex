@@ -3,17 +3,17 @@
 \minitoc
 
 L'objectif de la segmentation en IRM cérébrale est de fournir une étiquette à chaque voxel de l'image de manière à permettre une interprétation automatisée du contenu de l'image.
-Elle représente une étape importante pour de nombreuses tâches, que ce soit dans un environnement clinique (par exemple le suivi des lésions provoquées par une maladie dégénérative type Parkinson ou Alzheimer) ou purement applicatif (par exemple : reconstruction du cortex en 3D, quantification des différentes structures du cerveau et évaluation de leur variabilité, \ldots).
+Elle représente une étape importante pour de nombreuses tâches, que ce soit des tâches cliniques (par exemple : suivi de l'atrophie cérébrale provoquée par une maladie dégénérative type Parkinson ou Alzheimer), de la visualisation (par exemple : reconstruction du cortex en 3D) ou pour la conduite d'études (par exemple : quantification des différentes structures du cerveau et évaluation de leur variabilité au sein d'une population,\ldots).
 
-Les méthodes de segmentation proposées doivent tenir des différentes caractéristiques et artefacts qui composent une IRM (voir la section \ref{intro:irm:carac}).
-Elles peuvent intégrée une modélisation \emph{a priori} sur le bruit, le biais, la localisation et les caractéristiques des tissus cérébraux, \ldots.
-Cependant, ces modèles doivent être aussi proches que possible de la réalité, sous peine d'introduire de multiples erreurs dans la segmentation, ce qui pourrait provoquer une mauvaise interprétation du contenu de l'image et mener à de fausses conclusions dans le cadre d'une étude ou d'un suivi clinique.
+Les méthodes de segmentation proposées doivent tenir compte des différentes caractéristiques et artefacts qui composent une image IRM (voir la section \ref{intro:irm:carac}).
+Elles peuvent intégrée une modélisation \emph{a priori} sur le bruit, le biais, la localisation et les caractéristiques des tissus cérébraux,\ldots
+Cependant, ces modèles doivent être aussi proches que possible de la réalité, sous peine d'introduire de multiples erreurs dans la segmentation, ce qui pourrait provoquer une mauvaise interprétation du contenu de l'image et biaiser les résultats d'une étude ou d'un suivi clinique.
 
 Ce chapitre présente un état de l'art des différents types de méthodes développées pour répondre à la problématique de la segmentation cérébrale.
-Dans un premier temps, les grandes familles de méthodes sont identifiées et leur principale caractéristiques décrites.
-Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM (algorithme des C-moyennes floues ou \emph{Fuzzy C-Means} en anglais), un algorithme de classification suffisamment souple pour intégrer de nombreuses connaissances pour la segmentation des images.
+Dans un premier temps, les grandes familles de méthodes sont identifiées et leurs principales caractéristiques décrites.
+Dans un deuxième temps, nous décrivons plus en détail les méthodes basées sur l'algorithme FCM (algorithme des C-moyennes floues ou \emph{Fuzzy C-Means} en anglais), un algorithme de classification permettant l'intégration de nombreuses connaissances pour la segmentation des images et dont l'amélioration est une des contributions principales de ce travail de thèse.
 Enfin, un état de l'art des techniques de segmentation utilisées dans le cadre de la maturation cérébrale est présenté.
-En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont du être développées pour répondre à cette problématique récente.
+En effet, même si on retrouve les grandes familles de la segmentation dans ce cadre, des approches néanmoins spécifiques ont dû être développées pour répondre à cette problématique récente.
 
 
 %------------------------------------------------------------------------Vue d'ensemble----------------------------------------------------------------------------------------
@@ -24,46 +24,61 @@ En effet, même si on retrouve les grandes familles de la segmentation dans ce ca
 \subsection{Modèles déformables}
 \label{subsec:snake}
 
-Le principe des modèles déformables est l'adaptation d'un contour paramétrique à la structure que l'on cherche à segmenter.
+Le principe des modèles déformables est l'adaptation d'un contour à la structure que l'on cherche à segmenter.
 Deux types de modèles déformables sont distingués : les modèles explicites et les modèles implicites.
 
 Les modèles explicites ou \emph{snakes} définis par \cite{Kass:IJCV:1988} sont la déformation itérative d'un contour paramétrique.
-Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une force externe (le terme d'attache-aux-données lié au contenu de l'image) et d'une force interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
-Les principaux problèmes de ces modèles sont leur forte dépendance à l'initialisation et la difficulté de réaliser des changements de topologie (fusion ou séparation de labels). 
-En effet, le contour doit être déjà proche de la structure à segmenter et cela reste vrai malgré l'utilisation des \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation.
+Cette déformation est effectuée par la minimisation d'une fonctionnelle se présentant comme la somme d'une énergie externe (le terme d'attache aux données lié au contenu de l'image) et d'une énergie interne (le terme de régularisation prenant en compte l'élasticité et la rigidité du contour).
+Formellement, l'énergie de la courbe $\mathcal(C)$ est écrite de la manière suivante : 
+\begin{equation}
+J(\mathcal(C)) = \underbrace{\underbrace{\alpha \int \lvert \mathcal{C}'(q) \rvert^{2} dq}_{\mbox{\'Elasticité}} + \underbrace{\beta \int \lvert \mathcal{C}''(q) \rvert^{2} dq}_{\mbox{Rigidité}}}_{\mbox{\'Energie interne}} + \underbrace{\lambda \int g(\lvert \nabla I (\mathcal(C)(q)) \rvert) dq}_{\mbox{\'Energie externe}},
+\end{equation}
+où $\alpha$, $\beta$ et $\lambda$ sont des coefficients réels positifs, $g$ est une fonction strictement décroissante et $\nabla I$ est le gradient de l'image $I$.
 
-Ces modèles peuvent être utilisés comme une étape finale de la segmentation, destinée à corriger certains détails comme dans l'article de \cite{Stella-Atkins:TMI:1997}.
-Un autre exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui emploie une formulation particulière du contour afin de mieux prendre en compte la complexité des structures.
-Plus récemment, l'article de \cite{Colliot:PR:2006}, définit la force externe comme une combinaison du terme d'attache-aux-données et d'une information spatiale concernant la position des différents objets entre eux.
+Les avantages de ces modèles est leur capacité à compenser différents défauts comme le bruit ou les irrégularités de l'objet à segmenter et permettent la mise en place d'interactions intuitives.
+Les principaux problèmes sont que le contour initial doit être proche de l'objet à segmenter et la difficulté de segmenter des objets concaves et de réaliser des changements de topologie (fusion ou séparation de labels). 
+Plusieurs techniques ont été utilisés pour améliorer les contours paramétriques, telle que les \emph{gradient vector flow} (voir \cite{Xu:TIP:1998}) permettant une moins forte dépendance à l'initialisation, où les \emph{fluid vector flow} (voir \cite{Wang:TBE:2009}) prenant mieux en compte la concavité des objets.
+
+Ces modèles peuvent être utilisés comme une étape de post-traitement d'une première segmentation, obtenue par filtrage et seuillage de l'image initiale, destinée à corriger certains détails comme dans l'article de \cite{Stella-Atkins:TMI:1997}.
+Un autre exemple de leur utilisation est l'article de \cite{McInerney:TMI:1999} qui définit des contours prenant la topologie des objets en compte lors de la segmentation.
+Il parvient à cet objectif en plongeant le contour dans une décomposition affine cellulaire de l'image, qui divise l'image en une collection de polygones convexes.
+Plus récemment, l'article de \cite{Colliot:PR:2006}, définit la force externe comme une combinaison du terme d'attache aux données et d'une information spatiale concernant la position des différents objets entre eux.
 Cette information spatiale est formalisée sous la forme de contraintes de localisation (angle et distance) exprimées de façon floue par rapport à une structure de référence.
 Cette méthodologie a été appliquée à la segmentation des noyaux gris autour des ventricules.
-Enfin, nous pouvons également citer les travaux de \cite{Wang:TBE:2009} utilisant un nouveau formalisme, appelé FVF (\emph{Fluid Vector Flow} en anglais), qui permet une meilleure segmentation de structures présentant une forte concavité.
+% Enfin, nous pouvons également citer les travaux de \cite{Wang:TBE:2009} utilisant un nouveau formalisme, appelé FVF (\emph{Fluid Vector Flow} en anglais), qui permet une meilleure segmentation de structures présentant une forte concavité.
 
-% \cite{Xu:TIP:1998} : snakes et GVF.
-% \cite{McInerney:TMI:1999} : Snake avec formulation particulière de la surface permettant la segmentation de structures complexes.
-
-Les modèles implicites sont des méthodes par ensemble de niveaux (\emph{levels-sets} en anglais) permettant d'intégrer naturellement les changements de topologie.
-Le contour est considéré comme l'ensemble de niveaux zéro d'une hypersurface (surface de dimension supérieure), notée $\Psi$.
+Les modèles implicites sont des méthodes par ligne de niveaux (\emph{levels-sets} en anglais) permettant d'intégrer naturellement les changements de topologie.
+Le contour $\mathcal{C}$ est considéré comme l'ensemble de niveaux zéro d'une hypersurface (surface de dimension supérieure), notée $\Psi$, soit formellement (en deux dimensions avec les coordonnées d'un point définies par le couple $(x,y)$) : 
+$$
+\mathcal{C} = \{ (x,y) | \Psi(x,y) = 0 \}.
+$$
 La modélisation ne prend donc pas en compte directement l'évolution du contour, mais bien celui de $\Psi$, sachant que le contour peut en être déduit de manière immédiate.
 Cette évolution est inspirée des travaux en propagations des ondes de \cite{Osher:JCP:1988}, formalisant l'équation d'évolution sous forme d'équations à dérivées partielles.
 Elle se fait dans la direction de la normale à la surface et la vitesse de propagation est proportionnelle à la courbure.
 Elle est contrainte de manière à attirer la courbe vers l'objet à segmenter avec une régularisation spécifique.
-Deux solutions existent pour construire le modèle de propagation des ondes, à l'origine des \emph{level-sets} géométriques \cite{Casselles:NM:1993} et géodésiques \cite{Casselles:IJCV:1997}. 
+Formellement, celà revient à poser l'équation différentielle suivante : 
+\begin{equation}
+\frac{\partial \Psi}{\partial t} = \upsilon \lvert \nabla \Psi \rvert,
+\end{equation}
+où $\lvert \cdotp \rvert$ est la norme Euclidienne et $\upsilon$ la vitesse de propagation.
+Deux solutions existent pour construire le modèle de propagation des ondes, à l'origine des lignes de niveaux géométriques \cite{Casselles:NM:1993} et géodésiques \cite{Casselles:IJCV:1997}. 
 Cependant, la simulation de cette propagation est très gourmande en temps de calcul, menant à la définition d'algorithmes \emph{fast marching} \cite{Sethian:PNAS:1996}.
 
-Les level-sets ont été utilisés dans le cadre de la segmentation pour récupérer des structures très spécifiques telles que le cortex, les ventricules ou les noyaux gris.
+Les lignes de niveaux ont été utilisés dans le cadre de la segmentation pour récupérer des structures très spécifiques telles que le cortex, les ventricules ou les noyaux gris.
 L'article de \cite{Baillard:MIA:2001} réalise une segmentation du cerveau en deux étapes.
-Un modèle est d'abord recalé selon un procédé multigrille et multi-résolution avant une étape d'évolution du contour obtenu par \emph{level-sets}.
-L'article de \cite{Han:TPAMI:2003} définit un nouveau type de \emph{levels sets} permettant de respecter les contraintes topologiques du modèle initial.
-Une application à la reconstruction de la surface corticale montre que l'ajout de ces contraintes permet de corriger des détails anatomiquement peu pertinents (tel que l'apparition de boucles, le cortex étant une structure très circonvoluée).
+Un modèle est d'abord recalé selon un procédé multigrille et multi-résolution avant une étape d'évolution du contour obtenu par lignes de niveaux.
+L'article de \cite{Han:TPAMI:2003} définit un nouveau type de lignes de niveaux permettant de respecter les contraintes topologiques du modèle initial.
+Une application à la reconstruction de la surface corticale montre que l'ajout de ces contraintes permet de corriger des détails afin de respecter l'anatomie du cortex (tel que l'apparition de boucles, le cortex étant une structure très circonvoluée).
 
-Les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004} sont basés sur l'évolution de \emph{level-sets} concurrents \emph{via} une estimation du maximum \emph{a posteriori} (MAP) prenant en compte la forme des objets à segmenter et leurs relations de voisinage.
-Les travaux de \cite{Yang:TMI:2004} proposent une application à la segmentation des structures internes du cerveau (ventricules, noyaux gris, \ldots{}) tandis que ceux de \cite{Duncan:NeuroImage:2004} proposent une segmentation du cortex par deux \emph{level-sets} représentant respectivement l'interface matière blanche/matière grise et la surface du cortex.
+L'article de \cite{Zeng:TMI:1999} définit une méthode de segmentation du cortex par deux lignes de niveaux concurrentes, l'avantage étant qu'elles permettent de définir explicitement une frontière LCR/matière grise et matière grise/matière blanche, tout en gardant une distance minimale entre ces deux surfaces.
+Une évolution de cette approche est représentée par les articles de \cite{Yang:TMI:2004} et \cite{Duncan:NeuroImage:2004}, qui fondent l'évolution des lignes de niveaux sur l'estimation du maximum \emph{a posteriori} (MAP) prenant en compte la forme des objets à segmenter et leurs relations de voisinage.
+Ces deux derniers \emph{a priori} sont établis à partir d'un ensemble d'apprentissage permettant de calculer une forme moyenne pour chacune des structures recherchées, ainsi que leur positionnement par rapport à une structure de référence.
+Les travaux de \cite{Yang:TMI:2004} proposent une application à la segmentation des structures internes du cerveau (ventricules, noyaux gris, \ldots{}) tandis que ceux de \cite{Duncan:NeuroImage:2004} proposent une segmentation du cortex par deux lignes de niveaux représentant respectivement l'interface matière blanche/matière grise et la surface du cortex.
 
-Dans le même esprit d'utiliser plusieurs sources d'information pour guider le contour, l'article de \cite{Ciofolo:MIA:2009} définit une méthodologie décidant de la direction de propagation à partir d'un contrôleur flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels, la position du contour dans l'image et par rapport à d'autres objets.
+Dans le même esprit d'utiliser plusieurs sources d'information pour guider le contour, l'article de \cite{Ciofolo:MIA:2009} définit une méthodologie calculant la direction de propagation à partir d'un contrôleur flou prenant en compte un \emph{a priori} donné par un atlas anatomique, l'intensité des voxels, la position du contour dans l'image et par rapport à d'autres objets.
 Les expériences menées ont montré une bonne adaptabilité de cette méthode qui a été appliquée à la séparation des hémisphères cérébraux et du cervelet, ainsi qu'à la segmentation des différentes structures autour des ventricules.
 
-Toutes ces méthodes restent néanmoins trop dépendantes de l'initialisation du contour et des pré-traitements à effectuer.
+% Toutes ces méthodes restent néanmoins trop dépendantes de l'initialisation du contour et des pré-traitements à effectuer.
 Les images peu contrastées ou présentant un biais en intensité peuvent devenir un problème, d'autant que la correction de biais tend à réduire le contraste dans certaines zones du cerveau (voir l'article de \cite{Colliot:PR:2006}).
 Ces outils restent donc délicats à utiliser et l'utilisation d'une information \emph{a priori} est nécessaire pour accompagner efficacement l'évolution des contours.
 
@@ -73,7 +88,7 @@ Ces outils restent donc délicats à utiliser et l'utilisation d'une information \
 
 Les méthodes évoquées ci-après utilisent des opérateurs de morphologie mathématique \cite{Najman:2010}. 
 Cette théorie cherche à extraire le contenu d'une image à partir de mesures fondées sur les formes des objets contenus dans les images étudiées. 
-Une élément structurant, caractérisant les propriétés recherchées, parcourent alors l'image et agit à la manière d'un filtre et doit donc être choisi en fonction de l'application recherchée.
+Un élément structurant, caractérisant les propriétés recherchées, parcourent alors l'image et agit à la manière d'un filtre et doit donc être choisi en fonction de l'application recherchée.
 Nous rappelons tout d'abord la définition des deux opérateurs de base de la morphologie mathématique, qui sont la dilatation et l'érosion par un élément structurant $B$.
 
 Une image $I$ est considérée comme une partie de l'ensemble $E \subseteq \mathbb{R}^n$ ou $\mathbb{Z}^{n}$.
@@ -106,7 +121,8 @@ Cette segmentation est contrainte par des critères topologiques (position des ti
 % \cite{Stokking:NeuroImage:2000} : automatise complètement \cite{Hohne:JCAT:1992} par une détection automatique des seuils selon un algorithme de croissance de région.
 
 Enfin, nous pouvons citer des travaux récents, notamment ceux de \cite{Park:IWSCA:2007} définissant une approche automatique d'extraction du cerveau. 
-Le cerveau est tout d'abord extrait sur une coupe de l'image IRM et cette extraction est ensuite étendue à l'ensemble de l'image.
+Le cerveau est tout d'abord extrait sur une coupe de l'image IRM en effectuant un seuillage, une érosion puis une succession de dilatations de la plus grande composante restante.
+Cette extraction est ensuite étendu à l'ensemble de l'image.
 Enfin, les travaux de \cite{Chiverton:CBM:2007} présente également une méthode automatique d'extraction du cerveau basée sur la morphologie statistique.
 
 Une autre catégorie de méthodes est celle définie à partir d'un algorithme de segmentation appelé la ligne de partage des eaux (formalisé par \cite{Digabel:QAMSS:1978}).
@@ -564,7 +580,7 @@ Par exemple, si un voxel est au milieu d'une zone de matière blanche, le process
 \subsubsection{Terme de régularisation}
 
 Dans cette optique, deux algorithmes ont été définis de manière indépendante.
-Ils définissent la fonction d'énergie comme la somme d'un terme d'attache-aux-données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation (inspiré du formalisme des champs de Markov) tenant compte des fonctions d'appartenance des voxels voisins destinées à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
+Ils définissent la fonction d'énergie comme la somme d'un terme d'attache aux données, correspondant à l'algorithme FCM classique, et d'un terme de régularisation (inspiré du formalisme des champs de Markov) tenant compte des fonctions d'appartenance des voxels voisins destinées à corriger les fonctions d'appartenance au voxel $j$ en fonction de cet environnement.
 Le premier, appelé FCM robuste (en anglais : \emph{Robust FCM} ou \emph{RFCM})~\cite{Pham:CVIU:2001} ne prend en compte que les fonctions d'appartenance des voxels voisins pour contraindre la segmentation : 
 \begin{equation}
 J_{RFCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert_{2}^{2} + \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} \sum_{l \in N_j} \sum_{m \in M_k} u^q_{lm}  \label{eq:rfcm},
@@ -614,7 +630,7 @@ Les centroïdes sont donc exprimés selon :
 \begin{equation}
 \mathbf{v}_{k} = \frac{\sum_{p = 0}^{p_{max}} \gamma_{p} u_{pk}^{q} \zeta_{p}}{\sum_{p = 0}^{p_{max}} \gamma_{p} u_{pk}^{q}} \label{eq:Szilagyi:centroid}.
 \end{equation}
-Les avantages de cette méthodologie sont donc un traitement accéléré et une procédure ramenée à l'algorithme FCM classique, l'image d'entrée étant l'image intermédiaire qui prends en compte l'attache-aux-données et le terme de régularisation directement.
+Les avantages de cette méthodologie sont donc un traitement accéléré et une procédure ramenée à l'algorithme FCM classique, l'image d'entrée étant l'image intermédiaire qui prends en compte l'attache aux données et le terme de régularisation directement.
 De plus, les auteurs montrent que leur algorithme converge plus vite (en moins d'itérations) que la version MFCM.
 
 Toujours en suivant la même idée d'accélérer l'exécution d'un algorithme FCM ayant un terme de régularisation, les travaux de~\cite{Chen:TSMC:2004} introduisent la moyenne ou la médiane du voisinage plutôt que le calcul d'une image complète pour se ramener au cas de l'algorithme FCM classique.
@@ -628,7 +644,7 @@ L'expression des fonctions d'appartenance et des centroïdes est similaire à cell
 Il existe également une version de cet algorithme n'utilisant pas les opérateurs noyaux, appelé FCM\_S.
 % Il suffit de remplacer le terme $\lVert \mathbf{y}_j - \mathbf{v}_k \rVert^{2}_{2}$ par $(1-K(\mathbf{y}_j, \mathbf{v}_k))$ dans le calcul de la fonction d'appartenance.
 
-\subsubsection{Balance entre l'attache-aux-données et la régularisation}
+\subsubsection{Balance entre l'attache aux données et la régularisation}
 
 Les deux méthodes précédentes, tout comme les méthodes de~\cite{Ahmed:TMI:2002} et \cite{Pham:CVIU:2001}, ont le désavantage de reposer sur un paramètre $\beta$ contrôlant les poids respectifs entre les termes d'attache aux données et le terme de régularisation.
 Ce paramètre est choisi la plupart du temps par expérimentation et ce choix est loin d'être intuitif.
@@ -825,7 +841,7 @@ Son avantage est qu'elle procure une réponse native au problème du volume partie
 La prise en compte du biais en intensité se fait jusqu'ici de manière couplée avec une étape d'évaluation des paramètres de l'inhomogénéité (ces derniers dépendant du modèle choisi).
 Cela nécessite de poser plusieurs hypothèses sur la nature du biais, comme décrit à la section \ref{subsec:art:bias}.
 La correction du bruit montre de bonne performances, grâce à une prise en compte du voisinage du voxel courant, procédé directement inspiré des champs de Markov.
-Les efforts des différentes recherches ont surtout été de déterminer automatiquement le poids entre les termes d'attache-aux-données et de régularisation et d'accélérer le processus de segmentation, par la définition d'images intermédiaires notamment.
+Les efforts des différentes recherches ont surtout été de déterminer automatiquement le poids entre les termes d'attache aux données et de régularisation et d'accélérer le processus de segmentation, par la définition d'images intermédiaires notamment.
 
 Par ailleurs, l'étude des méthodologies développées dans le cadre de la maturation cérébrale révèle le besoin d'inclure des connaissances \emph{a priori} afin d'obtenir une segmentation efficace.
 Cette connaissance prend généralement la forme d'un atlas, mais peut prendre aussi la forme d'un ajustement des coefficients régissant le comportement des champs de Markov.
