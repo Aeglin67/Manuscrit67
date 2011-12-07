@@ -7,5 +7,5 @@ bibtex these
 latex these.tex
 latex these.tex
 dvips these.dvi
-ps2pdf these.ps
+ps2pdf -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FalteEncode -dMonoImageFilter=/FlateEncode these.ps these.pdf
 
