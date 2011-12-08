@@ -1,0 +1,93 @@
+\chapter*{Introduction générale}
+\label{chap:introgenerale}
+\addstarredchapter{Introduction générale}
+\minitoc
+% \addcontentsline{toc}{chapter}{\protect\numberline{}Introduction générale}
+
+\section*{Contexte}
+\addcontentsline{toc}{section}{Contexte}
+
+Le suivi médical d'une grossesse est un élément important des pays développés ayant permis la réduction des risques aussi bien pour la mère que pour le f\oe tus.
+Ce suivi permet également le contrôle du bon développement du futur enfant au cours de cette période (que ce soit la détection des battements cardiaques à la vingtième semaine d'aménorrhée, la croissance normale des membres antérieurs et postérieurs,\dots{}), l'examen privilégié étant jusqu'à présent l'échographie.
+
+Cependant, cet examen ne permet pas d'effectuer un suivi exhaustif de certains organes, notamment le cerveau et ne permet donc pas d'évaluer correctement le degré de maturation cérébral du f\oe tus, ni de trancher définitivement en cas de problèmes lors de son développement.
+Les progrès récents des imageurs IRM, en particulier l'apparition de nouvelles séquences dites de \og spins ultra-rapides \fg{}, ont ouvert la voie à l'utilisation de cette technique pour l'aide au diagnostique prénatal en cas de doute sur la santé du futur enfant, aucune contre-indication à cet usage ayant été mise en évidence ~\cite{Kok:MRI:2004}.
+Ces progrès sont également une opportunité pour observer la maturation cérébrale \emph{in vivo} durant cette période déterminante qu'est la grossesse.
+
+Le principal défi que rencontre les médecins (neurologue, radiologue,\ldots{}) est l'interprétation de ces images, c'est à dire la construction d'une représentation symbolique de l'image mettant en évidence les différents objets la composant.
+Cependant, dans le cadre de vastes études comportant plusieurs centaines de cas, cette interprétation \og manuelle \fg{} est chronophage et doit également tenir compte de la variabilité inter-expert.
+L'interprétation automatique des images est ainsi devenu un enjeu important.
+
+L'apport du traitement d'image dans ce domaine fût fondamental car il a apporté les outils nécessaires à cette interprétation automatique.
+De nombreux outils ont été développés durant les deux dernières décennies, notamment des méthodes de segmentation des tissus cérébraux (liquide céphalo-rachidien (LCR), matière grise et matière blanche), des structures cérébrales (ventricules, thalamus, \ldots{}) et de détection d'une atrophie ou de lésions cérébrales dans la cas de maladies dégénératives telles que la maladie d'Alzheimer ou la sclérose en plaque.
+Les progrès de l'IRM ont amenés certaines équipes à s'intéresser à l'interprétation des IRM f\oe tales et les a amené à constater la nécessité de définir de nouvelles méthodologies dédiées à ce cadre d'étude.
+Outre les artefact connus de l'IRM cérébrale, détaillés plus loin, les chercheurs doivent tenir compte d'images de plus faibles résolutions, présentant un contraste moins important entre les tissus ainsi qu'à une anatomie cérébrale sensiblement différente de celle d'un adulte.
+
+Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c cois Rousseau.
+Ce projet a pour objectif l'analyse et la modélisation du développement cérébral chez le f\oe tus et le nouveau-né, à l'aide d'images IRM anatomique et de diffusion.
+
+% Depuis quelques années, les améliorations apportées aux systèmes d'acquisition d'images, notamment l'imagerie par résonance magnétique (IRM), ont permis d'explorer le développement du cerveau à un âge de plus en plus précoce.
+% Ces outils ont permis aux médecins (radiologues, neurologues, \ldots{}) d'observer la maturation du cerveau \emph{in vivo} et de commencer à établir des ponts entre le développement des structures cérébrales et le développement cognitif.
+% De plus, l'usage de l'IRM s'est également imposé comme un complément indispensable pour le suivi d'une grossesse, ce qui permet de repérer de manière plus précoce les malformations ou pathologies dont pourraient être atteint le f\oe tus.
+% Plusieurs études (par exemple celle de \cite{Kok:MRI:2004}) ont par ailleurs démontré l'absence de contre-indications à l'usage de l'IRM comme outils de diagnostique, l'exposition au champ magnétique n'ayant montré aucun effet sur le développement normal des f\oe tus et des jeunes enfants.
+% 
+% L'objectif fondamental des médecins est de parvenir à une interprétation des images acquises par le système imageur, ce qui consiste à fournir une représentation symbolique de l'image, c'est à dire reconnaître les différents objets la composant.
+% L'apport du traitement d'image dans ce domaine fût fondamental car il a permis la définition de méthodes d'interprétation automatique.
+% De nombreux outils ont été développés au cours des dernières années, notamment des méthodes de segmentation des tissus cérébraux (liquide céphalo-rachidien (LCR), matière grise et matière blanche), des structures cérébrales (ventricules, thalamus, \ldots{}) et de détection d'une atrophie ou de lésions cérébrales dans la cas de maladies dégénératives telles que la maladie d'Alzheimer ou la sclérose en plaque.
+% Ces outils ont permis un gain de temps considérable, tout en évitant la variabilité issue d'une segmentation manuelle par différents experts.
+% 
+% La segmentation automatique de données issues d'IRM f\oe tale s'est développée ces cinq dernières années, mais rencontre néanmoins plusieurs problèmes propres à ce type de données.
+% Outre les artefacts \og classiques \fg{} rencontrés dans le cadre de l'IRM (biais en intensité, bruit et effet de volume partiel), elles doivent tenir compte d'une plus faible résolution, et d'un plus faible contraste de l'image, ainsi qu'une anatomie très différente des cas adultes.
+% 
+% Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c cois Rousseau.
+% Ce projet a pour objectif l'analyse et la modélisation du développement cérébral chez le f\oe tus et le nouveau-né, à l'aide d'images IRM anatomique et de diffusion.
+
+\section*{Objectifs}
+\addcontentsline{toc}{section}{Objectifs}
+
+De nombreuses méthodes de segmentation des tissus cérébraux ont été développées ces dernières années.
+Parmi ces méthodes, de nombreuses stratégies ont été définies de manière à prendre en compte l'influence du biais en intensité et du bruit sur le résultat de la segmentation.
+La plupart des modèles définissent le biais en intensité comme un paramètre explicite à évaluer lors du processus de segmentation, conduisant à émettre plusieurs hypothèses (voir la section \ref{subsec:art:bias}) sur la nature de ces variations en intensité.
+Dans le cas de la prise en compte du bruit, la plupart des méthodes de classification utilisent des outils de régularisation (champs ou chaînes de Markov, terme de régularisation) destinés à prendre en compte la segmentation du voisinage du voxel courant pour contraindre son étiquetage.
+Cependant, ces techniques ne prennent en compte que le voisinage immédiat du voxel traité.
+L'un des objectifs de cette thèse est donc de définir une méthode de segmentation permettant, d'une part de ne pas avoir à formuler d'hypothèses sur la nature du biais en intensité, d'autre part une correction plus fine des effets du bruit sur la segmentation par une prise en compte d'une quantité plus importante d'information et par l'introduction d'une hiérarchisation de cette information. 
+% L'objectif est donc de définir une méthode de segmentation prenant mieux en compte les informations de l'image, et notamment les redondances de l'information afin d'obtenir une segmentation plus fine des structures cérébrales et d'éviter une définition explicite du biais en intensité.
+
+Par ailleurs, notre travail s'est orienté sur la segmentation des structures cérébrales en IRM f\oe tale, l'objectif à long terme étant d'être en mesure de conduire des études sur l'évolution des différentes structures cérébrales.
+Au cours des dernières années, quelques méthodes de segmentation sont apparues, s'appuyant sur des \emph{a priori} spatiaux fournis par des atlas ou sur des connaissances anatomiques appliquées \emph{a posteriori}, c'est à dire après une première phase de classification.
+Devant la difficulté de construire un atlas, le deuxième objectif de la thèse est ici de définir une méthode de segmentation où les connaissances anatomiques permettent de guider le processus de segmentation.
+Les structures cérébrales sont alors extraites les unes après les autres en s'appuyant sur des informations génériques de localisation des tissus les uns par rapport aux autres.
+Les travaux se sont concentrés sur la segmentation du cortex pour sa capacité à traduire la maturité du cerveau en fonction de son plissement \cite{Levine:Radiology:1999}.
+
+\section*{Contributions}
+\addcontentsline{toc}{section}{Contributions}
+
+Les principales contributions de cette thèse sont : 
+\begin{itemize}
+\item l'utilisation de modèles locaux pour la segmentation des tissus cérébraux avec l'introduction d'une pondération entre ces différents modèles via la technique des moyennes non-locales. Cette pondération permet de prendre en compte l'état des modèles limitrophes de manière à corriger les éventuelles erreurs d'estimation d'un des modèles locaux,
+\item une meilleure prise en compte du bruit présent dans les images par l'exploitation de la redondance de l'information dans l'image. Ceci se fait également par l'utilisation des moyennes non-locales,
+\item la définition d'une approche \emph{données} pour la segmentation du cortex en IRM f\oe tale, par l'utilisation d'\emph{a priori} anatomiques et l'emploie d'opérateurs structurels issus de la morphologie mathématique.
+\end{itemize}
+
+Les résultats obtenus avec la nouvelle méthode de segmentation basée sur les moyennes non-locales sont comparés aux méthodes SPM5 (Statistical Parametric Mapping) \cite{Ashburner:NeuroImage:2005}, EMS (Expectation-Maximization Segmentation) \cite{VanLeemput1:TMI:1999} et HMC (Hidden Markov Chains) \cite{Bricq:MIA:2008}, ainsi qu'à des segmentations manuelles réalisées par des experts.
+Ceux obtenus dans le cadre de la segmentation du cortex en IRM f\oe tale sont comparés à des segmentations réalisées par des experts. 
+Les validations sont conduites aussi bien dans le cadre d'images brutes, que de volumes reconstruits par des techniques \emph{ad-hoc}.
+
+\section*{Organisation du manuscrit}
+\addcontentsline{toc}{section}{Organisation du manuscrit}
+
+Le manuscrit est organisé en cinq chapitres présentant les contributions essentielles de la thèse.
+La suite du présent chapitre présente les principes fondamentaux de l'IRM, tout en précisant les spécificités des séquences d'acquisition dans le cas d'IRM f\oe tales.
+Certaines notions d'anatomie cérébrale, ainsi que les différentes étapes de la maturation cérébrale sont également exposées.
+
+Le chapitre \ref{chap:art} rappelle les grandes familles de méthodes de segmentation.
+Une présentation plus complète de l'algorithme FCM et de ses extensions est également réalisée dans le but de mettre en valeur les axes de recherche développés autour de cette méthode.
+Enfin, une présentation des méthodes de segmentation employées dans le cas d'IRM de nouveaux-nés ou de f\oe tus est également faite et insiste sur les spécificités des méthodes développées autour de cette problématique.
+
+Le chapitre \ref{chap:nlfcm} commence par la présentation des moyennes non-locales et de leurs différentes applications.
+La suite du chapitre est consacrée à la définition d'une extension de l'algorithme FCM grâce aux moyennes non-locales et se poursuit par l'étude de cet apport dans le cadre de la segmentation d'IRM.
+
+Le chapitre \ref{chap:foetale} décrit la méthode proposée pour la segmentation du cortex en IRM f\oe tale. 
+Il présente les motivations qui ont conduit à introduire des contraintes géométriques dans la méthode de segmentation, ainsi que les différents outils employés pour mettre en valeur le cortex.
+
+Enfin, le chapitre \ref{chap:conclusion} présente les conclusions et les perspectives de ce travail de thèse.
