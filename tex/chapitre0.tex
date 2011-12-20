@@ -26,21 +26,6 @@ Outre les artefact connus de l'IRM cérébrale, détaillés plus loin, les chercheur
 Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c cois Rousseau.
 Ce projet a pour objectif l'analyse et la modélisation du développement cérébral chez le f\oe tus et le nouveau-né, à l'aide d'images IRM anatomique et de diffusion.
 
-% Depuis quelques années, les améliorations apportées aux systèmes d'acquisition d'images, notamment l'imagerie par résonance magnétique (IRM), ont permis d'explorer le développement du cerveau à un âge de plus en plus précoce.
-% Ces outils ont permis aux médecins (radiologues, neurologues, \ldots{}) d'observer la maturation du cerveau \emph{in vivo} et de commencer à établir des ponts entre le développement des structures cérébrales et le développement cognitif.
-% De plus, l'usage de l'IRM s'est également imposé comme un complément indispensable pour le suivi d'une grossesse, ce qui permet de repérer de manière plus précoce les malformations ou pathologies dont pourraient être atteint le f\oe tus.
-% Plusieurs études (par exemple celle de \cite{Kok:MRI:2004}) ont par ailleurs démontré l'absence de contre-indications à l'usage de l'IRM comme outils de diagnostique, l'exposition au champ magnétique n'ayant montré aucun effet sur le développement normal des f\oe tus et des jeunes enfants.
-% 
-% L'objectif fondamental des médecins est de parvenir à une interprétation des images acquises par le système imageur, ce qui consiste à fournir une représentation symbolique de l'image, c'est à dire reconnaître les différents objets la composant.
-% L'apport du traitement d'image dans ce domaine fût fondamental car il a permis la définition de méthodes d'interprétation automatique.
-% De nombreux outils ont été développés au cours des dernières années, notamment des méthodes de segmentation des tissus cérébraux (liquide céphalo-rachidien (LCR), matière grise et matière blanche), des structures cérébrales (ventricules, thalamus, \ldots{}) et de détection d'une atrophie ou de lésions cérébrales dans la cas de maladies dégénératives telles que la maladie d'Alzheimer ou la sclérose en plaque.
-% Ces outils ont permis un gain de temps considérable, tout en évitant la variabilité issue d'une segmentation manuelle par différents experts.
-% 
-% La segmentation automatique de données issues d'IRM f\oe tale s'est développée ces cinq dernières années, mais rencontre néanmoins plusieurs problèmes propres à ce type de données.
-% Outre les artefacts \og classiques \fg{} rencontrés dans le cadre de l'IRM (biais en intensité, bruit et effet de volume partiel), elles doivent tenir compte d'une plus faible résolution, et d'un plus faible contraste de l'image, ainsi qu'une anatomie très différente des cas adultes.
-% 
-% Ce travail de thèse a été mené au sein du Laboratoire des Sciences de l'Image, de l'Informatique et de la Télédection (LSIIT, UMR 7005, directeur de thèse Ch. Heinrich) dans le cadre du projet ERC (European Research Council) dirigé par Fran\c cois Rousseau.
-% Ce projet a pour objectif l'analyse et la modélisation du développement cérébral chez le f\oe tus et le nouveau-né, à l'aide d'images IRM anatomique et de diffusion.
 
 \section*{Objectifs}
 \addcontentsline{toc}{section}{Objectifs}
@@ -51,7 +36,6 @@ La plupart des modèles définissent le biais en intensité comme un paramètre expl
 Dans le cas de la prise en compte du bruit, la plupart des méthodes de classification utilisent des outils de régularisation (champs ou chaînes de Markov, terme de régularisation) destinés à prendre en compte la segmentation du voisinage du voxel courant pour contraindre son étiquetage.
 Cependant, ces techniques ne prennent en compte que le voisinage immédiat du voxel traité.
 L'un des objectifs de cette thèse est donc de définir une méthode de segmentation permettant, d'une part de ne pas avoir à formuler d'hypothèses sur la nature du biais en intensité, d'autre part une correction plus fine des effets du bruit sur la segmentation par une prise en compte d'une quantité plus importante d'information et par l'introduction d'une hiérarchisation de cette information. 
-% L'objectif est donc de définir une méthode de segmentation prenant mieux en compte les informations de l'image, et notamment les redondances de l'information afin d'obtenir une segmentation plus fine des structures cérébrales et d'éviter une définition explicite du biais en intensité.
 
 Par ailleurs, notre travail s'est orienté sur la segmentation des structures cérébrales en IRM f\oe tale, l'objectif à long terme étant d'être en mesure de conduire des études sur l'évolution des différentes structures cérébrales.
 Au cours des dernières années, quelques méthodes de segmentation sont apparues, s'appuyant sur des \emph{a priori} spatiaux fournis par des atlas ou sur des connaissances anatomiques appliquées \emph{a posteriori}, c'est à dire après une première phase de classification.

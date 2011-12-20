@@ -104,22 +104,46 @@ Elle a notamment été utilisée pour réaliser des études de population, telle qu'u
 \subsection{Caractéristiques}
 \label{intro:irm:carac}
 
+\begin{figure}[!t]
+        \begin{center}
+	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/ESC_Noise.eps}\label{FIG:INTRO:ARTEFACTS:NOISE}}
+	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/AYD_Bias.eps}\label{FIG:INTRO:ARTEFACTS:BIAS}}
+	\end{center}
+        \caption[Artéfacts de l'IRM]{\emph{Artéfacts de l'IRM. (a) Coupe axiale d'une IRM présentant un bruit. (b) Coupe axiale d'une IRM présentant un biais, caractérisé par une intensité des voxels de LCR moins élevés à gauche qu'à droite. }\label{FIG:INTRO:ARTEFACTS}}
+\end{figure}
+
 Cette section décrit les différents artefacts rencontrés lors de l'exploitation des images issus d'une IRM.
 Ils peuvent cependant être corrigé en post-traitement et la connaissance de leur origine permet de mieux les appréhender.
 
 \subsubsection{Le bruit}
 
-L'IRM étant un dispositif de mesure physique, le signal capté est entaché de bruit provenant aussi bien du patient (agitation thermique des protons à l'origine d'émissions parasites) que de la chaîne de mesure (bruit \og{} électronique \fg).
+L'IRM étant un dispositif de mesure physique, le signal capté est entaché de bruit provenant aussi bien du patient (agitation thermique des protons à l'origine d'émissions parasites) que de la chaîne de mesure (bruit \og{} électronique \fg) (voir Figure~\ref{FIG:INTRO:ARTEFACTS:NOISE}).
 Le rapport signal à bruit (SNR) caractérise l'amplitude du bruit par rapport à l'amplitude du signal.
+Il dépend de plusieurs facteurs, certains non modifiables (intensité du champ, séquence d'onde RF, caractéristiques des tissus), d'autres modifiables (choix de l'antenne) et des paramètres de la séquence (taille des voxels, nombre d'excitations, bande passante de réception).
+
 De manière générale, le bruit présent dans les IRM suit une distribution de Rice \cite{Sijbers:TMI:1998}, qui peut cependant être approximé par une distribution gaussienne dans les zones où l'intensité n'est pas proche de zéro et avec un SNR supérieur à $3$.
+Les méthodes de classification des voxels en fonction de leur intensité prennent cet artéfact en compte par des méthodes de régularisation, comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
 % Cette approximation est valide dans la matière grise, la matière blanche et dans une moindre mesure dans le LCR.
 % \cite{Sijbers:TMI:1998} : article précisant que le bruit rencontré dans les IRM est de type ricien et peut être approximé par une distribution gaussienne avec un haut SNR.
+
+
+\subsubsection{Le biais en intensité}
+
+Cet artefact se manifeste par une hétérogénéité en intensité pour un même tissu cérébral (voir Figure~\ref{FIG:INTRO:ARTEFACTS:BIAS}).
+Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu en fonction de sa localisation.
+Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
+
+Ce biais représente une difficulté pour toute méthode de classification des voxels reposant sur leur intensité et supposant que l'intensité d'une classe est constante sur l'ensemble de l'image.
+La plupart de ces méthodes soit, l'éliminent par un pré-traitement, soit le prennent directement en compte dans la classification.
+
+Les conséquences du biais sur les méthodes de traitement des IRM (en particulier les méthodes de segmentation) sont explorées plus en détails en section~\ref{subsec:art:bias}. 
 
 \subsubsection{Le volume partiel}
 
 Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
-Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré.
-En IRM, cet effet se manifeste surtout à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \ldots{}) ou lorsque certaines structures sont beaucoup trop fine pour être prise en compte par l'imageur (petits vaisseaux sanguins, ramification du cortex, \ldots{}).
+Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}).
+Cet effet se manifeste à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \emph{etc}.) ou lorsque certaines structures sont beaucoup trop fines pour être visibles par l'imageur (petits vaisseaux sanguins, couches du cortex, \emph{etc}.).
+Dans le cadre de certaines méthodes de classification des voxels en fonction de leur intensité, cet effet est pris en compte en considérant que l'intensité résultante du voxel est une combinaison linéaire de plusieurs tissus comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
 
 \begin{figure}[!t]
 \begin{center}
@@ -128,30 +152,31 @@ En IRM, cet effet se manifeste surtout à la frontière entre les tissus (LCR - ma
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Discretisation.eps}}
 \hspace{2mm}
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Final.eps}}
-\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM}}
-\label{fig:nlm:kernels}
+\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM. (a) Illustration d'un frontière entre deux tissus. (b) Superposition de la frontière entre tissus et de la grille de l'image. (c) Résultat de l'échantillonnage réalisé pour l'acquisition de l'image : les voxels situés à la frontière des tissus ont une intensité équivalente à la combinaison des signaux des deux tissus.}}
+\label{fig:intro:vp}
 \end{center}
 \end{figure}
-
-
-\subsubsection{Le biais en intensité}
-
-Cet artefact se manifeste par une hétérogénéité en intensité pour un même tissu cérébral.
-Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu en fonction de sa localisation.
-Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
-
-Ce biais représente une difficulté pour toute méthode de classification des voxels reposant sur leur intensité et supposant que l'intensité d'une classe est constante sur l'ensemble de l'image.
-La plupart de ces méthodes soit, l'élimine par un pré-traitement, soit le prennent directement en compte dans la classification.
 
 \subsubsection{Autres}
 
 % Nous pouvons encore signaler plusieurs types d'artefacts.
-Les artefacts de mouvement (pouvant être très problématique dans le cas de l'IRM f\oe tale) sont dus aux mouvements du patient pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
-L'impact de ces artefacts est variable selon le moment de l'acquisition mais il se traduit généralement par l'apparition d'images fantômes de la structure en mouvement.
-Ceci est particulièrement sensible en IRM f\oe tale ou l'on doit tenir compte non seulement des mouvements du f\oe tus (si il n'est pas sédaté), mais également de la respiration de la mère (c'est pourquoi certains protocoles d'acquisition prévoient une apnée de la mère pendant l'acquisition proprement dite).
+Les artefacts de mouvement (pouvant être très problématiques dans le cas de l'IRM f\oe tale) sont dus aux mouvements du f\oe tus pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
+L'impact de ces artefacts est variable selon le moment de l'acquisition mais il se traduit généralement, soit par une image floue si les mouvements sont aléatoires, ou par l'apparition d'images fantômes si ils sont périodiques (respiration ou battements cardiaques par exemple).
+Ceci est particulièrement sensible en IRM f\oe tale ou l'on doit tenir compte non seulement des mouvements du f\oe tus, mais également de la respiration de la mère.
 
-Différentes techniques permettent de réduire l'influence de ces artefacts (par exemple : l'introduction de bobines de shim pour assurer l'homogénéité du champs $B_0$).
-Cependant, l'image finale sera toujours perturbée par un certain nombre d'entre eux, et les méthode de classification des éléments de l'image doivent en tenir compte.
+% \'Etant donné que les acquisitions actuelles sont anistropiques et présentent un volume partiel important, la reconstruction d'images isotropes est un préalable à une étude plus avancée des cas cliniques rencontrés.
+% Cette reconstruction d'un réel volume 3D est effectuée à partir de trois acquisitions dans trois directions différentes (axiale, coronale et sagittale).
+% Cependant, cette reconstruction doit tenir compte du mouvement du f\oe tus, ce qui est fait tout d'abord par le recalage des images basses-résolutions entre elles
+\subsubsection{Correction des artéfacts}
+
+Différentes techniques permettent de réduire l'influence de ces artefacts.
+Par exemple, l'introduction de bobines de shim permet d'assurer l'homogénéité du champs $B_0$, ou la mise en \oe uvre d'une acquisition de calibrage pour le réglage manuel de ces bobines.
+Le choix des paramètres de la séquence d'acquisition ainsi que celui de l'antenne influencent aussi le niveau du bruit.
+
+Les artefacts de mouvement peuvent être diminuer par une apnée de la mère durant l'acquisition, ainsi qu'une sédation du f\oe tus (autorisée en France, mais pas aux \'Etats-Unis par exemple).
+Cependant, ces artefacts peuvent rester importants et les méthodes de reconstruction d'un volume 3D à partir des acquisitions basses-résolutions doivent en tenir compte pour obtenir un volume cohérent.
+
+Malgré les précautions que prennent les radiologues, l'image finale sera toujours perturbée par un certain nombre d'artéfacts (tel que le bruit ou le biais), et les méthodes de classification des éléments de l'image doivent en tenir compte.
 
 %------------------------------------------------------------------------Anatomie et maturation cérébrale----------------------------------------------------------------------------------------
 
@@ -174,17 +199,17 @@ Cette dernière partie décrira l'évolution du cerveau au cours de la grossesse.
 \end{figure}
 
 L'encéphale est constitué du cerveau, du cervelet et du tronc cérébral.
-Le cerveau lui-même est composé de trois matière principales que sont : la matière grise (MG), la matière blanche (MB) et le liquide céphalo-rachidien (LCR).
+Le cerveau lui-même est composé de trois matières principales que sont : la matière grise (MG), la matière blanche (MB) et le liquide céphalo-rachidien (LCR).
 Le LCR se situe tout autour du cerveau et remplit le système ventriculaire.
 Il permet d'amortir les chocs et les mouvements qui pourraient endommager le cerveau.
-La matière blanche est constituée des axones myélinisée des neurones, permettant la transmission de l'information à travers le cerveau.
+La matière blanche est constituée des axones myélinisés des neurones, permettant la transmission de l'information à travers le cerveau.
 La matière grise est composée essentiellement des corps cellulaires et des dendrites des neurones ainsi que des cellules gliales.
 Cette matière grise est répartie dans deux grandes structures différentes : les noyaux et le cortex.
 
-Le cortex en lui même est une couche de cellules de 1 à 4.5 mm d'épaisseur~\cite{Fischl:PNAS:2000}.
+Le cortex est une couche de cellules de 1 à 4.5 mm d'épaisseur~\cite{Fischl:PNAS:2000}.
 Il est plissé par différents sillons formant les circonvolution cérébrales, ou \emph{gyri}.
 Les scissure les plus profondes délimitent plusieurs aires appelés des lobes (voir Figure~\ref{Intro:Brain:Adult}). 
-Les quatre grands lobes du cerveau sont les lobes : frontal, pariétal, temporal et occipital.
+Les quatre grands lobes du cerveau sont les lobes : frontaux, pariétaux, temporaux et occipitaux.
 
 Les sillons principaux du lobe frontal sont : le sillon précentral et les sillons frontaux inférieurs et supérieurs.
 Ceux du lobe temporal sont : les sillons temporals inférieurs et supérieurs.
@@ -192,7 +217,9 @@ Ceux du lobe pariétal sont : le sillon postcentral et le sillons intrapariétal.
 
 Le sillon central marque la frontière entre les lobes frontal et pariétal et le sillon latéral celle entre les lobes frontal et temporal.
 Le repli de l'\emph{insula} est complètement recouvert par les lobes frontal et temporal.
-Ces sillons sont importants à noter car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié~\cite{Levine:Radiology:1999}.
+Ces sillons sont importants à noter car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié ainsi que qu'une indication sur le bon déroulement de la maturation cérébrale~\cite{Levine:Radiology:1999, Garel:AJNR:2001}.
+En effet, le développement des sillons permet une augmentation de la surface corticale et ils aparaissent en suivant un shéma temporel précis, ce dernier étant décrit plus loin.
+Une importante variabilité par rapport à shéma peut alors apparaitre comme un marqueur indiquant un problème dans le développement fonctionnel.
 
 \subsection{Maturation cérébrale}
 
@@ -200,22 +227,22 @@ Ces sillons sont importants à noter car leur apparition au cours de la grossesse
 
 \begin{figure}[!t]
 \begin{center}
-\includegraphics[height=100mm]{eps/chapitre1/Tube_Neural.eps}
+\includegraphics[height=90mm]{eps/chapitre1/Tube_Neural.eps}
 \hspace{-5mm}
 \caption[Formation du tube neural]{\emph{Formation du tube neural à l'origine du système nerveux (image issue de : \url{http://lecerveau.mcgill.ca})}}
 \label{fig:intro:tube}
 \end{center}
 \end{figure}
 
-La formation du système nerveux commence très tôt au cours de la grossesse, c'est à dire dès la troisième semaine.
+La formation du système nerveux commence très tôt au cours de la grossesse, c'est-à-dire dès la troisième semaine.
 A ce stade, la gastrulation de l'embryon (réorganisation des cellules après la nidation dans l'utérus) a déjà eu lieu et le système nerveux se présente sous la forme d'une couche aplatie de cellules appelée la plaque neurale.
-Cette plaque va tout d'abord s'invaginer, formant ainsi la gouttière neurale (voir Figure~\ref{fig:intro:tube}).
+Cette plaque va tout d'abord se replier, formant ainsi la gouttière neurale (voir Figure~\ref{fig:intro:tube}).
 La fermeture de cette gouttière, tout d'abord par son milieu, puis dans sa partie antérieure et postérieure, constitue alors le tube neural dont la partie dorsale, la crête neurale, est à l'origine du système nerveux périphérique.
 A la fin de la quatrième semaine de grossesse, ce processus est achevé et deux processus vont avoir lieux en parallèle : l'histogenèse, c'est à dire la différenciation cellulaire à partir des cellules souches, et la formation des grandes régions du cerveau. 
 
-\begin{figure}[!t]
+\begin{figure}[!ht]
 \begin{center}
-\includegraphics[height=100mm]{eps/chapitre1/vesicules.eps}
+\includegraphics[height=90mm]{eps/chapitre1/vesicules.eps}
 \hspace{-5mm}
 \caption[Formation des grandes régions du cerveau]{\emph{Formation des grandes régions du cerveau (image issue de : \url{http://lecerveau.mcgill.ca})}}
 \label{fig:intro:vesicules}
@@ -230,35 +257,60 @@ Son évolution est plus lente et aboutit entre autres à la formation du tegmentum
 Le métancéphale donnera jour au cervelet (entre autres) et le myélancéphale deviendra le bulbe rachidien.
 Le reste du tube neural formera la moelle épinière par épaississement des parois, conduisant à une réduction du diamètre du tube jusqu'à aboutir au canal spinal.
 
-A partir de la huitième semaine, le développement cérébral en temps que tel commence tout d'abord par la multiplication des neurones et des cellules gliales dans les zones germinales autour des ventricules.
+
+A partir de la huitième semaine, le développement cérébral commence tout d'abord par la multiplication des neurones et des cellules gliales dans les zones germinales autour des ventricules.
 Puis, l'ensemble des neurones va migrer le long de cellules gliales radiales pour former les différentes couches du cortex.
 Cette migration se poursuit jusqu'à 20 semaines et peut s'étendre jusqu'à 24 semaines.
 
 
 \subsubsection{L'évolution du cortex cérébral}
 
-Cette partie est issue de plusieurs études anatomiques (par exemple celle de \cite{Chi:AnnNeuro:1977}), qui ont étudiées plusieurs centaines de cas de manière à dégager un schéma de développement global du cortex humain et ont établit quelques propriété intéressante comme l'assymétrie du lobe temporal gauche à 31 semaines (plus riche en sillons secondaires et tertiaires) (observation semblant indiquer la dominance de l'hémisphère gauche dans la gestion du langage et de la parole~\cite{Chi:ArNeuro:1977}).
-L'étude de ce développement est très importante car l'observation de l'état du cortex \emph{in utero} par un imageur IRM est un bon indicateur de la maturation cérébrale d'un patient \cite{Levine:Radiology:1999}.
+\begin{figure}[!t]
+\begin{center}
+\subfigure[]{\includegraphics[height=90mm]{eps/chapitre1/Foetus_20W.eps}}
+\subfigure[]{\includegraphics[height=100mm]{eps/chapitre1/Foetus_32W.eps}}
+\hspace{-5mm}
+\caption[Les sillons cérébraux au cours de la grossesse]{\emph{Formation des sillons cérébraux au cours de la grossesse. (a) 25-26 semaines de grossesse, (b) 32-33 semaines de grossesse (images issues de \cite{Griffiths:2010})}}
+\label{fig:intro:vesicules}
+\end{center}
+\end{figure}
+
+Cette partie est issue de plusieurs études anatomiques (par exemple celle de \cite{Chi:AnnNeuro:1977}), qui ont étudiées plusieurs centaines de cas de manière à dégager un schéma de développement global du cortex humain et ont établi quelques propriétés intéressantes comme l'assymétrie du lobe temporal gauche à 31 semaines (plus riche en sillons secondaires et tertiaires) (observation semblant confirmer la dominance de l'hémisphère gauche dans la gestion du langage et de la parole~\cite{Chi:ArNeuro:1977, Josse:BRR:2004}).
+% L'étude de ce développement est très importante car l'observation de l'état du cortex \emph{in utero} par un imageur IRM est un bon indicateur de la maturation cérébrale d'un patient \cite{Levine:Radiology:1999}.
 
 Très rapidement, les premières fissures cérébrales apparaissent.
 La première d'entre elle est le fossé hémisphérique, visible à partir de la huitième semaine, dont le creusement se fait du côté antérieur vers le postérieur et s'achève à la dixième semaine de grossesse.
-A partir de la quatorzième semaine d'aménorrhée, le sillon latéral est visible et est constitué d'une petite dépression formée par le repli de l'insula (partie du cortex replié profondément entre le lobe temporal et le lobe frontal) \cite{Chi:AnnNeuro:1977}.
-A partir de la dix-neuvième semaine, l'insula est complètement formée.
+A partir de la quatorzième semaine d'aménorrhée, les sillons latéraux sont visibles et sont constitués d'une petite dépression formée par le repli des \emph{insula} (parties du cortex repliées profondément entre le lobe temporal et le lobe frontal) \cite{Chi:AnnNeuro:1977}.
+A partir de la dix-neuvième semaine, les \emph{insula} sont complètement formées.
+Elles restent lisses jusqu'à environ 28 semaines, les opercules (surfaces du cerveau bordant les sillons latéraux) frontaux, temporaux et pariétaux commençant à les recouvrir.
+% Le gyrus insulaire droit se développe plus tôt que le gauche.
 
-Le lobe pariétal est une structure qui reste lisse pendant un long moment à l'exception des sillons central et post-central.
+Le lobe pariétal est une structure qui reste lisse jusqu'à 25 semaines d'aménorrhée à l'exception des sillons centraux et post-centraux.
 Le premier est une profonde fissure qui apparaît dès la vingtième semaine de grossesse avec quelques cas ou il apparaît dès la dix-septième semaine du côté droit.
 Il commence au niveau de la fosse inter-hémisphérique et s'étend vers le bas jusqu'à l'insula pour former une fissure linéaire au bout de 22 à 23 semaines d'aménorrhée.
-A peu prêt une semaine s'écoule entre l'apparition du sillon du côté droit et du côté gauche.
+A peu près une semaine s'écoule entre l'apparition du sillon du côté droit et du côté gauche.
 Le sillon post-central suit durant la vingt-cinquième semaine.
-A partir de la trente-troisième semaine, les sillons secondaires sont observables.
+Le sillon interpariétal apparait durant le vingt-sixième semaine, permettant la distinction entre les gyri angulaires et supramarginaux après 28 semaines.
+A partir de la trente-troisième semaine, les sillons secondaires sont observables, suivi des sillons tertiaires après 39 semaines.
 
 La gyration du lobe frontal suit le schéma suivant.
-Le sillon frontal supérieur se forme autour de la vingt-cinquième semaine et délimite le gyrus frontal supérieur.
-Le sillon frontal inférieur peut être identifié à 28 semaines et délimite les gyri frontaux médian et inférieur.
-La trente-deuxième semaine est caractérisée par l'apparition de sillons secondaires.
+Le sillon frontal supérieur se forme autour de la vingt-cinquième semaine et délimite le gyrus frontal supérieur (le droit aparaissant approximativement une semaine avant le gauche).
+Le sillon frontal inférieur peut être identifié à 28 semaines et délimite les gyri frontaux médians et inférieurs.
+La trente-deuxième semaine est caractérisée par l'apparition de sillons secondaires au niveau des gyri médians et inférieurs, suivi de sillons tertiaires autour de la quarantième semaine.
 
 Au niveau du lobe temporal, le premier sillon (sillon temporal supérieur) apparaît au bout de 23 semaines d'aménorrhée avec encore une fois un décalage entre le côté droit et le côté gauche.
-Les sillons temporal médians et inférieurs sont en général visible à la trentième semaine.
+Les sillons temporaux médians et inférieurs sont en général visibles à la trentième semaine.
+Le gyrus de Heschl, ou gyrus temporal transverse, situé sur la face supérieure du gyrus temporal supérieur, dans la profondeur du sillon latéral, présente une assymétrie marquée entre les hémisphère droits et gauches.
+Il apparait d'abord du côté droit, et se développe vers le face antérieure, tandis qu'il se développe vers la face postérieure du côté gauche.
+Il y a également une différence en terme de taille et d'orientation de ce gyrus.
+Le côté gauche est moins haut et présente un angle plus obtu par rapport à l'axe anteropostérieur du cerveau.
+Ceci a pour effet de donner plus d'espace pour le développement de la face supérieur du gyrus temporal supérieur (ou \emph{planum temporale}) gauche.
+Les gyri secondaire des gyri tranverses temporaux aparaissent à la trente-sixième semaine, le droit aparaissant plus plissé que le gauche.
+
+L'aspect médian du lobe occipital est fixé dès la dix-huitième semaine de grossesse, tandis que les aspects latéral et supérieur le sont seulement à la vingt-septième.
+A ce moment, il est possible de distinguer le \emph{cuneus} (circonvolution de la partie supérieure de la face interne du lobe occipital) et le lobule lingual (limité par la scissure calcarine, qui le sépare du cuneus au dessus).
+En dessous du lobule lingual se forme le lobule fusiforme qui devient visible à la trentième semaine.
+Les gyri secondaires de ces lobules aparaissent à partir de la trente-quatrième semaine et les sillons tertiaires entre les quarantième et quarante-deuxième semaines.
 
 De manière général, on observe un décalage de deux semaines entre la première apparition d'un sillon dans une population et le moment où il est visible dans 75 à 80\% des cas.
 On peut observer que la plupart des sillons et gyri sont observables entre 26 et 28 semaines d'aménorrhée.
@@ -266,15 +318,54 @@ Le dernier trimestre de la grossesse est alors marqué par un accroissement du vo
 
 \subsubsection{L'observation du cortex grâce à l'IRM}
 
-Les progrès récents des IRM ont permis de conduire des études anatomiques exhaustives \emph{in vivo}, même si quelques travaux ont réalisé quelques observations (par exemple ceux de~\cite{Girard:AJN:1995} qui ont mis en évidence quelques variations du signal des images montrant la variation de la densité cellulaires et les progrès de la myélinisation).
-Plusieurs travaux se sont penchés sur l'évolution visible du cortex à partir de l'IRM ~\cite{Prayer:PedRad:2006, Glenn:SePer:2009}.
-De manière générale, on observe un décalage entre le moment ou un sillon est observable \emph{ex vivo} et \emph{in vivo}.
-Ainsi, le sillon central n'est visible qu'à partir de la vingt-cinquième semaine et il faut attendre la vingt-septième semaine pour qu'il soit observable dans au moins 75\% des cas.
-Même constat pour le sillon post-central, ou il faut attendre la vingt-huitième semaine contre la vingt-cinquième \emph{ex vivo}~\cite{Garel:AJNR:2001}.
+\begin{table}[!t]
+\begin{center}
+
+\begin{tabular}{|c|c|c|}
+\hline
+Sillon & \'Etude anatomique \cite{Chi:AnnNeuro:1977} & \'Etude IRM \cite{Garel:AJNR:2001}\\
+\hline
+Sillon central & 20 & 27 \\
+\hline
+Sillon précentral & 24 & 27 \\
+\hline
+Sillon post-central & 25 & 28 \\
+\hline
+Sillon frontal supérieur & 25 & 29 \\
+\hline
+Sillon frontal inférieur & 28 & 29 \\
+\hline
+Sillon temporal supérieur & 23 & 27 \\
+\hline
+Sillon temporal inférieur & 30 & 33 \\
+\hline
+Sillon intrapariétal & 26 & 28 \\
+\hline
+Sillon insulaire & 34 & 34 \\
+\hline
+\end{tabular}
+
+\end{center}
+\caption[Apparition des sillons à l'IRM]{\emph{Comparaison entre l'aparition des sillons lors des études anatomiques et des études en IRM en semaines d'aménorrhée}\label{TAB:INTRO:SULCI}}
+\end{table}
+
+Les progrès récents des IRM ont permis de conduire des études anatomiques exhaustives \emph{in vivo}, même si quelques étude ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence quelques variations du signal des images montrant la variation de la densité cellulaire et les progrès de la myélinisation).
+Plusieurs travaux se sont penchés sur l'évolution visible du cortex à partir de l'IRM ~\cite{Levine:Radiology:1999, Garel:AJNR:2001, Prayer:PedRad:2006, Glenn:SePer:2009, Habas:SPIE:2011}.
+De manière générale, on observe un décalage entre le moment où un sillon est observable \emph{ex vivo} et \emph{in vivo} d'environ une semaine.
+
+\`A la vingt-cinquième semaine, il possible d'observer le sillon inter-hémisphérique, ainsi que les sillons centraux sur certains cas.
+Ce dernier n'est systématiquement présent qu'à partir de la vingt-septième semaine.
+De même, le sillon post-central n'est systématiquement présent qu'à partir de la vingt-huitième semaine et le sillon précentral à partir de la vingt-septième.
+D'autres exemples sont donnés par le tableau~\ref{TAB:INTRO:SULCI}.
 Les équipes expliquent ce décalage par l'épaisseur des coupes et la faible résolution des IRM, l'effet de volume partiel tendant à masquer de nombreux détails anatomiques, surtout sur des structures aussi petites.
 
-Néanmoins, l'ensemble de ces étude montre que l'IRM est un outil pertinent quant au suivi de la maturation cérébrale au cours de la grossesse, tout ceci sans danger avéré pour le f\oe tus.
+L'ensemble de ces études montre que l'IRM est un outil pertinent quant au suivi de la maturation cérébrale au cours de la grossesse, tout ceci sans danger avéré pour le f\oe tus~\cite{Kok:MRI:2004}.
 De plus, cette modalité peut être utilisée pour réaliser des études cliniques, telle que celle de \cite{Batchelor:TMI:2002} qui à partir d'une segmentation manuelle du cortex a testé différentes mesures de la courbure du cortex en chaque point, de manière à suivre plus précisément l'évolution des sillons et des gyri.
 Cependant, la segmentation manuelle des tissus prend énormément de temps, d'où la nécessité de développer des algorithmes rapides et robustes pour automatiser ce genre de tâche.
 
 \section{Bilan}
+
+La maturation cérébrale est un domaine étudié depuis quelques décennies, mais dont l'essentiel des connaissances reposait sur des étude anatomique post-mortem.
+L'arrivée de séquences IRM ultra-rapides a permis d'étudier cette maturation directement durant la grossesse et de poser des marqueurs fiables quant au développement cérébral normal (tel que l'apparition des sillons).
+La connaissance de ces marqueurs permet d'envisager la construction d'outils de diagnostiques et de suivis automatiques, nécessitant de traiter les images de manière à en extraire l'information pertinente.
+Le suivi automatique des sillons doit nécessairement être précédé d'une étape de segmentation (ou labélisation) des tissus, sujet de cette thèse.
