@@ -28,15 +28,6 @@ Enfin, des validations, ainsi qu'une évaluation des performances de l'algorithme
 
 \subsection{Définition}
 
-\begin{figure}[!t]
-\begin{center}
-\subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/Mean_Filter.eps}}
-\subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/NL_Mean_Filter.eps}}
-\end{center}
-\caption[Comparaison entre un débruitage par moyennes et par moyennes non-locales]{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
-\label{fig:mean_filter}
-\end{figure}
-
 L'image $I$ est considérée comme étant une fonction $I : \Omega \rightarrow Y$, où $\Omega$ est le support de l'image contenant $N$ voxels et $Y$ est l'espace des intensités.
 Le débruitage par moyennes non-locales et l'évaluation des redondances reposent sur des patchs, qui sont définis comme un petit voisinage cubique autour d'un voxel d'intérêt $j$, de rayon $W$ et indexé par son voxel central (voir la figure~\ref{fig:mean_filter}).
 Un patch est noté de la manière suivante : 
@@ -65,6 +56,15 @@ Ce terme est défini par :
 \omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)}{\sum_{i=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{i} \rVert}{h} \right)} \label{nlfcm:poids:definition},
 \end{equation}
 avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$ et est donc directement lié au calcul de la similarité entre les voxels de la zone de recherche.
+
+\begin{figure}[!t]
+\begin{center}
+\subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/Mean_Filter.eps}}
+\subfigure[]{\includegraphics[height=55mm]{eps/chapitre3/NL_Mean_Filter.eps}}
+\end{center}
+\caption[Comparaison entre un débruitage par moyennes et par moyennes non-locales]{\emph{(a) Débruitage par moyennes. L'estimation de l'intensité du voxel central est une moyenne de l'ensemble des voxels du voisinage $N_j$. (b) Débruitage par moyennes non-locales~\cite{Buades:MMS:2005}. Un poids est attribué à chaque voxel de la zone de recherche $\Omega^R_j$ selon la similarité de son patch avec celui du voxel central.}}
+\label{fig:mean_filter}
+\end{figure}
 
 \subsection{\'Etat de l'art}
 
@@ -186,7 +186,7 @@ L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de si
 \section{FCM non-local}
 \label{sec:nlfcm}
 
-Nous présentons dans cette section une amélioration de l'algorithme FCM prenant en compte les moyennes non-locales au sein du terme d'attache aux données de manière à améliorer la prise en compte du biais en intensité et au sein du terme de régularisation afin d'améliorer la correction du bruit.
+Nous présentons dans cette section une extension de l'algorithme FCM incluant les moyennes non-locales au sein du terme d'attache aux données de manière à améliorer la prise en compte du biais en intensité et au sein du terme de régularisation de manière à améliorer celle du bruit.
 Dans la suite du manuscrit, l'implémentation des moyennes non-locales utilise un noyau de type gaussien $K(x) = e^{\frac{-x}{h}}$ et la norme euclidienne pour le calcul des similarités. 
 L'estimation de la fenêtre $h$ est inspiré de \cite{Coupe:TMI:2008}, laissant un paramètre $\alpha$ à évaluer.
 
@@ -248,7 +248,7 @@ J_{NL\textrm{-}Reg} =
 \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
 \end{equation}
 
-Rappelons que $L_{k}=[\![1,C]\!]\setminus \{k\} = \{1, \ldots, k-1, k+1, \ldots, C\}$ et représente l'ensemble des classes exceptée la classe dont on effectue la régularisation et $\Omega^{R_{r}}_{j}$ représente la zone de recherche centrée autour du voxel $j$ destinée à calculer les poids non-locaux pour la régularisation.
+Rappelons que $L_{k}=[\![1,C]\!]\setminus \{k\} = \{1, \ldots, k-1, k+1, \ldots, C\}$ représente l'ensemble des classes exceptée la classe dont on effectue la régularisation et $\Omega^{R_{r}}_{j}$ représente la zone de recherche centrée autour du voxel $j$ destinée à calculer les poids non-locaux pour la régularisation.
 Le paramètre $\beta$ contrôle les poids respectifs entre le terme de régularisation et le terme d'attache aux données au sein de la fonction d'énergie.
 
 \subsection{Algorithme non-local complet}
@@ -286,20 +286,20 @@ Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-
 \end{enumerate}
 
 La donnée d'entrée de l'algorithme est l'image à segmenter (fournissant $\Omega$ et les valeurs $\mathbf{y}$).
-Les paramètres déterminant son comportement sont : $C$ (le nombre de classes), $\beta$ (qui contrôle le rapport entre le terme d'attache aux données et le terme de régularisation), la taille de la zone de recherche pour le calcul des poids non-locaux destinés à la régularisation $\Omega^{R_r}_j$, la taille de la zone de recherche pour le calcul des poids non-locaux destinés au terme d'attache aux données $\Omega^{R_d}_j$, la taille des sous-volumes $M_j$ permettant l'estimation des modèles locaux et le paramètre de lissage $\alpha$.
+Les paramètres déterminant son comportement sont : $C$ (le nombre de classes), $\beta$ (qui contrôle le rapport entre le terme d'attache aux données et le terme de régularisation), la taille de la zone de recherche pour le calcul des poids non-locaux destinés à la régularisation $\Omega^{R_r}_j$, la taille de la zone de recherche pour le calcul des poids non-locaux destinés au terme d'attache aux données $\Omega^{R_d}_j$, la taille des sous-volumes $M_j$ permettant l'estimation des modèles locaux et le paramètre de lissage $\alpha$ intervenant dans l'estimation de $h$.
 
 \section{Validations}
 \label{sec:nlfcm:validations}
 
-Les expériences permettant la validation des FCM non-locaux sont menées tout d'abord sur des images simulées fournies par la base BrainWeb \cite{Kwann:VBC:1996, Cocosco:NeuroImage:1997}, puis sur des cas réels fournis par la base IBSR (\emph{Internet Brain Segmentation Repository}).
+Les expériences sont menées tout d'abord sur des images simulées fournies par la base BrainWeb \cite{Kwann:VBC:1996, Cocosco:NeuroImage:1997}, puis sur des cas réels fournis par la base IBSR (\emph{Internet Brain Segmentation Repository}).
 
-Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menées de manière à déterminer le comportement de l'algorithme FCM non-local et d'évaluer ses performances par rapport à d'autres méthodes :
+Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menées de manière à déterminer le comportement de l'algorithme FCM non-local :
 \begin{enumerate}
         \item Évaluation du terme d'attache aux données non-local en utilisant des images ayant 20~\% d'inhomogénéité en intensité (voir la section~\ref{sec:brainweb:nlData}).
         \item \'Evaluation du terme de régularisation non-locale en utilisant des images ayant différents niveaux de bruit ricien (voir la section~\ref{sec:brainweb:nlReg}).
         \item Évaluation de l'algorithme non-local complet en utilisant des images ayant à la fois 20~\% d'inhomogénéité en intensité et différents niveaux de bruit (voir la section~\ref{sec:brainweb:nlAll}).
 \end{enumerate}
-Par la suite, l'algorithme FCM non-local complet est appliqué à l'ensemble de la base IBSR et comparé à d'autres méthodologies.
+Par la suite, l'algorithme FCM non-local complet est appliqué à l'ensemble de la base IBSR.
 
 L'évaluation des performances des différents algorithmes est faite par comparaison de la segmentation estimée avec la vérité terrain fournie par les bases d'images respectives.
 La qualité de la segmentation est mesurée par le calcul de l'indice de similarité Dice : 
@@ -322,7 +322,7 @@ Ces trois méthodes incluent une correction du biais et un terme de régularisatio
 \subsection{BrainWeb}
 \label{subsec:brainweb}
 
-Le dépôt de BrainWeb~\footnote{\url{http://www.bic.mni.mcgill.ca/brainweb/}} permet de simuler des IRM cérébrales avec différents niveaux de bruit et d'inhomogénéité et fournit la vérité terrain correspondante, permettant de comparer différents algorithmes de segmentation.
+Le site de BrainWeb~\footnote{\url{http://www.bic.mni.mcgill.ca/brainweb/}} permet de simuler des IRM cérébrales avec différents niveaux de bruit et d'inhomogénéité et fournit la vérité terrain correspondante, permettant de comparer différents algorithmes de segmentation.
 % La connaissance de la vérité terrain permet de comparer différents algorithmes de segmentation.
 Les images fournies par la base sont issues de 27 acquisitions réalisées sur un même individu.
 Elles sont ensuite moyennées pour construire le volume initial auquel sont ensuite appliqués divers traitements pour créer le fantôme~\cite{Collins:TMI:1998}.
@@ -332,7 +332,8 @@ Le bruit est de type ricien d'un niveau allant de $0$ à $9$~\% (c'est à dire une
 \subsubsection{Évaluation du terme d'attache aux données}
 \label{sec:brainweb:nlData}
 
-L'algorithme est initialisé grâce à un atlas fourni avec la base BrainWeb.
+L'algorithme est initialisé grâce à l'atlas 452 T1 fourni par l'\emph{International Consortium for Brain Mapping} (ICBM).
+Il est recalé sur l'image BrainWeb de manière linéaire et affine.
 Il permet d'initialiser de manière fiable les moyennes locales avant le lancement de NL-FCM proprement dit et fournit une première estimation de la classification des tissus.
 
 \paragraph*{\'Etude des paramètres}
@@ -354,7 +355,7 @@ On pose $n_j$ et $m_j$ tels que $\lvert \Omega^{R_{d}}_{j} \rvert = (2 \cdot n_j
 \end{figure}
 
 La figure~\ref{FIG:PARAM:BRAINWEB:BIAS} présente les résultats avec différents sous-volumes et différentes zones de recherche.
-La première partie de la courbe, de $m_j = 5$ à $m_j = 9$, montre comme attendu qu'à sous-volume égal, l'accroissement de la taille de zone de recherche permet d'obtenir une meilleure segmentation par la prise en compte des modèles voisins et la pondération en résultant.
+La première partie de la courbe, de $m_j = 5$ à $m_j = 9$, montre comme attendu que pour une même valeur de $m_j$, l'accroissement de la taille de zone de recherche permet d'obtenir une meilleure segmentation par la prise en compte des modèles voisins et la pondération en résultant.
 Cependant, un fléchissement est observé à $m_j = 10$ pour $n_j = 8$ et $n_j = 9$.
 Les différents travaux sur les moyennes non-locales pointaient la faible efficacité d'une zone de recherche trop grande, surtout dans le cas d'un noyaux à support infini tel que le noyau gaussien. 
 En effet, les voxels de faible similarité avec le voxel courant sont pris en compte dans le calcul des pondérations, ce qui peut entraîner un biais dans le calcul de l'attache aux données locale.
@@ -390,10 +391,10 @@ La figure~\ref{FIG:VIEW:BRAINWEB:BIAS} illustre les performances du terme d'atta
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_Bias_T1.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_Bias_truth.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_Bias_classicfcm.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_Bias_nlfcm.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_Bias_T1.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_Bias_truth.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_Bias_classicfcm.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_Bias_nlfcm.eps}}
         \end{center}
 
         \caption[Résultats de la segmentation d'une image T1 présentant un biais en intensité]{\emph{Résultats de la segmentation d'une image T1 présentant un biais en intensité. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par FCM non-local.}}
@@ -473,14 +474,14 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 
 \begin{figure}[!t]
 \begin{center}
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_T1.eps}}  
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_truth.eps}}\\
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_classicfcm.eps}}  
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_rfcm.eps}}  
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_nlregfcm.eps}}\\
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_truth_zoom.eps}\label{NLREG:ZOOM:TRUTH}}  
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_rfcm_zoom.eps}\label{NLREG:ZOOM:RFCM}}  
-\subfigure[]{\includegraphics[height=45mm]{eps/chapitre3/Brainweb_Noise_nlregfcm_zoom.eps}\label{NLREG:ZOOM:NLREG}}\\
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_T1.eps}}  
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_truth.eps}}\\
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_classicfcm.eps}}  
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_rfcm.eps}}  
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_nlregfcm.eps}}\\
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_truth_zoom.eps}\label{NLREG:ZOOM:TRUTH}}  
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_rfcm_zoom.eps}\label{NLREG:ZOOM:RFCM}}  
+\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_nlregfcm_zoom.eps}\label{NLREG:ZOOM:NLREG}}\\
 \caption[Aperçu de différentes segmentations d'une image pondérée en T1 avec un bruit ricien de $5$~\%]{\emph{(a) Coupe axiale d'une image pondérée en T1 avec un bruit ricien de $5$~\%. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM~\cite{Pham:CVIU:2001}. (e) Segmentation par NL-Reg. (f) Zoom sur la vérité terrain. (g) Zoom sur la segmentation par RFCM. (h) Zoom sur la segmentation par NL-Reg.}\label{FIG:VIEW:BRAINWEB:NOISE}}
 \end{center}
 \end{figure}
@@ -516,11 +517,11 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_T1.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_Truth.eps}}\\
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_NLReg.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_NLFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/Brainweb_All_NLRFCM.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_T1.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_Truth.eps}}\\
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLReg.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLFCM.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLRFCM.eps}}
         \end{center}
 
         \caption[Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%]{\emph{Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par NL-Reg. (d) Segmentation par NL-FCM. (e) Segmentation par NL-R-FCM.}}
@@ -602,13 +603,13 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_T1.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_Truth.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_ClassicFCM.eps}}\\
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_RFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_NLFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_NLReg.eps}}
-	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre3/IBSR_11_NLAll.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_T1.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_Truth.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_ClassicFCM.eps}}\\
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_RFCM.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLFCM.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLReg.eps}}
+	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLAll.eps}}
         \end{center}
 
         \caption[Résultats de la segmentation du cas n\textdegree11 de la base IBSR]{\emph{Résultats de la segmentation du cas n\textdegree11 de la base IBSR. (a) Coupe d'une image T1. (b) Vérité-terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM. (e) Segmentation par NL-FCM. (f) Segmentation par NL-Reg. (g) Segmentation par NL-R-FCM.}}
