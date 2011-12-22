@@ -6,12 +6,12 @@ Dans ce chapitre, une nouvelle méthode de segmentation basée sur FCM est définie
 Elle inclue l'approche des moyennes non-locales (en anglais, \emph{non-local means}) proposée en 2005.
 Issue de travaux dans le cadre du débruitage d'images, cette dernière a été spécifiée de manière indépendante par \cite{Buades:MMS:2005}, et \cite{Awate:PAMI:2006}.
 L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer la \og vrai \fg{} valeur en chaque voxel.
-La nécessité d'avoir une évaluation robuste de ces similarités entre voxels a conduit à prendre en compte leur proche voisinage, conduisant à la définition de patchs.
+La nécessité d'avoir une évaluation robuste de ces similarités entre voxels a conduit à prendre en compte leur proche voisinage, conduisant à la définition de patches.
 
 L'utilisation de la redondance de l'information de l'image est une option peu explorée en segmentation cérébrale.
 Comme nous l'avons vu précédemment, de nombreuses méthodes utilisent une modélisation spécifique d'un champ de biais pour la correction de l'inhomogénéité de l'intensité ou une approche prenant en compte la classification des voxels environnants pour la prise en compte du bruit.
 Certaines méthodologies de types FCM ont inclu une prise en compte de la redondance de l'information en favorisant les voxels dont l'intensité et les coordonées spatiales sont les plus proches de celles du voxel courant (voir en Section~\ref{subsubsec:fcm:ponderation}).
-Cependant, les travaux sur les méthodes de débruitage par patchs (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
+Cependant, les travaux sur les méthodes de débruitage par patches (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
 Un terme de régularisation non-local intègre don une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
 Concernant la prise en compte du biais, une méthodologie de type FCM a introduit une évaluation locale des centroïdes afin de ne pas avoir à évaluer le champ de biais directement (voir en Section~\ref{subsec:fcm:bias}).
@@ -29,19 +29,19 @@ Enfin, des validations, ainsi qu'une évaluation des performances de l'algorithme
 \subsection{Définition}
 
 L'image $I$ est considérée comme étant une fonction $I : \Omega \rightarrow Y$, où $\Omega$ est le support de l'image contenant $N$ voxels et $Y$ est l'espace des intensités.
-Le débruitage par moyennes non-locales et l'évaluation des redondances reposent sur des patchs, qui sont définis comme un petit voisinage cubique autour d'un voxel d'intérêt $j$, de rayon $W$ et indexé par son voxel central (voir la figure~\ref{fig:mean_filter}).
+Le débruitage par moyennes non-locales et l'évaluation des redondances reposent sur l'utilisation de patches, qui sont définis comme un voisinage cubique autour d'un voxel d'intérêt $j$, de rayon $W$ et indexé par son voxel central (voir la figure~\ref{fig:mean_filter}).
 Un patch est noté de la manière suivante : 
 \begin{equation}
 P_{j} = P^{W}_{j} = \left( I(\mathbf{x}_j+\mathbf{\tau}), \mathbf{\tau} \in [\![ -W, W ]\!]^{d} \right) \label{nlfcm:patch:def},
 \end{equation}
 où $d$ est la dimension de l'image $I$ et $\mathbf{x}_j$ est le vecteur correspondant aux coordonnées spatiales du voxel $j$.
 
-Avec cette définition du patch, l'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par : 
+L'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par : 
 \begin{equation}
 \mathbf{\hat{y}}_{j} = \frac{\sum_{j'=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{j'=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)} \label{nlfcm:estimateur:complet},
 \end{equation}
 où $K(\cdotp)$ est un noyau, c'est-à-dire une fonction de pondération de $\mathbb{R}$ dans $\mathbb{R}$ et $h$ est la fenêtre régissant le degré de lissage de l'estimation de la similarité.
-Le calcul de cette dernière est effectué par la comparaison entre les patchs respectifs des voxels considérés et est contrôlé par le choix de la norme $\lVert \cdotp \rVert$.
+Le calcul de cette dernière est effectué par la comparaison entre les patches respectifs des voxels considérés et est contrôlé par le choix de la norme $\lVert \cdotp \rVert$.
 Cette formulation correspond à une moyenne pondérée des voxels sur l'ensemble du support de l'image.
 
 Cela nous permet de réécrire la formule \ref{nlfcm:estimateur:complet} sous la forme :
@@ -53,7 +53,7 @@ Ce terme est défini par :
 \begin{equation}
 \omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)}{\sum_{i=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{i} \rVert}{h} \right)} \label{nlfcm:poids:definition},
 \end{equation}
-avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$ et est donc directement lié au calcul de la similarité entre les voxels de la zone de recherche.
+avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$.
 
 \begin{figure}[!t]
 \begin{center}
@@ -64,18 +64,20 @@ avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$ et est donc directement lié au calc
 \label{fig:mean_filter}
 \end{figure}
 
-Les moyennes non-locales ainsi définies reposent sur deux hypothèses importantes~\cite{Szlam:UCLA:2008}: 
-\begin{enumerate}
-        \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
-        \item des patches similaires ont des voxels centraux similaires.
-\end{enumerate}
+Telle qu'elles sont définies, les moyennes non-locales ont montrés une grande efficacité dans le débruitage de zones régulières mais aussi dans des zones texturées~\cite{Salmon:2010}, ce qui est peu étonnant vu que certains travaux préliminaires ayant mené à cette approche ont été fait dans le cadre de la synthèse de textures~\cite{Criminisi:CVPR:2003}.
+% 
+% Les moyennes non-locales ainsi définies reposent sur deux hypothèses importantes~\cite{Szlam:UCLA:2008}: 
+% \begin{enumerate}
+%         \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
+%         \item des patches similaires ont des voxels centraux similaires.
+% \end{enumerate}
+% 
+% A rajouter dans l'état de l'art : \cite{VanDeVille:TIP:2011}.
 
-A rajouter dans l'état de l'art : \cite{VanDeVille:TIP:2011}.
-
-\subsection{Les paramètres des moyennes non-locales et leur influence}
+\subsection{Limites de l'approche non-locale et influence de ses paramètres}
 
 Plusieurs paramètres influent sur le comportement des moyennes non-locales. 
-Ces paramètres peuvent être numériques, tel que le paramètre de lissage $h$ ou la taille des patchs $\lvert P_{j} \rvert$.
+Ces paramètres peuvent être numériques, tel que le paramètre de lissage $h$ ou la taille des patches $\lvert P_{j} \rvert$.
 D'autres sont plus difficilement quantifiables, tels que le choix de la fonction noyau $K(\cdot)$ et de la norme $\lVert \cdot \rVert$ utilisée pour le calcul de la similarité.
 De nombreux articles ont discuté les limites des moyennes non-locales et l'influence des paramètres.
 
@@ -112,34 +114,35 @@ De plus, ces noyaux ont l'avantage d'être continus.
 Un noyau plat peut être employé afin de privilégier la vitesse de calcul et il est courant de trouver des noyaux compacts polynomiaux de degré $4$ \cite{Goossens:LNLA:2008} ou de degré $6$ \cite{Duval:2010}.
 
 Le choix de la norme est aussi un élément à prendre en compte.
-De manière générale, l'utilisation la norme euclidienne pour le calcul de la similarité entre deux patchs a peu été remis en cause \cite{Salmon:2010}.
-Cependant, quelques alternatives au calcul direct de la distance entre les patchs peuvent être notés.
+De manière générale, l'utilisation la norme euclidienne pour le calcul de la similarité entre deux patches a peu été remis en cause \cite{Salmon:2010}.
+Cependant, quelques alternatives au calcul direct de la distance entre les patches peuvent être notés.
 L'article de \cite{Buades:MMS:2005} inclut également une pondération en fonction de la distance des voxels par rapport au voxel central.
 Cependant, il semble que cette pondération ait été peu retenue dans les travaux ultérieurs.
 Les travaux de \cite{Azzabou:ICIP:2007} et \cite{Tasdizen:TIP:2009} utilisent un dictionnaire issue de l'image et calculé par une analyse des composantes principales (ACP) de la matrice de covariance construite à partir de l'ensemble des voisinages de l'image.
-La comparaison des patchs se fait alors dans l'espace construit à partir des composantes présentant les valeurs propres les plus élevées. 
+La comparaison des patches se fait alors dans l'espace construit à partir des composantes présentant les valeurs propres les plus élevées. 
 Les résultats montrent une nette amélioration des performances du débruitage.
 
-L'influence de la taille des patchs a été étudiée par \cite{Mairal:ECCV:2009}. 
+L'influence de la taille des patches a été étudiée par \cite{Mairal:ECCV:2009}. 
 Les principales conclusions sont que ce paramètre doit augmenter avec le niveau du bruit présent dans l'image.
 De plus, le bruit peut ne pas être uniforme sur l'image et la taille du patch doit donc être idéalement définie localement.
 La nature de l'image à débruiter influe également sur l'efficacité de ce paramètre, qui est donc à fixer en fonction de l'image.
-Notons l'article de \cite{Manjon:JMRI:2010} introduisant des patchs adaptatifs de manière à débruiter une IRM présentant un bruit variable.
+Notons l'article de \cite{Manjon:JMRI:2010} introduisant des patches adaptatifs de manière à débruiter une IRM présentant un bruit variable.
 L'article de \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
-% Une technique de patchs adaptatifs a été implémentée par \cite{Kervrann:TIP:2006} dans l'
+FIXME : Ajouter \cite{Deledalle:JMIV:2011} pour les formes de patches adaptatives.
+% Une technique de patches adaptatifs a été implémentée par \cite{Kervrann:TIP:2006} dans l'
 
 % D'autres travaux ont cherché à améliorer ce filtre. 
-% Certains ont accéléré les traitements en partant du principe qu'un voxel appartient à plusieurs patchs différents \cite{Coupe:TMI:2008}, la valeur finale du voxel étant récupérée par un moyenne sur l'ensemble des patchs.
+% Certains ont accéléré les traitements en partant du principe qu'un voxel appartient à plusieurs patches différents \cite{Coupe:TMI:2008}, la valeur finale du voxel étant récupérée par un moyenne sur l'ensemble des patches.
 
 \subsection{Usage des moyennes non-locales}
 
-Enfin, à un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assimile la première version des moyennes non-locales à une régression linéaire de niveau $0$ et l'étend à des niveaux supérieurs.
+\`A un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assimile la première version des moyennes non-locales à une régression linéaire de niveau $0$ et l'étend à des niveaux supérieurs.
 De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tel que le filtre bilatéral, les filtres bayésiens,\ldots).
 Des techniques de régularisation de graphes discrètes, (voir les travaux de \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008}) permettent de faire le lien entre ces différentes techniques.
 Ces méthodes de régularisation peuvent être vues comme des versions discrètes d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)} \cite{Mrazek:2006}. 
 Ici, le terme \emph{non-local} est utilisé car des interactions avec des voxels plus éloignés que le voisinage immédiat sont prises en compte.
 Ce formalisme définit une forme générale permettant l'unification de nombreux filtres existants par la somme d'un terme d'attache aux données et d'un terme de lissage.
-Il est étendu à la prise en compte des patchs par l'article de \cite{Katkovnik:IJCV:2010}, définissant ainsi le \emph{Generalized NDS (GNDS)}, dont le NDS est un cas particulier.
+Il est étendu à la prise en compte des patches par l'article de \cite{Katkovnik:IJCV:2010}, définissant ainsi le \emph{Generalized NDS (GNDS)}, dont le NDS est un cas particulier.
 
 Depuis son apparition en 2005, les moyennes non-locales ont été utilisées dans d'autres domaines que le débruitage d'images.
 Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de l'apport des moyennes non-locales.
@@ -150,13 +153,13 @@ Enfin, les moyennes non-locales ont également été appliqué à la segmentation d'i
 Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'un opérateur gradient et et d'un opérateur divergence non-locaux de manière à étendre les techniques fondées sur des équations différentielles partielles (EDP) ou des approches variationnelles.
 Les travaux de \cite{Bresson:2008} ont défini plusieurs fonctionnelles non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
 Les moyennes non-locales ont également été utilisées en propagation de labels à partir d'une base d'images dont la vérité terrain est connue. 
-L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patchs similaires dans une base d'image, après une recalage affine et une égalisation d'histogramme.
+L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patches similaires dans une base d'image, après une recalage affine et une égalisation d'histogramme.
 Cette méthododologie a l'avantage de ne pas nécessiter de recalage non-linéaire, et base l'étape de fusion des labels sur les poids non-locaux calculés à travers la base.
 Les moyennes non-locales ont également été introduites dans les lignes de niveaux par~\cite{Jung:SSVM:2011} et ont permis la segmentation de structures dont l'intensité varie de façon lisse, ce qui peut se révélé intéréssant dans le cas ou un biais est présent.
 Enfin, l'article de \cite{Wang:CMIG:2008} définit une première approche permettant de prendre en compte l'information non-locale dans FCM. 
 Elle est décrite à la section suivante.
 
-Les limites et les différentes approches concernant les moyennes non-locales sont explorés plus en détail dans le travail de Salmon \cite{Salmon:2010}.
+% Les limites et les différentes approches concernant les moyennes non-locales sont explorés plus en détail dans le travail de Salmon \cite{Salmon:2010}.
 
 
 \subsection{Segmentation non-locale}
@@ -176,7 +179,7 @@ La distance locale est calculée de la façon suivante :
 d^{2}_{l}(\mathbf{y}_{j}, \mathbf{v}_{k}) = \frac{\sum_{l \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l}) \lVert \mathbf{y}_{l} - \mathbf{v}_{k} \rVert^{2}_{2}}{\sum_{l \in N{j}} \omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l})} \label{nlfcm:wang:distance:locale},
 \end{equation}
 où $N_{j}$ est un voisinage centré autour du voxel $j$, $\omega_{l} (\mathbf{y}_{j}, \mathbf{y}_{l}) = e^{-\frac{\lvert \mathbf{y}_{j} - \mathbf{y}_{l} \rvert}{\sigma^{2}}}$ est le poids local accordé au voxel $l$ et $\sigma^{2}$ est la variance sur $N_{j}$.
-Cette distance locale représente donc une moyenne pondérée sur le voisinage $N_j$, les pondérations étant calculées à partir de la similarité entre le voxel central et ses voisins (similarité voxel à voxel et non similarité des patchs).
+Cette distance locale représente donc une moyenne pondérée sur le voisinage $N_j$, les pondérations étant calculées à partir de la similarité entre le voxel central et ses voisins (similarité voxel à voxel et non similarité des patches).
 
 La distance non-locale est calculée de la façon suivante : 
 \begin{equation}
@@ -187,7 +190,7 @@ où $\omega_{nl}(j,j')$ représente le poids non-local entre les voxels $j$ et $j'
 % En pratique, ce calcul de la distance non-locale est limité à une zone de recherche $\Omega^{R}_{j}$ centrée autour du voxel $j$.
 Le paramètre $\lambda_{j}$ est calculé automatiquement en tenant compte de la similarité globale du patch $P^{I}_{j}$ au sein de $\Omega^{R}_{j}$. 
 Plus il y a de voxels similaires au voxel central au sein de la zone de recherche $\Omega^R_j$, plus le poids de la distance non-locale dans le calcul de la distance générale sera important.
-L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de similaritée entre les voxels (par exemple, dans une IRM cérébrale, autour des sillons cérébraux) où il est plus efficace de prendre en compte une similarité entre les voxels directement plutôt qu'entre les patchs.
+L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de similaritée entre les voxels (par exemple, dans une IRM cérébrale, autour des sillons cérébraux) où il est plus efficace de prendre en compte une similarité entre les voxels directement plutôt qu'entre les patches.
 
 % Nous montrerons que la correction du bruit présent dans une image ne nécessite pas de définir une telle distance, mais qu'il suffit d'incorporer les moyennes non-locales au sein du terme de régularisation de FCM pour obtenir une correction efficace.
 
@@ -195,8 +198,8 @@ L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de si
 \label{sec:nlfcm}
 
 Nous présentons dans cette section une extension de l'algorithme FCM incluant les moyennes non-locales au sein du terme d'attache aux données de manière à améliorer la prise en compte du biais en intensité et au sein du terme de régularisation de manière à améliorer celle du bruit.
-Dans la suite du manuscrit, l'implémentation des moyennes non-locales utilise un noyau de type gaussien $K(x) = e^{\frac{-x}{h}}$ et la norme euclidienne pour le calcul des similarités. 
-L'estimation de la fenêtre $h$ est inspiré de \cite{Coupe:TMI:2008}, laissant un paramètre $\alpha$ à évaluer.
+% Dans la suite du manuscrit, l'implémentation des moyennes non-locales utilise un noyau de type gaussien $K(x) = e^{\frac{-x}{h}}$ et la norme euclidienne pour le calcul des similarités. 
+% L'estimation de la fenêtre $h$ est inspiré de \cite{Coupe:TMI:2008}, laissant un paramètre $\alpha$ à évaluer.
 
 \subsection{Terme d'attache aux données}
 \label{subsec:nl:dd}
@@ -232,11 +235,12 @@ Cependant, ces deux approches peuvent être considérées comme un déplacement du p
 
 A notre connaissance, aucune méthode ne permet la prise en compte des modèles voisins sans cette étape de fusion.
 Cependant, l'approche non-locale permet de mettre en \oe uvre une pondération entre les différents voxels de l'image en fonction de la similarité de leur patch.
-En faisant l'hypothèse que deux voxels dont les patchs sont similaires font partie du même tissu, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu'entraîne une mauvaise évaluation des centroïdes locaux.
+En faisant l'hypothèse que deux voxels dont les patches sont similaires font partie du même tissu, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu'entraîne une mauvaise évaluation des centroïdes locaux.
 Un terme d'attache aux données non-local est alors défini de la façon suivante :
 \begin{equation}
 J_{NL-FCM} = \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{l \in \Omega^{R_d}_{j}} \omega_{nl}(j, l) \Vert \mathbf{y}_{j} - \mathbf{v}_{lk} \Vert_2^{2} \label{eq:nlfcm:dd}.
 \end{equation}
+Le terme $\omega_{nl}(j, l)$ est calculé selon l'équation \ref{nlfcm:poids:definition} et $h$ selon la méthode définie par \cite{Coupe:TMI:2008}.
 % Ce terme d'attache aux données permet une meilleure robustesse de la segmentation en cas de mauvaise évaluation de certains modèles locaux.
 
 Deux différences sont notables par rapport à la définition standard de FCM (donnée par l'équation \ref{eq:fcm}).
@@ -254,7 +258,7 @@ Plusieurs articles ont introduit différentes stratégies permettant de prendre en
 
 Les moyennes non-locales sont particulièrement intéressantes dans cette situation, car elles fournissent les outils nécessaires à une pondération relativement aisée des voxels d'intêret au sein de la zone de recherche.
 Le rôle de poids non-locaux est donc de sélectionner les voxels les plus pertinents au sein de la zone de recherche pour effectuer la régularisation en fonction de leur degré de similarité avec le voxel courant.
-L'hypothèse que nous faisons est que si les patchs de deux voxels sont similaires, alors ils appartiennent au même tissu.
+L'hypothèse que nous faisons est que si les patches de deux voxels sont similaires, alors ils appartiennent au même tissu.
 L'objectif est d'obtenir une régularisation plus lisse de façon adaptative.
 
 Le terme de régularisation défini dans cette section s'inspire de celui de \cite{Pham:CVIU:2001} (dont la définition est donnée par l'équation \ref{eq:rfcm}), calculant la proportion d'une classe au sein d'un voxel en prenant en compte la proportion des autres classes dans le voisinage.
@@ -266,6 +270,7 @@ J_{NL\textrm{-}Reg} =
 
 Rappelons que $L_{k}=[\![1,C]\!]\setminus \{k\} = \{1, \ldots, k-1, k+1, \ldots, C\}$ représente l'ensemble des classes exceptée la classe dont on effectue la régularisation et $\Omega^{R_{r}}_{j}$ représente la zone de recherche centrée autour du voxel $j$ destinée à calculer les poids non-locaux pour la régularisation.
 Le paramètre $\beta$ contrôle les poids respectifs entre le terme de régularisation et le terme d'attache aux données au sein de la fonction d'énergie.
+Le terme $\omega_{nl}(j, l)$ est calculé selon l'équation \ref{nlfcm:poids:definition} et $h$ selon la méthode définie par \cite{Coupe:TMI:2008}.
 
 \subsection{Algorithme non-local complet}
 
@@ -283,6 +288,8 @@ J_{NL\textrm{-}R\textrm{-}FCM} & = J_{NL\textrm{-}FCM} + J_{NL\textrm{-}Reg} \\
 \end{array}
 \end{equation}
 Il est important de noter que les poids $\omega_{nl}(\cdot,\cdot)$ présents dans le terme d'attache aux données et le terme de régularisation sont distincts car les zones de recherche $\Omega^{R_d}_{j}$ et $\Omega^{R_r}_{j}$ ne sont pas nécessairement identiques.
+Etant donné que le biais est un artéfact lisse variant lentement le long de l'image, la zone de recherche $\Omega^{R_d}_{j}$ peut être choisi aussi grande que possible.
+Par contre, la correction du bruit nous impose un plus petit rayon pour $\Omega^{R_r}_{j}$ afin de limiter la prise en compte de patches peu similaires lors du calcul des poids.
 
 Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-local sont les suivantes : 
 \begin{enumerate}
@@ -293,7 +300,7 @@ Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-
 \end{equation}
 \item Calculer $u_{jk}$ pour tout $(j,k) \in [\![ 1,C ]\!]\times \Omega$ selon : 
 \begin{equation}
- u_{jk} = \frac{(\sum_{j' \in \Omega^{R_d}} \omega(j,j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}{\sum_{k=1}^{C}(\sum_{j' \in \Omega^{R_d}} \omega(j,j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}
+ u_{jk} = \frac{(\sum_{j' \in \Omega^{R_d}} \omega_{nl}(j, j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \omega_{nl}(j, j'') \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}{\sum_{k=1}^{C}(\sum_{j' \in \Omega^{R_d}} \omega_{nl}(j, j')\lVert \mathbf{y}_{j} - \mathbf{v}_{k} \rVert^{2} + \beta \sum_{j'' \in \Omega^{R_r}} \omega_{nl}(j, j'') \sum_{m \in M_{k}} u_{j''m}^{q})^{\frac{-1}{q-1}}}
 \end{equation}
 \item Répéter jusqu'à un minimum local de la fonction d'énergie : 
 \begin{itemize}
