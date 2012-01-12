@@ -66,15 +66,22 @@ avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$.
 
 Telle qu'elles sont définies, les moyennes non-locales ont montrés une grande efficacité dans le débruitage de zones régulières mais aussi dans des zones texturées~\cite{Salmon:2010}, ce qui est peu étonnant vu que certains travaux préliminaires ayant mené à cette approche ont été fait dans le cadre de la synthèse de textures~\cite{Criminisi:CVPR:2003}.
 % 
-% Les moyennes non-locales ainsi définies reposent sur deux hypothèses importantes~\cite{Szlam:UCLA:2008}: 
-% \begin{enumerate}
-%         \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
-%         \item des patches similaires ont des voxels centraux similaires.
-% \end{enumerate}
-% 
+
 % A rajouter dans l'état de l'art : \cite{VanDeVille:TIP:2011}.
 
 \subsection{Limites de l'approche non-locale et influence de ses paramètres}
+
+Les deux inovations permettant permettant une grande efficacité de ce filtre sont la non-localité et l'utilisation de patches.
+Deux hypothèses importantes~\cite{Szlam:UCLA:2008} sont ainsi faites concernant l'image traitée : 
+\begin{enumerate}
+        \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
+        \item des patches similaires ont des voxels centraux similaires.
+\end{enumerate}
+Cependant, il est montré que ce filtre reste moins efficace que d'autres méthodes \cite{Goossens:LNLA:2008} développées récemment comme la méthode BM3D (\emph{Bloc-Matching and 3D filtering}) \cite{Dabov:TIP:2007}.
+Cet algorithme est également fondé sur un traitement par patch, mais traite l'image en groupant les patches similaires dans des piles, ces dernières étant filtrés par des méthodes d'ondelettes.
+Les estimateurs ainsi estimés sont alors reprojetés dans le domaine des voxels et combinés de manière à obtenir une estimation de la valeur en chaque voxel.
+
+
 
 Plusieurs paramètres influent sur le comportement des moyennes non-locales. 
 Ces paramètres peuvent être numériques, tel que le paramètre de lissage $h$ ou la taille des patches $\lvert P_{j} \rvert$.
