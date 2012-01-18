@@ -2,23 +2,25 @@
 \label{chap:foetale}
 \minitoc
 
-Le but de ce chapitre est de présenter une méthode de segmentation du cortex du cerveau en maturation à partir d'IRM produites au cours de la grossesse.
+Le but de ce chapitre est de présenter une méthode de segmentation du cortex du cerveau à partir d'images IRM acquises au cours de la grossesse.
 Une nouvelle méthodologie s'avère nécessaire car les méthodes de segmentations développées pour les cas adultes ne permettent pas d'obtenir une segmentation complète des tissus cérébraux dans le cas f\oe tal.
-Plusieurs différences entre ces deux types d'IRM expliquent ce constat.
+Plusieurs différences entre ces deux types d'images IRM expliquent ce constat.
 
 Tout d'abord, les protocoles d'acquisition de ces deux cas sont assez différents, marqués notamment par un temps d'acquisition plus court dans le cas du f\oe tus, rendus nécessaires afin d'éviter des artefacts de mouvements lors de l'examen.
+Afin d'obtenir un rapport signal à bruit favorable, des voxels fortement anisotropiques sont définis (les caractéristiques des images utilisées sont décrites plus en détail en Section~\ref{subsubsec:foetus:param}), entrainant un important effet de volume partiel.
 
 Des différences sont également à signaler au niveau anatomique.
 Un cerveau adulte est constitué d'un cortex très circonvolué et d'une matière blanche complètement myélinisée.
-Dans un cas non mature, le cortex est une structure lisse où l'on peut observer la formation progressive des sillons.
-De plus, la matière blanche n'est presque pas myélinisée.
+Dans un cas non mature, le cortex est une structure se plissant progressivement (lisse à 26 semaines de grossesses et très circonvolué à 32 semaines) où l'on peut observer la formation progressive des sillons.
+Concernant la matière blanche, la myélinisation aparait autour de la vingt-cinquième semaine dans les pédoncules cérébraux inférieurs et se propage aux colliculi inférieurs, au cervelet postérieur et aux noyaux ventro-latéraux du thalamus \cite{Rutherford:2001}.
+Par la suite, aucune progression de la myélinisation n'est observée au cours de la période allant de la vingt-huitième à la quarantième semaine, la matière blanche restant principalement composée d'eau, ce qui entraine un temps de relaxation $T2$ plus long et un signal plus élevé si l'image acquise est pondérée en T2.
 Une autre différence anatomique est la présence d'une structure intermédiaire, la matrice germinale située autour des ventricules, où se forment les neurones avant leur migration vers le cortex.
 Cependant, cette structure disparaît presque complètement après 26 semaines de grossesse, mais des traces peuvent être observés après cette date.
 
-Ces différences au niveau de l'acquisition et de l'anatomie conduisent nécessairement à des changements importants du contenu des images.
-Le plus notable est l'inversion des contrastes entre la matière blanche et la matière grise par rapport à une image adulte (le cortex apparaît plus foncé que la matière blanche dans  le cas adulte et plus clair dans le cas d'un f\oe tus si l'image est pondérée en T1).
-Dans le cadre d'une classification, l'effet de volume partiel (présence de plusieurs tissus dans un même voxel conduisant à une altération du signal) propre aux IRM conduit alors à des artefacts comme la présence d'une fine bande de voxels classés comme matière blanche entre le LCR et le cortex, ce qui est anatomiquement aberrant (voir Figure~\ref{FIG:CLASSIF:FOETUS}).
-De plus, le faible temps d'acquisition des IRM f\oe tales conduit à une plus faible dissociabilité des tissus, marquée par un fort recouvrement des distributions en intensité des différents tissus, notamment le cortex et la matière blanche, tandis qu'en général, les tissus cérébraux adultes sont bien plus dissociables.
+Ces différences au niveau de l'acquisition et de l'anatomie conduisent à des changements importants du contenu des images.
+Le plus notable est l'inversion des contrastes entre la matière blanche et la matière grise par rapport à une image adulte (le cortex apparaît plus foncé que la matière blanche dans  le cas adulte pondéré en T1 et également plus foncé dans le cas d'une image IRM f\oe tale pondérée en T2) (voir en Figure~\ref{FIG:DISTRIB}).
+Dans le cadre d'une classification, l'effet de volume partiel (présence de plusieurs tissus dans un même voxel conduisant à une altération du signal) propre aux IRM conduit alors à des artefacts comme la présence d'une fine bande de voxels classés comme matière blanche entre le LCR et le cortex, ce qui n'est pas pertinent d'un point de vue anatomique (voir Figure~\ref{FIG:CLASSIF:FOETUS}).
+% De plus, le faible temps d'acquisition des IRM f\oe tales conduit à une plus faible dissociabilité des tissus, marquée par un fort recouvrement des distributions en intensité des différents tissus, notamment le cortex et la matière blanche, tandis qu'en général, les tissus cérébraux adultes sont bien plus dissociables.
 
 En section~\ref{prenatal}, nous avons constaté que les réponses apportées aux différents problèmes posés par les IRM f\oe tales dans le cadre d'une segmentation complète des tissus conduisent à utiliser soit un atlas \cite{Habas:SPIE:2009, Habas:NeuroImage:2010} (dans le cadre d'une approche probabiliste) soit une étape spécifique de régularisation de la segmentation déconnectée des données avec quelques contraintes structurelles \cite{BachCuedra:MICCAI:2009}.
 Cependant, l'utilisation d'un atlas pose le problème de sa construction et de son utilisation (notamment celui de son recalage sur le cas courant comme nous l'avons vu en section \ref{subsec:atlas}) et une étape de régularisation déconnectée des données nécessite un réglage particulièrement fin des différents paramètres contrôlant la régularisation afin de ne pas s'éloigner de la réalité de l'image.
@@ -35,10 +37,11 @@ La méthodologie conduisant à cette segmentation est décrite en section \ref{sec:
 
         \begin{center}
 % 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/Brainweb_Noise_truth.eps}}
-% 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/hist_pn9.eps}}\\
-	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/Truth_IBSR_12.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/IBSR_12.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/IBSR_12_Truth.eps}}
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/hist_IBSR_12.eps}}\\
-	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/TAB_Ar_Coronal_truth.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/TAB_Ar_01_Coronal.eps}}
+	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/TAB_Ar_01_Coronal_Truth.eps}}
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/hist_foetus.eps}}
         \end{center}
 
@@ -277,6 +280,7 @@ La deuxième est celle de ~\cite{Rousseau:MIA:2010}, incluant une approche de sup
 \subsection{Images non reconstruites}
 
 \subsubsection{Caractéristiques et paramètres}
+\label{subsubsec:foetus:param}
 
 Les expériences sont menées sur huit cas acquis avec un imageur IRM de 1.5 Tesla (Magnetom Avento, Siemens, Germany Erlangen) utilisant des séquences d'écho de spins ultra-rapides.
 Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiales, coronales et sagittales.
@@ -435,7 +439,20 @@ Les coefficients Dice moyens pour chacune des trois orientations sont : 60.26 po
 Nous pouvons constater que les résultats sont globalement similaires pour une segmentation d'images acquises selon les directions axiale et coronale, mais ils illustrent une mauvaise adéquation de la méthode avec la direction sagittale.
 % Ce constat est cependant peu surprenant, étant donné l'apparence des structures cérébrales vues dans une direction sagittale.
 % La zone du corps caleux est particulièrement inadaptée au modèle développé, tandis que les directions axiales et coronales sont adaptées au modèles.
-Les valeurs des écarts-types montrent une grande variabilité des résultats de la segmentation, qui peut s'expliquer largement par la qualité de l'image traitée (présence d'un bruit plus ou moins important, cortex plus ou moins net, présence d'un hypersignal au sein de la matière blanche, \ldots).
+Les valeurs des écarts-types montrent une grande variabilité des résultats de la segmentation, qui peut s'expliquer largement par la qualité de l'image traitée (présence d'un bruit plus ou moins important, cortex plus ou moins net, présence d'un hypersignal au sein de la matière blanche, \ldots) (voir Figure~\ref{FIG:CORTEX:UNBUILD:PEDPR}).
+
+\begin{figure*}[!t]
+\centering
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/PED_Pr_Axial_Grey.eps}}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/PED_Pr_Axial_Seg_01.eps}}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=40mm]{eps/chapitre4/PED_Pr_Axial_Seg_02.eps}}
+\caption[Illustration de l'effet d'un hypersignal dans la matière blanche sur la segmentation]{
+\emph{Illustration de l'effet d'un hypersignal dans la matière blanche sur la segmentation. (a) Image IRM à niveau de gris. (b) Séparation du LCR interne et du LCR externe. Légende : LCR externe (rouge), cerveau (vert), LCR interne (bleu). (c) Segmentation du cortex. Légende : LCR (rouge), cortex (vert), matière blanche et noyaux gris (bleu).}
+\label{FIG:CORTEX:UNBUILD:PEDPR}}
+% \vspace{-6mm}
+\end{figure*}
 
 Une plus grande dispersion est observée dans la direction sagittale, confirmant la plus faible adéquation du modèle à cette direction, tandis que les résultats obtenus dans les directions axiales et coronales présentent une dispersion similaire.
 Cependant, la relative faible valeur du coefficient Dice incite à une observation plus précise des résultats.
@@ -475,10 +492,33 @@ Les coupes supérieures permettent de distinguer nettement les ventricules du LCR
 
 Dans le cas des images orientées dans la direction coronale, l'observation des résultats coupe à coupe confirme la bonne adaptation du modèle à cette orientation.
 En effet, dans la plupart des coupes, les ventricules sont séparés du LCR externe.
-Cependant, une ambiguïté est introduite là où le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendue de ce dernier et donc à définir une zone d'intérêt trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral.
+Cependant, une ambiguïté est introduite là où le quatrième ventricule rejoint le LCR externe, conduisant à sur-évaluer l'étendue de ce dernier et donc à définir une zone d'intérêt trop large, provoquant l'apparition de faux positifs dans la segmentation, surtout dans la région autour du cervelet et du tronc cérébral (voir Figure~\ref{FIG:CORTEX:UNBUILD:CORO}).
 % Cela s'explique par la non-adaptation du modèle à cette vue particulière, notamment concernant la zone entre les deux hémisphères cérébraux.
 
+\begin{figure*}[!t]
+\centering
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Grey_01.eps}}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Grey_02.eps}}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Grey_03.eps}}
+\hspace{0.1mm}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Grey_04.eps}}\\
 
+% \vspace{-3mm}
+
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Seg_01.eps}}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Seg_02.eps}}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Seg_03.eps}}
+\subfigure[]{\includegraphics[height=37mm]{eps/chapitre4/TAB_Ar_01_Coronal_Seg_04.eps}}\\
+
+% \vspace{-5mm}
+
+\caption[Segmentation de quatres coupes coronales consécutives d'une image IRM non-reconstruite]{
+\emph{Segmentation de quatres coupes coronales consécutives d'une image IRM non-reconstruite. Il est possible d'observer sur ces coupes la connexion entre le LCR externe et le LCR interne et l'effet que produit cette connexion lors du processus de segmentation. Par exemple, le résultat de la segmentation (images (f) et (g)) montrent que le ventricule gauche a été classé comme LCR externe, entrainant la présence d'une mince couche de cortex autour de lui. Première ligne : images à niveau de gris. Deuxième ligne : segmentation. Légende : LCR (rouge), cortex (vert), matière blanche et noyaux gris (bleu).}
+\label{FIG:CORTEX:UNBUILD:CORO}}
+\vspace{-6mm}
+\end{figure*}
 
 \paragraph{Evaluation croisée entre experts et segmentation automatique}
 
@@ -637,7 +677,6 @@ $Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61 &  75.12 $\pm$ 1.93\\
 Ces résultats préliminaires confirment la possibilité de segmenter le cortex de manière fiable malgré l'absence d'\emph{a priori} spatiaux issus d'un atlas ou d'une étape de régularisation spécifique. 
 Cependant, ils nécessitent une segmentation préalable du volume intracrânien, du cervelet et du tronc cérébral.
 La nécessité d'utiliser une contrainte géométrique (revenant à dire que le cortex est forcément connexe au LCR) pour tenir compte de l'effet de volume partiel indique qu'il est nécessaire d'introduire une information anatomique \emph{a priori} afin de guider le processus de segmentation.
-Un prochaine étape pourrait être une détection des résidus de matrice germinale, ou l'affinement de la fontière entre le cortex et le LCR, ou entre le cortex et la matière blanche.
 
 % Cependant, comme précisé en section \ref{pipe:cortex}, cette méthodologie s'appuie sur une segmentation préalable du tronc cérébrale et du cervelet, ainsi qu'une extraction du volume intracrânien.
 % Une méthode d'extraction automatique du volume intracrânien, basée sur des opérateurs de morphologie mathématique, existe~\cite{Anquez:ISBI:2009} et la séparation des deux hémisphères et du cervelet est une opération déjà réalisée dans des cas adultes, qui pourrait être adaptée aux images reconstruites en IRM f\oe tale.
@@ -646,7 +685,7 @@ Un prochaine étape pourrait être une détection des résidus de matrice germinale,
 
 \begin{figure}[!tb]
 \centering
-\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR.eps}} \label{HR}
+\subfigure[]{\reflectbox{\includegraphics[angle=90, height=39mm]{eps/chapitre4/TAB_Ar_02_HR.eps}}} \label{HR}
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR.eps} \label{SR}}
 
 \caption[Comparaison entre une image reconstruite selon deux procédés de reconstruction différents]{
@@ -663,8 +702,8 @@ Nous présentons une analyse qualitative des résultats ainsi qu'une étude succinc
 
 \begin{figure}[!tb]
 \centering
-\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_Original.eps}} \label{HR:Original}
-\subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_HR_Seg.eps}} \label{HR:Seg} \\
+\subfigure[]{\reflectbox{\includegraphics[angle=270, totalheight=39mm]{eps/chapitre4/TAB_Ar_02_HR_Original.eps}}} \label{HR:Original}
+\subfigure[]{\reflectbox{\includegraphics[angle=270, totalheight=39mm]{eps/chapitre4/TAB_Ar_02_HR_Seg.eps}}} \label{HR:Seg} \\
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_Original.eps}} \label{SR:Original}
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_SR_Seg.eps}} \label{SR:Seg}
 
@@ -695,7 +734,7 @@ En effet, le cortex bénéficiant d'un meilleur contraste par rapport à la matière
 
 Cependant l'absence de vérité-terrain à l'heure actuelle sur ces images ne permet pas d'évaluer quantitativement le gain réalisé grâce à l'emploi de la super-résolution.
 Cependant, une illustration est donnée par la représentation en 3D de la surface du cortex et de la surface de la matière blanche (voir Figure~\ref{FIG:COMPARE:HR:SR:3D}) dans le cas d'une image reconstruite selon les méthode de \cite{Rousseau:AR:2006} et \cite{Rousseau:MIA:2010}.
-Cet exemple montre que la super-résolution permet à l'algorithme de segmentation de mieux détecter les limites entre la matière blanche et la cortex et ainsi de reconstruire une frontière plus nette entre ces deux tissus et donc d'obtenir des résultats qui devraient permettre à terme de conduire des études sur l'épaisseur du cortex au cours de la grossesse.
+Cet exemple montre que la super-résolution permet à l'algorithme de segmentation de mieux détecter les limites entre la matière blanche et la cortex. 
 
 \subsubsection{Apparition des sillons corticaux au cours du temps}
 
@@ -714,7 +753,7 @@ Cet exemple montre que la super-résolution permet à l'algorithme de segmentation
 \end{figure}
 
 % La méthode de segmentation présentée dans ce chapitre donnant de bons résultats concernant l'évaluation de la surface du cortex, la base de données disponible permet de réaliser une observation de l'apparition des sillons corticaux au cours du temps.
-La méthode de segmentation présentée au cours de ce chapitre permettant d'estimer la surface du cortex, il est alors possible de vérifier s'il est possible d'observer l'apparition des sillons corticaux à partir d'une reconstruction 3D de la segmentation du cortex.
+La méthode de segmentation présentée au cours de ce chapitre permettant d'estimer la surface du cortex, il est alors possible de suivre l'évolution des sillons corticaux au cours des dernières semaines de grossesse.
 Cinq cas, acquis à respectivement 26, 27, 28, 30 et 32 semaines sont présentés afin d'illustrer cette évolution.
 
 La Figure~\ref{DER:3D} montre le cortex tel qu'il apparaît à 26 semaines d'aménorrhée.
@@ -727,22 +766,27 @@ Au cours des semaines suivantes, le cerveau continue de se complexifier, ce qui 
 On peut observer cependant que la Figure~\ref{AYD:3D} semble présenter un retard dans son développement, notamment vis-à-vis de la Figure~\ref{TAB01:3D}, qui à une semaine d'aménorrhée de moins présente une giration plus avancée.
 Néanmoins, l'observation d'un tel écart dans le développement est tout à fait normal.
 En effet, il est courant d'observer un écart de deux semaines entre l'apparition d'un sillon chez certains patients et sa présence dans 75\% des cas \cite{Glenn:SePer:2009}.
-De manière générale, l'observation de l'apparition des sillons est conforme aux observations médicales, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
+De manière générale, l'observation de l'apparition des sillons est conforme aux observations médicales. 
 
 \section{Conclusion}
+
+% Un prochaine étape pourrait être une détection des résidus de matrice germinale, ou l'affinement de la fontière entre le cortex et le LCR, ou entre le cortex et la matière blanche.
+% et ainsi de reconstruire une frontière plus nette entre ces deux tissus et donc d'obtenir des résultats qui devraient permettre à terme de conduire des études sur l'épaisseur du cortex au cours de la grossesse.
+
 
 Ce chapitre a présenté une méthode de segmentation du cortex en IRM f\oe tale.
 Le principe est d'utiliser des \emph{a priori} anatomiques génériques sous forme de contraintes géométriques et de s'appuyer exclusivement sur les données de l'images pour obtenir la segmentation finale.
 Les résultats obtenus montrent la pertinence de cette approche, notamment dans le cadre de cas bénéficiant de la reconstruction d'un volume 3D à partir des acquisitions originales.
+Ils ouvrent la voie à des étapes additionnelles pour la segmentation des tissus cérébraux telles que la détection des résidus de la matrice germinale, l'affinement de la frontière entre le cortex et le LCR ou de celle entre le cortex et la matière blanche.
+La meilleure netteté de la frontière entre le cortex et la matière blanche dans le cas d'images reconstruites par la méthode de super-résolution permet d'envisager l'étude de l'évolution de l'épaisseur corticale au cours de la grossesse.
 
-Cependant, plusieurs limitations ne permettent pas d'utiliser cet algorithme en routine clinique ou pour des études de population.
-En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élevés pour que la méthodologie présentée dans ce manuscrit puisse être utilisée de manière systématique.
-Les causes en sont en partie les contraintes géométriques du modèle, qui malgré leur apport dans la correction du volume partiel, introduisent des faux positifs dans la détection du cortex dans d'autres zones du cerveau.
-Néanmoins, ce modèle semble suffisamment robuste pour pouvoir observer la surface du cortex ainsi que la surface de la matière blanche à la frontière du cortex et permet de suivre la formation des sillons corticaux.
-
-Cependant, le processus nécessite d'être fiabilisé en étant mieux guidé \emph{via} l'introduction d' \emph{a priori} supplémentaires.
-Il pourrait par exemple être intéressant de précisier qu'il n'y a pas de cortex au dessus de tronc cérébral, ni autour des ventricules, permettant ainsi un relachement des contraintes géométriques autour de ces structures.
+Cependant, les contraintes géométriques du modèle, malgré leur apport dans la correction du volume partiel, introduisent des faux positifs dans la détection du cortex, notamment autour du tronc cérébral.
+Le processus nécessite donc d'être fiabilisé en étant mieux guidé \emph{via} l'introduction d' \emph{a priori} supplémentaires.
+Il pourrait par exemple être intéressant de préciser qu'il n'y a pas de cortex au dessus de tronc cérébral, ni autour des ventricules, permettant ainsi un relachement des contraintes géométriques autour de ces structures.
 Des méthodes formalisant les relations spatiales entre différents objets et exprimant leur position relative de façon floue existent~\cite{Bloch:IVC:2005} et semblent tout indiquées pour être introduites dans le processus de segmentation.
+% plusieurs limitations ne permettent pas d'utiliser cet algorithme en routine clinique ou pour des études de population.
+% En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élevés pour que la méthodologie présentée dans ce manuscrit puisse être utilisée de manière systématique.
+Néanmoins, ce modèle semble suffisamment robuste pour pouvoir observer la surface du cortex ainsi que la surface de la matière blanche à la frontière du cortex et permet de suivre la formation des sillons corticaux, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
 
 De plus, comme dit précédemment, cette méthodologie s'appuie sur une extraction préalable du volume intracrânien et sur la segmentation du cervelet et du tronc cérébral.
 La définition d'un outil d'extraction de ces structures est donc indispensable dans la perspective d'obtenir un processus de segmentation complet des structures cérébrales.
