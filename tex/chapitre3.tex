@@ -69,18 +69,53 @@ Telle qu'elles sont définies, les moyennes non-locales ont montrés une grande ef
 
 % A rajouter dans l'état de l'art : \cite{VanDeVille:TIP:2011}.
 
+\subsection{Interprétation des moyennes non-locales}
+
+Plusieurs points de vue peuvent être adoptés pour l'interprétation des moyennes-non-locales.
+Un premier lien a été établi avec les variations totales, où le débruitage d'une image consiste en la minimisation d'une fonctionnelle constituée de la somme d'un terme d'attache aux données (différence entre l'image estimée et l'image originale) et d'un terme de régularisation, pénalisant le bruit à haute-fréquence.
+Des termes non-locaux sont introduits dans cette fonctionnelle afin de favoriser les similarité de l'image \cite{Kindermann:MMS:2005, Gilboa:MMS:2008, Azzabou:CVPR:2007}.
+Dans ce cadre, les moyennes non-locales sont vu comme une étape d'une descente de gradient pour la minimisation de la fonctionelle .
+
+Les moyennes non-locales ont également été étudiées directement depuis l'espace des patches.
+Les travaux de \cite{Tschumperle:ICIP:2009} les interprètent comme une étape d'une équation de chaleur dans l'espace des patches et établissent des liens avec les algorithmes classiques de diffusion.
+Ce point de vue est soutenu par l'article de \cite{Peyre:CVIU:2009} qui considère qu'une image repose sur une variété dans l'espace des patches, les moyennes non-locales consistant en une diffusion dans cette variété.
+Enfin, un lien avec les équations de Fokker-Planck est mis en évidence par \cite{Singer:SIAMJIS:2009}, rapprochant les moyennes non-locales des processus de Markov.
+
+D'autres auteurs adoptent un point de vue statistiques pour interpréter les moyennes non-locales.
+Par exemple, \cite{Goossens:LNLA:2008} démontre un lien avec les estimateurs robustes (ou plutôt, la première itération d'un algorithme d'optimisation) et pose la question de l'utilisation du noyau gaussien si le bruit ne l'est pas.
+Par ailleurs, \cite{Deledalle:TIP:2009} propose un algorithme itératif fondé sur l'estimation du maximum de vraisemblance permettant de prendre en compte différents types de bruit.
+Enfin, \cite{Salmon:ICIP:2009} considère les moyennes non-locales comme une agrégation bayésienne d'estimateurs en chaque patches.
+
+L'article de \cite{Katkovnik:IJCV:2010} assimile la première version des moyennes non-locales à une régression linéaire de niveau $0$ et l'étend à des niveaux supérieurs.
+De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tel que le filtre bilatéral, les filtres bayésiens,\ldots).
+Des techniques de régularisation de graphes discrètes, (voir les travaux de \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008}) permettent de faire le lien entre ces différentes techniques.
+Ces méthodes de régularisation peuvent être vues comme des versions discrètes d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)} \cite{Mrazek:2006}. 
+Ici, le terme \emph{non-local} est utilisé car des interactions avec des voxels plus éloignés que le voisinage immédiat sont prises en compte.
+Ce formalisme définit une forme générale permettant l'unification de nombreux filtres existants par la somme d'un terme d'attache aux données et d'un terme de lissage.
+Il est étendu à la prise en compte des patches par l'article de \cite{Katkovnik:IJCV:2010}, définissant ainsi le \emph{Generalized NDS (GNDS)}, dont le NDS est un cas particulier.
+
+
 \subsection{Limites de l'approche non-locale et influence de ses paramètres}
 
-Les deux inovations permettant permettant une grande efficacité de ce filtre sont la non-localité et l'utilisation de patches.
+Les deux inovations permettant une grande efficacité de ce filtre sont la non-localité et l'utilisation de patches.
 Deux hypothèses importantes~\cite{Szlam:UCLA:2008} sont ainsi faites concernant l'image traitée : 
 \begin{enumerate}
         \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
         \item des patches similaires ont des voxels centraux similaires.
 \end{enumerate}
-Cependant, il est montré que ce filtre reste moins efficace que d'autres méthodes \cite{Goossens:LNLA:2008} développées récemment comme la méthode BM3D (\emph{Bloc-Matching and 3D filtering}) \cite{Dabov:TIP:2007}.
-Cet algorithme est également fondé sur un traitement par patch, mais traite l'image en groupant les patches similaires dans des piles, ces dernières étant filtrés par des méthodes d'ondelettes.
-Les estimateurs ainsi estimés sont alors reprojetés dans le domaine des voxels et combinés de manière à obtenir une estimation de la valeur en chaque voxel.
 
+Il est cependant démontré \cite{Duval:2011} que ces hypothèses ont plusieurs conséquences lors du débruitage des images : 
+\begin{itemize}
+ \item malgré l'importance de la similarité, les images périodiques présentent des défaults lors du débruitage,
+ \item la zone de recherche a un impact sur la qualité visuelle du débruitage,
+ \item un grand patch tend à flouter l'image,
+ \item une perte de contraste dépendant du niveau d'occurence de chaque patch est observée,
+ \item moins les détails sont contrastés, plus ils sont dégradés.
+\end{itemize}
+
+% Cependant, il est montré que ce filtre reste moins efficace que d'autres méthodes \cite{Goossens:LNLA:2008} développées récemment comme la méthode BM3D (\emph{Bloc-Matching and 3D filtering}) \cite{Dabov:TIP:2007}.
+% Cet algorithme est également fondé sur un traitement par patch, mais traite l'image en groupant les patches similaires dans des piles, ces dernières étant filtrés par des méthodes d'ondelettes.
+% Les estimateurs ainsi estimés sont alors reprojetés dans le domaine des voxels et combinés de manière à obtenir une estimation de la valeur en chaque voxel.
 
 
 Plusieurs paramètres influent sur le comportement des moyennes non-locales. 
@@ -112,7 +147,7 @@ La relation linéaire entre $h$ et $\sigma$ est mise en évidence et ses paramètre
 \end{figure}
 
 D'autres articles ont étudié l'impact de la fonction noyau sur le débruitage. 
-L'article de Buades \cite{Buades:MMS:2005} utilise un noyau de type gaussien $K(x) = e^{-x}$, qui est encore largement utilisé dans la littérature.
+L'article de Buades \cite{Buades:MMS:2005} utilise un noyau de type gaussien $K(x) = e^{-x^2}$, qui est encore largement utilisé dans la littérature.
 Cependant, des travaux récents \cite{Goossens:LNLA:2008, Salmon:2010} ont montré qu'un noyau à support compact \cite{Remaki:TIP:2000} est préférable.
 En effet, le noyau gaussien a l'inconvénient de donner une valeur proche de zéro, mais non nulle, aux voxels peu similaires au voxel central, ce qui tend à perturber l'efficacité du débruitage.
 Certains travaux tronquent le noyau gaussien pour éviter ce problème et pour accélérer les traitements \cite{Coupe:TMI:2008}.
@@ -135,6 +170,7 @@ De plus, le bruit peut ne pas être uniforme sur l'image et la taille du patch do
 La nature de l'image à débruiter influe également sur l'efficacité de ce paramètre, qui est donc à fixer en fonction de l'image.
 Notons l'article de \cite{Manjon:JMRI:2010} introduisant des patches adaptatifs de manière à débruiter une IRM présentant un bruit variable.
 L'article de \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
+
 FIXME : Ajouter \cite{Deledalle:JMIV:2011} pour les formes de patches adaptatives.
 % Une technique de patches adaptatifs a été implémentée par \cite{Kervrann:TIP:2006} dans l'
 
@@ -142,14 +178,6 @@ FIXME : Ajouter \cite{Deledalle:JMIV:2011} pour les formes de patches adaptative
 % Certains ont accéléré les traitements en partant du principe qu'un voxel appartient à plusieurs patches différents \cite{Coupe:TMI:2008}, la valeur finale du voxel étant récupérée par un moyenne sur l'ensemble des patches.
 
 \subsection{Usage des moyennes non-locales}
-
-\`A un niveau plus théorique, l'article de \cite{Katkovnik:IJCV:2010} assimile la première version des moyennes non-locales à une régression linéaire de niveau $0$ et l'étend à des niveaux supérieurs.
-De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tel que le filtre bilatéral, les filtres bayésiens,\ldots).
-Des techniques de régularisation de graphes discrètes, (voir les travaux de \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008}) permettent de faire le lien entre ces différentes techniques.
-Ces méthodes de régularisation peuvent être vues comme des versions discrètes d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)} \cite{Mrazek:2006}. 
-Ici, le terme \emph{non-local} est utilisé car des interactions avec des voxels plus éloignés que le voisinage immédiat sont prises en compte.
-Ce formalisme définit une forme générale permettant l'unification de nombreux filtres existants par la somme d'un terme d'attache aux données et d'un terme de lissage.
-Il est étendu à la prise en compte des patches par l'article de \cite{Katkovnik:IJCV:2010}, définissant ainsi le \emph{Generalized NDS (GNDS)}, dont le NDS est un cas particulier.
 
 Depuis son apparition en 2005, les moyennes non-locales ont été utilisées dans d'autres domaines que le débruitage d'images.
 Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de l'apport des moyennes non-locales.
