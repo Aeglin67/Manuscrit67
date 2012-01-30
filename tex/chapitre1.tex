@@ -6,7 +6,7 @@ Ce chapitre présente le principe de l'IRM cérébrale et décrit l'anatomie d'un ce
 
 %------------------------------------------------------------------------IRM----------------------------------------------------------------------------------------
 
-\section{L'imagerie par résonance magnétique}
+\section{Imagerie par résonance magnétique}
 \label{intro:irm}
 
 L'imagerie par résonance magnétique (IRM) est une technique fournissant des images tridimensionnelles (en coupes ou en 3D) de façon non invasive en exploitant le phénomène physique de la résonance nucléaire.
@@ -61,7 +61,7 @@ C'est ce signal qui doit être traité après transformée de Fourier, selon sa fréq
 
 \subsection{Formation des images et contrastes}
 
-\subsubsection{Le cas général}
+\subsubsection{Cas général}
 
 Les applications médicales courantes se basent sur l'excitation du proton d'hydrogène des molécules d'eau présentes en grande quantité dans le corps humain.
 L'obtention d'une image en 2D ou 3D grâce à l'IRM se fait en différenciant les différentes parties d'une zone considérée grâce à des gradients directionnels appliqués dans les trois directions de l'espace par des bobines de gradients.
@@ -77,7 +77,7 @@ Différentes séquences ont été définies afin d'obtenir une image à partir de l'IR
 Ces séquences représentent différentes combinaisons d'ondes RF et d'impulsions de gradients.
 Chacune d'entre elles présente ses avantages et ses inconvénients en terme de temps d'acquisition et d'introduction d'artefacts (par exemple hypersignal des graisses, baisse du rapport signal à bruit, \ldots{}).
 
-\subsubsection{Le cas spécifique des f\oe tus}
+\subsubsection{Cas spécifique des f\oe tus}
 
 \begin{figure}[!t]
         \begin{center}
@@ -115,7 +115,7 @@ Elle a notamment été utilisée pour réaliser des études de population, telle qu'u
 Cette section décrit les différents artefacts rencontrés lors de l'exploitation des images issus d'une IRM.
 Ils peuvent cependant être corrigé en post-traitement et la connaissance de leur origine permet de mieux les appréhender.
 
-\subsubsection{Le bruit}
+\subsubsection{Bruit}
 
 L'IRM étant un dispositif de mesure physique, le signal capté est entaché de bruit provenant aussi bien du patient (agitation thermique des protons à l'origine d'émissions parasites) que de la chaîne de mesure (bruit \og{} électronique \fg) (voir Figure~\ref{FIG:INTRO:ARTEFACTS:NOISE}).
 Le rapport signal à bruit (SNR) caractérise l'amplitude du bruit par rapport à l'amplitude du signal.
@@ -127,7 +127,7 @@ Les méthodes de classification des voxels en fonction de leur intensité prennent
 % \cite{Sijbers:TMI:1998} : article précisant que le bruit rencontré dans les IRM est de type ricien et peut être approximé par une distribution gaussienne avec un haut SNR.
 
 
-\subsubsection{Le biais en intensité}
+\subsubsection{Biais en intensité}
 
 Cet artefact se manifeste par une hétérogénéité en intensité pour un même tissu cérébral (voir Figure~\ref{FIG:INTRO:ARTEFACTS:BIAS}).
 Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu en fonction de sa localisation.
@@ -138,7 +138,7 @@ La plupart de ces méthodes soit, l'éliminent par un pré-traitement, soit le pren
 
 Les conséquences du biais sur les méthodes de traitement des IRM (en particulier les méthodes de segmentation) sont explorées plus en détails en section~\ref{subsec:art:bias}. 
 
-\subsubsection{Le volume partiel}
+\subsubsection{Volume partiel}
 
 Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
 Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}).
@@ -157,7 +157,7 @@ Dans le cadre de certaines méthodes de classification des voxels en fonction de 
 \end{center}
 \end{figure}
 
-\subsubsection{Autres}
+\subsubsection{Autres artéfacts}
 
 % Nous pouvons encore signaler plusieurs types d'artefacts.
 Les artefacts de mouvement (pouvant être très problématiques dans le cas de l'IRM f\oe tale) sont dus aux mouvements du f\oe tus pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
@@ -223,7 +223,7 @@ Une importante variabilité par rapport à shéma peut alors apparaitre comme un ma
 
 \subsection{Maturation cérébrale}
 
-\subsubsection{La mise en place du système nerveux}
+\subsubsection{Développement du système nerveux}
 
 \begin{figure}[!t]
 \begin{center}
@@ -263,7 +263,7 @@ Puis, l'ensemble des neurones va migrer le long de cellules gliales radiales pou
 Cette migration se poursuit jusqu'à 20 semaines et peut s'étendre jusqu'à 24 semaines.
 
 
-\subsubsection{L'évolution du cortex cérébral}
+\subsubsection{\'Evolution du cortex cérébral}
 
 \begin{figure}[!t]
 \begin{center}
@@ -316,7 +316,7 @@ De manière général, on observe un décalage de deux semaines entre la première ap
 On peut observer que la plupart des sillons et gyri sont observables entre 26 et 28 semaines d'aménorrhée.
 Le dernier trimestre de la grossesse est alors marqué par un accroissement du volume cérébral (le cerveau passe de 60 ml à 160 ml), un approfondissement des sillons déjà formés et le développement de sillons secondaires, voir même tertiaires entre 40 et 44 semaines de grossesse.
 
-\subsubsection{L'observation du cortex grâce à l'IRM}
+\subsubsection{Observation du cortex grâce à l'IRM}
 
 \begin{table}[!t]
 \begin{center}

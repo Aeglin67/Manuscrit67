@@ -1,4 +1,4 @@
-\chapter[Contribution à l'algorithme FCM]{Contribution à l'algorithme FCM et application à la segmentation cérébrale}
+\chapter[Contribution à l'algorithme des C-moyennes floues]{Contribution à l'algorithme des C-moyennes floues et application à la segmentation cérébrale}
 \label{chap:nlfcm}
 \minitoc
 
@@ -226,7 +226,7 @@ L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de si
 
 % Nous montrerons que la correction du bruit présent dans une image ne nécessite pas de définir une telle distance, mais qu'il suffit d'incorporer les moyennes non-locales au sein du terme de régularisation de FCM pour obtenir une correction efficace.
 
-\section{FCM non-local}
+\section{C-moyennes floues non-local}
 \label{sec:nlfcm}
 
 Nous présentons dans cette section une extension de l'algorithme FCM incluant les moyennes non-locales au sein du terme d'attache aux données de manière à améliorer la prise en compte du biais en intensité et au sein du terme de régularisation de manière à améliorer celle du bruit.
@@ -484,7 +484,7 @@ Nous pouvons observer que l'algorithme FCM non local obtient les meilleurs score
 Elle apporte une prise en compte du biais en intensité à l'algorithme FCM sans en nécessiter une évaluation explicite.
 
 
-\subsubsection{Evaluation du terme de régularisation}
+\subsubsection{\'Evaluation du terme de régularisation}
 \label{sec:brainweb:nlReg}
 
 L'algorithme NL-Reg est initialisé par un algorithme des K-Moyennes de manière à obtenir une première estimation de la distribution en intensité et les cartes de probabilité sont initialisées à $\frac{1}{C}$ ($C$ étant le nombre de classes recherchées).
