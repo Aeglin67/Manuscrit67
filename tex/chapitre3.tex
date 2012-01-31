@@ -3,15 +3,15 @@
 \minitoc
 
 Dans ce chapitre, une nouvelle méthode de segmentation basée sur FCM est définie.
-Elle inclue l'approche des moyennes non-locales (en anglais, \emph{non-local means}) proposée en 2005.
-Issue de travaux dans le cadre du débruitage d'images, cette dernière a été spécifiée de manière indépendante par \cite{Buades:MMS:2005}, et \cite{Awate:PAMI:2006}.
-L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer la \og vrai \fg{} valeur en chaque voxel.
-La nécessité d'avoir une évaluation robuste de ces similarités entre voxels a conduit à prendre en compte leur proche voisinage, conduisant à la définition de patches.
+Elle inclut l'approche des moyennes non-locales (en anglais, \emph{non-local means}) proposée en 2005.
+Issue de travaux dans le cadre du débruitage d'images, cette dernière a été spécifiée de manière indépendante par \cite{Buades:MMS:2005} et \cite{Awate:PAMI:2006}.
+L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer la \og vraie \fg{} valeur de l'intensité en chaque voxel.
+La nécessité d'avoir une évaluation robuste de ces similarités entre voxels a nécessitée la prise en compte leur proche voisinage, conduisant à la définition d'une notion de patches.
 
 L'utilisation de la redondance de l'information de l'image est une option peu explorée en segmentation cérébrale.
 Comme nous l'avons vu précédemment, de nombreuses méthodes utilisent une modélisation spécifique d'un champ de biais pour la correction de l'inhomogénéité de l'intensité ou une approche prenant en compte la classification des voxels environnants pour la prise en compte du bruit.
-Certaines méthodologies de types FCM ont inclu une prise en compte de la redondance de l'information en favorisant les voxels dont l'intensité et les coordonées spatiales sont les plus proches de celles du voxel courant (voir en Section~\ref{subsubsec:fcm:ponderation}).
-Cependant, les travaux sur les méthodes de débruitage par patches (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
+Certaines méthodologies de types FCM ont inclu une prise en compte de la redondance de l'information en favorisant les voxels dont l'intensité et les coordonnées spatiales sont les plus proches de celles du voxel courant (voir en Section~\ref{subsubsec:fcm:ponderation}).
+Toutefois, les travaux sur les méthodes de débruitage par patches (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
 Un terme de régularisation non-local intègre don une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
 Concernant la prise en compte du biais, une méthodologie de type FCM a introduit une évaluation locale des centroïdes afin de ne pas avoir à évaluer le champ de biais directement (voir en Section~\ref{subsec:fcm:bias}).
@@ -238,19 +238,19 @@ Nous présentons dans cette section une extension de l'algorithme FCM incluant le
 
 Comme précisé dans la section \ref{subsec:fcm:def}, l'algorithme FCM considère que les centroïdes des classes sont invariants au sein de l'espace de l'image, le rendant sensible à l'inhomogénéité des intensités.
 Nous avons vu à la section~\ref{subsec:fcm:bias} qu'il est alors nécessaire de définir un modèle du biais explicite de manière à en prévenir les effets sur la segmentation.
-Cependant, de nombreuses hypothèses doivent être faites pour pouvoir estimer ce biais, notamment sur sa nature multiplicative, la nature lente des variations d'intensité (valable que pour les inhomogénéités dues à l'imageur), la modélisation du biais lui même (polynomiales, B-Splines,\ldots{}) ou encore la définition d'un champ de biais unique ou d'un champ par tissu.
+Cependant, de nombreuses hypothèses doivent être faites pour pouvoir estimer ce biais, notamment sur sa nature multiplicative, la nature lente des variations d'intensité (valable que pour les inhomogénéités dues à l'imageur), la modélisation du biais lui-même (polynomiale, B-Splines, \emph{etc.}) ou encore la définition d'un champ de biais unique ou d'un champ par tissu.
 
 \begin{figure}[!t]
 \begin{center}
 \subfigure[]{\includegraphics[height=42mm]{eps/chapitre3/BigBox.eps}\label{fig:nlm:seglocale:a}}
 \subfigure[]{\includegraphics[height=42mm]{eps/chapitre3/LittleBox.eps}\label{fig:nlm:seglocale:b}}
 \end{center}
-\caption[Modélisation locale pour la segmentation]{\emph{Modélisation locale de l'image. (a) Deux sous-volumes distincts présentent deux histogrammes différents conduisant à classer une même intensité (marquée par la barre verticale) dans deux classes différentes. (b) Illustration de la mauvaise estimation issue de la définition de sous-volumes trop petits. Images issues de~\cite{Scherrer:2008}}}
+\caption[Modélisation locale pour la segmentation]{\emph{Modélisation locale de l'image. (a) Deux sous-volumes distincts présentent deux histogrammes différents conduisant à classer une même intensité (marquée par la barre verticale) dans deux classes différentes. (b) Illustration de la mauvaise estimation issue de la définition de sous-volumes trop petits. Images issues de~\cite{Scherrer:2008}.}}
 \label{fig:nlm:seglocale}
 \end{figure}
 
-Une approche locale de la segmentation est une alternative à explorer car elle permet une estimation des modèles d'intensité dans des sous-volumes du volume complet sans avoir recours à une estimation explicite du biais, évitant de poser les nombreuses hypothèses citées précédemment.
-Une même intensité peut donc être étiquettée différemment selon l'estimation locale du modèle (voir en Figure~\ref{fig:nlm:seglocale:a}).
+Une approche locale de la segmentation constitue une alternative à explorer car elle permet une estimation des modèles d'intensité dans des sous-volumes du volume complet sans avoir recours à une estimation explicite du biais, évitant de poser les nombreuses hypothèses citées précédemment.
+Une même intensité peut donc être étiquetée différemment selon l'estimation locale du modèle (voir en Figure~\ref{fig:nlm:seglocale:a}).
 La taille des sous-volumes est cependant cruciale car un sous-volume trop important sera sensible à l'inhomogénéité tandis qu'un volume trop réduit risque de conduire à une mauvaise évaluation du modèle d'intensité local (voir en Figure~\ref{fig:nlm:seglocale:b}). 
 Dans le cas de l'IRM cérébrale, une fenêtre trop petite peut, par exemple, conduire à une mauvaise évaluation dans des zones de grande concentration de matière blanche.
 En effet, trop peu de voxels représentant la matière grise ou le LCR (voir aucun) seraient alors pris en compte pour permettre une estimation fiable des centroïdes des classes représentant ces tissus. 
@@ -265,7 +265,7 @@ Des approches par recouvrement de sous-volumes ont été définies comme celle de \
 De même, \cite{Scherrer:TMI:2009} introduit des modèles markoviens locaux par la division de l'image en sous-volumes et estime ces modèles en coopération avec les modèles voisins afin d'assurer la cohérence de l'ensemble de la segmentation.
 Cependant, ces deux approches peuvent être considérées comme un déplacement du problème de l'évaluation d'un modèle global vers celui de la fusion de plusieurs sous-modèles.
 
-A notre connaissance, aucune méthode ne permet la prise en compte des modèles voisins sans cette étape de fusion.
+\`A notre connaissance, aucune méthode ne permet la prise en compte des modèles voisins sans cette étape de fusion.
 Cependant, l'approche non-locale permet de mettre en \oe uvre une pondération entre les différents voxels de l'image en fonction de la similarité de leur patch.
 En faisant l'hypothèse que deux voxels dont les patches sont similaires font partie du même tissu, il est possible d'utiliser ces pondérations pour prendre en compte les modèles voisins (c'est-à-dire l'estimation des centroïdes locaux aux voxels voisins) pour diminuer le risque qu'entraîne une mauvaise évaluation des centroïdes locaux.
 Un terme d'attache aux données non-local est alors défini de la façon suivante :
@@ -288,7 +288,7 @@ Comme vu dans la section~\ref{subsec:fcm:noise}, le terme de régularisation de l
 L'article de~\cite{Pham:CVIU:2001} a une approche légèrement différente étant donné que le lissage ne se fait qu'en prenant en compte l'ensemble des classes exceptée la classe courante, ce qui permet de favoriser le terme d'attache aux données si la classe courante est bien représentée dans le voisinage. 
 Plusieurs articles ont introduit différentes stratégies permettant de prendre en compte la similarité entre les voxels (introduisant ainsi une pondération entre les voxels d'un même voisinage), mais cette prise en compte nécessite le calcul de plusieurs variables additionnelles ou la définition d'une image intermédiaire (voir la sous-section \ref{subsec:fcm:noise}).
 
-Les moyennes non-locales sont particulièrement intéressantes dans cette situation, car elles fournissent les outils nécessaires à une pondération relativement aisée des voxels d'intêret au sein de la zone de recherche.
+Les moyennes non-locales sont particulièrement intéressantes dans cette situation, car elles fournissent les outils nécessaires à une pondération relativement aisée des voxels d'intérêt au sein de la zone de recherche.
 Le rôle de poids non-locaux est donc de sélectionner les voxels les plus pertinents au sein de la zone de recherche pour effectuer la régularisation en fonction de leur degré de similarité avec le voxel courant.
 L'hypothèse que nous faisons est que si les patches de deux voxels sont similaires, alors ils appartiennent au même tissu.
 L'objectif est d'obtenir une régularisation plus lisse de façon adaptative.
@@ -313,14 +313,14 @@ La fonction d'énergie devient donc :
 J_{NL\textrm{-}R\textrm{-}FCM} & = J_{NL\textrm{-}FCM} + J_{NL\textrm{-}Reg} \\
  & = \left\{ 
 \begin{array}{c}
-\sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j' \in \Omega^{R_d}_{j}} \omega_{nl}(j, j') \Vert \mathbf{y}_{j} - \mathbf{v}_{j'k} \Vert_2^{2} + \\
-\frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j'' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j'') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
+\sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j' \in \Omega^{R_d}_{j}} \omega_{nl}(j, j') \Vert \mathbf{y}_{j} - \mathbf{v}_{j'k} \Vert_2^{2} \\
++ \frac{\beta}{2} \sum_{j \in \Omega} \sum_{k=1}^{C} u_{jk}^{q} \sum_{j'' \in \Omega^{R_{r}}_{j}} \omega_{nl}(j, j'') \sum_{l \in L_{k}} u_{j'l}^{q} \label{eq:nlfcm:reg}.
 \end{array}
 \right.
 \end{array}
 \end{equation}
-Il est important de noter que les poids $\omega_{nl}(\cdot,\cdot)$ présents dans le terme d'attache aux données et le terme de régularisation sont distincts car les zones de recherche $\Omega^{R_d}_{j}$ et $\Omega^{R_r}_{j}$ ne sont pas nécessairement identiques.
-Etant donné que le biais est un artéfact lisse variant lentement le long de l'image, la zone de recherche $\Omega^{R_d}_{j}$ peut être choisi aussi grande que possible.
+Il est important de noter que les poids $\omega_{nl}$ présents dans le terme d'attache aux données et le terme de régularisation sont distincts car les zones de recherche $\Omega^{R_d}_{j}$ et $\Omega^{R_r}_{j}$ ne sont pas nécessairement identiques.
+\'Etant donné que le biais est un artéfact lisse variant lentement le long de l'image, la zone de recherche $\Omega^{R_d}_{j}$ peut être choisie aussi grande que possible.
 Par contre, la correction du bruit nous impose un plus petit rayon pour $\Omega^{R_r}_{j}$ afin de limiter la prise en compte de patches peu similaires lors du calcul des poids.
 
 Les différentes étapes permettant de minimiser la fonction d'énergie du FCM non-local sont les suivantes : 
@@ -354,7 +354,7 @@ NL-FCM & Terme d'attache aux données non-local \\
 \hline
 NL-Reg & Terme de régularisation non-locale \\
 \hline
-NL-R-FCM & FCM avec attache aux données et régularisation non-locals \\
+NL-R-FCM & FCM avec attache aux données et régularisation non-locales \\
 \hline
 
 \end{tabular}
@@ -369,7 +369,7 @@ Le tableau~\ref{fig:nlfcm:acronymes} résume l'ensemble des terminologies utilisé
 
 Les expériences sont menées tout d'abord sur des images simulées fournies par la base BrainWeb \cite{Kwann:VBC:1996, Cocosco:NeuroImage:1997}, puis sur des cas réels fournis par la base IBSR (\emph{Internet Brain Segmentation Repository}).
 
-Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menées de manière à déterminer le comportement de l'algorithme FCM non-local :
+Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont réalisées de manière à déterminer le comportement de l'algorithme FCM non-local :
 \begin{enumerate}
         \item Évaluation du terme d'attache aux données non-local en utilisant des images ayant 20~\% d'inhomogénéité en intensité (voir la section~\ref{sec:brainweb:nlData}).
         \item \'Evaluation du terme de régularisation non-locale en utilisant des images ayant différents niveaux de bruit ricien (voir la section~\ref{sec:brainweb:nlReg}).
@@ -377,13 +377,13 @@ Considérant tout d'abord la base BrainWeb, trois séries d'expériences sont menée
 \end{enumerate}
 Par la suite, l'algorithme FCM non-local complet est appliqué à l'ensemble de la base IBSR.
 
-L'évaluation des performances des différents algorithmes est faite par comparaison de la segmentation estimée avec la vérité terrain fournie par les bases d'images respectives.
+L'évaluation des performances des différents algorithmes est faite par comparaison de la segmentation estimée avec la vérité-terrain fournie par les bases d'images respectives.
 La qualité de la segmentation est mesurée par le calcul de l'indice de similarité Dice : 
 $$
 Dice = \frac{2\cdotp VP}{2\cdotp VP + FP + FN},
 $$
 où $VP$ est le nombre de vrais positifs, $FP$ le nombre de faux positifs et $FN$ le nombre de faux négatifs.
-Cet indice calcule un taux de recouvrement entre la vérité terrain et la segmentation automatique.
+Cet indice calcule un taux de recouvrement entre la vérité-terrain et la segmentation automatique.
 
 De plus, l'évaluation inclut à chaque étape une comparaison avec d'autres méthodes de classification reposant sur les champs et chaînes de Markov.
 Ces méthodes sont : 
@@ -398,12 +398,12 @@ Ces trois méthodes incluent une correction du biais et un terme de régularisatio
 \subsection{BrainWeb}
 \label{subsec:brainweb}
 
-Le site de BrainWeb~\footnote{\url{http://www.bic.mni.mcgill.ca/brainweb/}} permet de simuler des IRM cérébrales avec différents niveaux de bruit et d'inhomogénéité et fournit la vérité terrain correspondante, permettant de comparer différents algorithmes de segmentation.
+Le site de BrainWeb~\footnote{\url{http://www.bic.mni.mcgill.ca/brainweb/}} fournit des images IRM cérébrales simulées avec différents niveaux de bruit et d'inhomogénéité, ainsi que la vérité terrain correspondante, permettant de comparer différents algorithmes de segmentation.
 % La connaissance de la vérité terrain permet de comparer différents algorithmes de segmentation.
 Les images fournies par la base sont issues de 27 acquisitions réalisées sur un même individu.
 Elles sont ensuite moyennées pour construire le volume initial auquel sont ensuite appliqués divers traitements pour créer le fantôme~\cite{Collins:TMI:1998}.
 Les images utilisées sont de taille $181\times181\times217$ avec des voxels isotropes de $1$ mm de côté.
-Le bruit est de type ricien d'un niveau allant de $0$ à $9$~\% (c'est à dire une amplitude du bruit allant jusqu'à $9$~\% de la valeur maximale de l'image).
+Le bruit est de type ricien d'un niveau allant de $0$ à $9$~\% (c'est-à-dire une amplitude du bruit allant jusqu'à $9$~\% de la valeur maximale de l'image).
 
 \subsubsection{Évaluation du terme d'attache aux données}
 \label{sec:brainweb:nlData}
@@ -424,7 +424,7 @@ On pose $n_j$ et $m_j$ tels que $\lvert \Omega^{R_{d}}_{j} \rvert = (2 \cdot n_j
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/Brainweb_Bias_Couple_WM.eps}}
         \end{center}
 
-        \caption[Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale]{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluation du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. $n_j = 4$ : $+$, $n_j = 5$ : $\diamond$, $n_j = 6$ : $\circ$, $n_j = 7$ : $\times$, $n_j = 8$ : $\bigtriangledown$, $n_j = 9$ : $\star$.}}
+        \caption[Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale]{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluations du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. $n_j = 4$ : $+$, $n_j = 5$ : $\diamond$, $n_j = 6$ : $\circ$, $n_j = 7$ : $\times$, $n_j = 8$ : $\bigtriangledown$, $n_j = 9$ : $\star$.}}
 
         \label{FIG:PARAM:BRAINWEB:BIAS}
 
@@ -433,15 +433,15 @@ On pose $n_j$ et $m_j$ tels que $\lvert \Omega^{R_{d}}_{j} \rvert = (2 \cdot n_j
 La figure~\ref{FIG:PARAM:BRAINWEB:BIAS} présente les résultats avec différents sous-volumes et différentes zones de recherche.
 La première partie de la courbe, de $m_j = 5$ à $m_j = 9$, montre comme attendu que pour une même valeur de $m_j$, l'accroissement de la taille de zone de recherche permet d'obtenir une meilleure segmentation par la prise en compte des modèles voisins et la pondération en résultant.
 Cependant, un fléchissement est observé à $m_j = 10$ pour $n_j = 8$ et $n_j = 9$.
-Les différents travaux sur les moyennes non-locales pointaient la faible efficacité d'une zone de recherche trop grande \cite{Salmon:2010,Kervrann:TIP:2006}, surtout dans le cas d'un noyaux à support infini tel que le noyau gaussien. 
+Les différents travaux sur les moyennes non-locales pointaient la faible efficacité d'une zone de recherche trop grande \cite{Salmon:2010,Kervrann:TIP:2006}, surtout dans le cas d'un noyau à support infini tel que le noyau gaussien. 
 En effet, les voxels de faible similarité avec le voxel courant sont pris en compte dans le calcul des pondérations, ce qui entraîne un biais dans le calcul de l'attache aux données locale.
-Ceci, couplé à un voisinage $M_j$ trop important rendu le calcul des centroïdes locaux sensibles à l'inhomogénéité en intensité, explique la baisse des performances de l'algorithme FCM non-local avec des paramètres $n_j$ et $m_j$ trop importants.
+Ceci, couplé à un voisinage $M_j$ trop important, rend le calcul des centroïdes locaux sensible à l'inhomogénéité en intensité et explique la baisse des performances de l'algorithme FCM non-local avec des paramètres $n_j$ et $m_j$ trop élevés.
 
 Les paramètres finaux choisis pour la suite des expérience sont un compromis entre la performance et le temps de calcul de l'algorithme.
-En effet, les deux voisinages $M_j$ et $N_j$ étant de taille importantes, ils entraînent des temps de calculs de l'ordre de plusieurs heures.
-Les paramètres $n_j$ et $m_j$ donc fixé à : $(n_j, m_j) = (8, 8)$ (voir la figure~\ref{FIG:PARAM:BRAINWEB:BIAS}) car le résultat de ce couple de valeur est proche du résultat optimale et permet la diminution du temps de calcul.
+En effet, les deux voisinages $M_j$ et $N_j$ étant de taille importante, ils induisent des temps de calculs de l'ordre de plusieurs heures.
+Les paramètres $n_j$ et $m_j$ sont donc fixé à : $(n_j, m_j) = (8, 8)$ (voir la figure~\ref{FIG:PARAM:BRAINWEB:BIAS}) car le résultat de ce couple de valeur est proche du résultat optimal et permet la diminution du temps de calcul.
 
-\paragraph*{Comparaison à d'autres méthodologies}
+\paragraph*{Comparaison avec d'autres méthodologies}
 
 Le terme d'attache aux données non-locale a été comparé à la version classique de l'algorithme FCM ainsi qu'à SPM5, EMS et HMC. 
 La table~\ref{TAB:DICE:BRAINWEB:BIAS} récapitule les taux de recouvrement obtenus avec les différentes méthodes de segmentation.
@@ -481,7 +481,7 @@ La figure~\ref{FIG:VIEW:BRAINWEB:BIAS} illustre les performances du terme d'atta
 \end{figure}
 
 Nous pouvons observer que l'algorithme FCM non local obtient les meilleurs scores selon les taux de recouvrement.
-Elle apporte une prise en compte du biais en intensité à l'algorithme FCM sans en nécessiter une évaluation explicite.
+Elle apporte ainsi une prise en compte du biais en intensité à l'algorithme FCM sans en nécessiter une évaluation explicite.
 
 
 \subsubsection{\'Evaluation du terme de régularisation}
@@ -520,11 +520,11 @@ Elle est effectuée en simulant des segmentations avec un bruit ricien allant de 
 
 La figure~\ref{FIG:VIEW:BRAINWEB:NOISE} présente une coupe axiale d'une image T1 et les segmentations correspondantes pour les algorithmes FCM classique, RFCM \cite{Pham:CVIU:2001} et NL-Reg.
 L'apport de RFCM par rapport à l'algorithme FCM classique est visible par l'absence d'artéfacts de segmentation dus au bruit (par exemple : voxels classés comme matière grise au milieu de la matière blanche).
-Cependant, l'effet de lissage apporté par cette régularisation a pour effet de gommer les aspérités dans certaines parties de l'image. 
-Par exemple, une comparaison visuelle avec la vérité terrain montre une sous-segmentation du LCR au sein des sillons.
-Le terme de régularisation non-local permet de remédier à cela grâce à la pondération introduite par les poids non-locaux, ce qui est illustré par les figures~\ref{NLREG:ZOOM:TRUTH}, \ref{NLREG:ZOOM:RFCM} et \ref{NLREG:ZOOM:NLREG} montrant un zoom sur une zone particulière du cerveau.
+Cependant, l'effet de lissage apporté par cette régularisation a pour conséquence de gommer les aspérités dans certaines parties de l'image. 
+Par exemple, une comparaison visuelle avec la vérité-terrain montre une sous-segmentation du LCR au sein des sillons.
+Le terme de régularisation non-local permet de remédier à cela grâce à la pondération introduite par les poids non-locaux, ce qui est illustré par les figures~\ref{NLREG:ZOOM:TRUTH}, \ref{NLREG:ZOOM:RFCM} et \ref{NLREG:ZOOM:NLREG} sur une zone particulière du cerveau.
 
-De plus, le  tableau~\ref{TAB:DICE:BRAINWEB:NOISE} montre une meilleure performance des algorithmes FCM que des algorithmes basés sur les champs et chaînes de Markov. 
+De plus, le  tableau~\ref{TAB:DICE:BRAINWEB:NOISE} met en évidence une meilleure performance des algorithmes FCM que des algorithmes basés sur les champs et chaînes de Markov. 
 La figure~\ref{FIG:DICE:BRAINWEB:NOISE}, comparant les coefficients Dice obtenus par les algorithmes en fonction du niveau de bruit, confirme cette observation.
 Elle montre que le terme de régularisation non-local fournit une segmentation plus consistante à partir d'un niveau de bruit de $5$~\%.
 
@@ -624,7 +624,7 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 	\hline 
 \end{tabular}
 \vspace{2mm}
-\caption[Coefficients Dice issus différentes segmentation sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%]{Application de différentes segmentation sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%. Comparaison des différents coefficient Dice pour la matière grise et la matière blanche (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:BRAINWEB:ALL}}
+\caption[Coefficients Dice issus différentes segmentations sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%]{Application de différentes segmentations sur une image T1 issue de BrainWeb avec un bruit Ricien à $9$~\% et un biais en intensité de $20$~\%. Comparaison des différents coefficient Dice pour la matière grise et la matière blanche (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:BRAINWEB:ALL}}
 \end{center}
 \end{table}
 
@@ -641,8 +641,8 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 
 \end{figure}
 
-La figure~\ref{FIG:DICE:BRAINWEB:ALL} montre l'évolution des performances des différentes méthodologies avec un bruit ricien allant de $0$ à $9$~\% dans le cas de la matière blanche et de la matière grise. 
-Ces deux graphiques illustrent la similarité des performances de la méthode non-locale par rapport aux algorithmes basées sur les champs et chaînes de Markov.
+La figure~\ref{FIG:DICE:BRAINWEB:ALL} illustre l'évolution des performances des différentes méthodologies avec un bruit ricien allant de $0$ à $9$~\% dans le cas de la matière blanche et de la matière grise. 
+Ces deux graphiques illustrent la similarité des performances de la méthode non-locale par rapport aux algorithmes basés sur les champs et chaînes de Markov.
 Une différence significative n'est observable qu'à partir d'un niveau de bruit élevé ($7$~\%) et seulement dans le cas de la matière blanche. 
 De plus, dans ce cas précis, la méthode HMC semble légèrement supérieure.
 
@@ -673,7 +673,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 	\hline 
 \end{tabular}
 \vspace{2mm}
-\caption[Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'image IBSR]{\emph{Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'image IBSR (Coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:IBSR}}}
+\caption[Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'images IBSR]{\emph{Moyennes des coefficients Dice (matière grise et matière blanche) obtenus pour différentes segmentations de la base d'images IBSR (coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).\label{TAB:DICE:IBSR}}}
 \end{center}
 \end{table}
 
@@ -727,8 +727,8 @@ Néanmoins, nous pouvons signaler que la méthode NL-R-FCM, combinant donc régular
 
 Il faut cependant ajouter que ces résultats doivent être interprétés avec précaution.
 En effet, les segmentations manuelles fournies avec la base IBSR ne sont pas toujours optimales (par exemple autour des ventricules ou bien dans des régions très circonvoluées tels que les sillons) comme illustré à la figure~\ref{FIG:VIEW:IBSR}.
-L'analyse des résultats doit donc être complétée par une observation de la segmentation des différents cas.
-Elle peut être révélatrice comme dans le cas n\textdegree11 où il apparaît clairement que le matière grise est sur-segmentée, constituant ainsi un sur-ensemble de la matière grise réelle, expliquant les scores relativement plus faibles dans ce cas que dans les autres.
+L'analyse des résultats doit donc être complétée par une observation de la segmentation des différents cas pour en avoir une interprétation fiable.
+Un exemple est donné par le cas n\textdegree11 où il apparaît clairement que le matière grise est sur-segmentée, constituant ainsi un sur-ensemble de la matière grise réelle, expliquant les plus faibles scores obtenus pour ce cas que pour les autres.
 
 \section{Conclusion}
 
@@ -742,15 +742,15 @@ Cependant, ceux du terme d'attache aux données méritent un approfondissement et 
 L'utilisation d'un noyau à support compact peut par exemple être une alternative à tester afin d'éliminer l'influence des voxels peu similaires au voxel courant.
 
 Le terme d'attache aux données repose sur le calcul de centroïdes locaux et sur le calcul des poids non-locaux permettant une pondération des modèles locaux environnants.
-Ces deux ensembles de paramètres nécessitent la définition de deux larges voisinages, menant à des temps de calcul très élevés (ces deux zones de recherches ont une taille de : $17\times17\times17$).
+Ces deux ensembles de paramètres nécessitent la définition de deux larges voisinages, menant à des temps de calcul très élevés (ces deux zones de recherches ont une taille de $17\times17\times17$).
 En effet, environ huit heures de calcul sur un PC standard sont nécessaires pour segmenter une image (logiciel programmé en C++).
 Différentes voies doivent être explorées afin de diminuer le temps d'exécution du logiciel.
 Une solution pourrait être la décomposition en composante principales de l'ensemble des patches de l'image, ce qui aurait pour effet d'accélérer le traitement mais également d'améliorer le résultat de la segmentation~\cite{VanDeVille:TIP:2011}.
-Une autre solution serait de décomposer l'image en sous-volumes disjoints, d'effectuer une évaluation locale du modèle dans ces sous-volume puis d'effectuer une interpolation des huit modèles les plus proches en chaque voxels pour avoir une estimation des centroïdes au voxel courant.
+Une autre solution serait de décomposer l'image en sous-volumes disjoints, d'effectuer une évaluation locale du modèle dans ces sous-volumes puis d'effectuer une interpolation des huit modèles les plus proches en chaque voxels pour obtenir une estimation des centroïdes au voxel courant.
 Le terme de régularisation ne nécessite au contraire que le calcul des poids non-locaux dans une zone de recherche plus réduite ($5\times5\times5$).
 Les temps de calcul sont alors réduits à une dizaine de minutes.
 
-Les expériences menées afin d'évaluer les deux termes de la fonction d'énergie de cette nouvelle version de FCM séparément ont montré qu'ils obtenaient de meilleurs résultats que les autres méthodologies testées.
-Cependant, l'utilisation conjointe de ces termes non-locaux n'a pas apporté une amélioration du même ordre par rapport à ces méthodes dans un environnement à la fois biaisé et bruité.
+Les expériences menées afin d'évaluer les deux termes de la fonction d'énergie de cette nouvelle version de FCM séparément ont montré qu'ils fournissaient de meilleurs résultats que les autres méthodologies testées.
+Cependant, l'utilisation conjointe de ces termes non-locaux ne semble pas apporté de gain significatif dans un environnement à la fois biaisé et bruité.
 Une étude plus poussée des interactions entre ces deux termes est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre cette amélioration.
 
