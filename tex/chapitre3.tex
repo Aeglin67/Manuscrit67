@@ -40,7 +40,7 @@ L'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par :
 \begin{equation}
 \mathbf{\hat{y}}_{j} = \frac{\sum_{j'=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{j'=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)} \label{nlfcm:estimateur:complet},
 \end{equation}
-où $K(\cdotp)$ est un noyau, c'est-à-dire une fonction de pondération de $\mathbb{R}$ dans $\mathbb{R}$ et $h$ est la fenêtre régissant le degré de lissage de l'estimation de la similarité.
+où $K(\cdotp)$ est un noyau, c'est-à-dire une fonction de pondération de $\mathbb{R}$ dans $\mathbb{R}$ et $h$ est un paramètre régissant le degré de lissage de l'estimation de la similarité.
 Le calcul de cette dernière est effectué par la comparaison entre les patches respectifs des voxels considérés et est contrôlé par le choix de la norme $\lVert \cdotp \rVert$.
 Cette formulation correspond à une moyenne pondérée des voxels sur l'ensemble du support de l'image.
 
@@ -68,30 +68,30 @@ L'article fondateur de \cite{Buades:MMS:2005} propose déjà cette solution.
 \label{fig:mean_filter}
 \end{figure}
 
-Telle qu'elles sont définies, les moyennes non-locales ont montrés une grande efficacité dans le débruitage de zones régulières mais aussi dans des zones texturées~\cite{Salmon:2010}, ce qui est peu étonnant vu que certains travaux préliminaires ayant mené à cette approche ont été fait dans le cadre de la synthèse de textures~\cite{Criminisi:CVPR:2003}.
+Telle qu'elles sont définies, les moyennes non-locales ont montré une grande efficacité dans le débruitage de zones régulières mais aussi dans des zones texturées~\cite{Salmon:2010}, ce qui est peu étonnant vu que certains travaux préliminaires ayant mené à cette approche ont été effectués dans le cadre de la synthèse de textures~\cite{Criminisi:CVPR:2003}.
 % 
 
 % A rajouter dans l'état de l'art : \cite{VanDeVille:TIP:2011}.
 
 \subsection{Interprétation des moyennes non-locales}
 
-Plusieurs points de vue peuvent être adoptés pour l'interprétation des moyennes-non-locales.
+Plusieurs points de vue peuvent être adoptés pour l'interprétation des moyennes non-locales.
 Un premier lien a été établi avec les variations totales, où le débruitage d'une image consiste en la minimisation d'une fonctionnelle constituée de la somme d'un terme d'attache aux données (différence entre l'image estimée et l'image originale) et d'un terme de régularisation, pénalisant le bruit à haute-fréquence.
 Des termes non-locaux sont introduits dans cette fonctionnelle afin de favoriser les similarité de l'image \cite{Kindermann:MMS:2005, Gilboa:MMS:2008, Azzabou:CVPR:2007}.
-Dans ce cadre, les moyennes non-locales sont vu comme une étape d'une descente de gradient pour la minimisation de la fonctionelle .
+Dans ce cadre, les moyennes non-locales sont vues comme une étape d'une descente de gradient pour la minimisation de la fonctionelle .
 
-Les moyennes non-locales ont également été étudiées directement depuis l'espace des patches.
+Les moyennes non-locales ont également été étudiées directement depuis l'espace des patch.
 Les travaux de \cite{Tschumperle:ICIP:2009} les interprètent comme une étape d'une équation de chaleur dans l'espace des patches et établissent des liens avec les algorithmes classiques de diffusion.
 Ce point de vue est soutenu par l'article de \cite{Peyre:CVIU:2009} qui considère qu'une image repose sur une variété dans l'espace des patches, les moyennes non-locales consistant en une diffusion dans cette variété.
 Enfin, un lien avec les équations de Fokker-Planck est mis en évidence par \cite{Singer:SIAMJIS:2009}, rapprochant les moyennes non-locales des processus de Markov.
 
-D'autres auteurs adoptent un point de vue statistiques pour interpréter les moyennes non-locales.
+D'autres auteurs adoptent un point de vue statistique pour interpréter les moyennes non-locales.
 Par exemple, \cite{Goossens:LNLA:2008} démontre un lien avec les estimateurs robustes (ou plutôt, la première itération d'un algorithme d'optimisation) et pose la question de l'utilisation du noyau gaussien si le bruit ne l'est pas.
 Par ailleurs, \cite{Deledalle:TIP:2009} propose un algorithme itératif fondé sur l'estimation du maximum de vraisemblance permettant de prendre en compte différents types de bruit.
 Enfin, \cite{Salmon:ICIP:2009} considère les moyennes non-locales comme une agrégation bayésienne d'estimateurs en chaque patches.
 L'article de \cite{Katkovnik:IJCV:2010} assimile quant à lui la première version des moyennes non-locales à une régression linéaire d'ordre $0$ et l'étend à des niveaux supérieurs.
 
-De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tel que le filtre bilatéral, les filtres bayésiens,\ldots).
+De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tels que le filtre bilatéral, les filtres bayésiens, \emph{etc.}).
 Des techniques de régularisation de graphes discrètes, (voir les travaux de \cite{Bougleux:IJCV:2009} et \cite{Elmoataz:TIP:2008}) permettent de faire le lien entre ces différentes techniques.
 Ces méthodes de régularisation peuvent être vues comme des versions discrètes d'un formalisme plus général appellé \emph{Non local data and smoothness term (NDS)} \cite{Mrazek:2006}. 
 Ce formalisme définit une forme générale permettant l'unification de nombreux filtres existants par la somme d'un terme d'attache aux données et d'un terme de lissage.
@@ -100,7 +100,7 @@ Il est étendu à la prise en compte des patches par l'article de \cite{Pizarro:IJ
 
 \subsection{Limites de l'approche non-locale et influence de ses paramètres}
 
-Les deux inovations permettant une grande efficacité de ce filtre sont la non-localité et l'utilisation de patches.
+Les deux innovations permettant une grande efficacité de ce filtre sont la non-localité et l'utilisation de patches.
 Deux hypothèses importantes~\cite{Szlam:UCLA:2008} sont ainsi faites concernant l'image traitée : 
 \begin{enumerate}
         \item il existe des patches similaires dans l'image (hypothèse de redondance de l'information),
@@ -111,7 +111,7 @@ Il est cependant démontré \cite{Duval:2011} que ces hypothèses ont plusieurs con
 \begin{itemize}
  \item le filtre a un impact conséquent sur des images périodiques (par exemple des images alternant des bandes blanches et noires)
  \item la zone de recherche $\Omega^R_j$ a un impact sur la qualité visuelle du débruitage,
- \item un grand patch tend à flouter l'image,
+ \item un grand patch tend à rendre l'image floue,
  \item une perte de contraste dépendant du niveau d'occurence de chaque patch est observée,
  \item moins les détails sont contrastés, plus ils sont dégradés.
 \end{itemize}
@@ -122,10 +122,10 @@ L'article de \cite{Buades:MMS:2005} propose de fixer ce paramètre selon la règle
 Cependant, les travaux de \cite{Coupe:TMI:2008} proposent une autre méthode de calcul en montrant que $h$ ne dépend  pas que de la variance du bruit $\sigma^2$, mais également de la taille de la zone de recherche $\lvert \Omega^{R}_{j} \rvert$.
 La fenêtre $h$ peut ainsi être évaluée par : $h = 2 \alpha \sigma^{2} \lvert \Omega^{R}_{j} \rvert$ où seul le paramètre $\alpha$ est à ajuster manuellement.
 Dans la cas d'un bruit gaussien, la valeur de $\alpha$ est théoriquement à $1$ si l'estimation de la variance est correcte.
-Un dernier exemple d'ajustement est le travail de \cite{Tasdizen:TIP:2009} qui réalise un apprentissage sur différentes images ayant un niveau de bruit connu.
+Un dernier exemple d'ajustement est donné par les travaux de \cite{Tasdizen:TIP:2009} qui réalise un apprentissage sur différentes images ayant un niveau de bruit connu.
 La relation linéaire entre $h$ et $\sigma$ est mise en évidence et ses paramètres calculés en fonction du niveau de bruit et du paramètre $h$ permettant un débruitage optimal.
 
-La zone de recherche $\Omega^R_j$ a été introduite d'abord dans un soucis d'amélioration du temps de calcul. 
+La zone de recherche $\Omega^R_j$ a été introduite d'abord dans un souci d'amélioration du temps de calcul. 
 Cependant, certains auteurs ont observé qu'elle avait une influence déterminante sur la qualité visuelle du débruitage \cite{Kervrann:TIP:2006,Gilboa:MMS:2007}.
 En effet, l'utilisation d'une zone de recherche trop grande peut conduire à une baisse des performances alors qu'intuitivement, une zone de recherche de plus en plus grande devrait augmenter le nombre de \og bons \fg{} candidats pour effectuer une estimation fiable de la valeur en chaque voxel. 
 En pratique, dans les zones où la frontière entre les objets est bien marquée, peu de candidats supplémentaires sont ajoutés tandis que de nombreux \og mauvais \fg{} le sont, conduisant finalement à une moins bonne estimation.
@@ -141,19 +141,19 @@ Elle peut également être déterminée localement selon la règle de Lepski en fonct
 \end{figure}
 
 D'autres articles ont étudié l'impact de la fonction noyau sur le débruitage. 
-L'article de Buades \cite{Buades:MMS:2005} utilise un noyau de type gaussien $K(x) = e^{-x^2}$, qui est encore largement utilisé dans la littérature.
+L'article de Buades \cite{Buades:MMS:2005} utilise un noyau de type gaussien, qui est encore largement utilisé dans la littérature.
 Cependant, des travaux récents \cite{Goossens:LNLA:2008, Salmon:2010} ont montré qu'un noyau à support compact \cite{Remaki:TIP:2000} est préférable.
 En effet, le noyau gaussien a l'inconvénient de donner une valeur proche de zéro, mais non nulle, aux patches peu similaires à celui entourant le voxel central, ce qui tend à diminuer l'efficacité du débruitage. 
 Certains travaux tronquent le noyau gaussien pour éviter ce problème et pour accélérer les traitements \cite{Coupe:TMI:2008}.
 Cependant, l'utilisation de noyaux compacts apporte une réponse plus naturelle à ce problème en définissant l'influence des patches peu similaires au patch central comme nulle, tout en assurant la continuité de ces fonctionnelles. 
-Un noyau plat peut être employé afin de privilégier la vitesse de calcul (mais n'est pas continu) et on peut trouver des noyaux compacts polynomiaux de degré $4$ \cite{Goossens:LNLA:2008} ou de degré $6$ \cite{Duval:2010}.
-La figure~\ref{fig:nlm:kernels} illustrent cette problématique en comparant différents noyaux et démontre l'utilité d'un noyau plat par rapport au noyau gaussien (en ne prenant en compte que les patches \og proches \fg{} du patch central) et par rapport au noyau plat (qui n'est pas une fonction continue et ne pondère pas les patches).
+Un noyau plat peut être employé afin de privilégier la vitesse de calcul (mais n'est pas continu), ainsi que des noyaux compacts polynomiaux de degré $4$ \cite{Goossens:LNLA:2008} ou de degré $6$ \cite{Duval:2010}.
+La figure~\ref{fig:nlm:kernels} illustrent cette problématique en comparant différents noyaux et démontre l'utilité d'un noyau compact polynomiale par rapport au noyau gaussien (en ne prenant en compte que les patches \og proches \fg{} du patch central) et par rapport au noyau plat (qui n'est pas une fonction continue et ne pondère pas les patches).
 
 Le choix de la norme est aussi un élément à prendre en compte.
-De manière générale, l'utilisation la norme euclidienne pour le calcul de la similarité entre deux patches a peu été remis en cause \cite{Salmon:2010}.
+De manière générale, l'utilisation de la norme euclidienne pour le calcul de la similarité entre deux patches a peu été remis en cause \cite{Salmon:2010}.
 Cependant, quelques alternatives au calcul direct de la distance entre les patches peuvent être notés.
 L'article de \cite{Buades:MMS:2005} inclut également une pondération en fonction de la distance des voxels par rapport au voxel central.
-Cependant, il semble que cette pondération ait été peu retenue dans les travaux ultérieurs.
+Toutefois, il semble que cette pondération ait été peu retenue dans les travaux ultérieurs.
 Les travaux de \cite{Azzabou:ICIP:2007} et \cite{Tasdizen:TIP:2009} utilisent un dictionnaire issu de l'image et calculé par une analyse des composantes principales (ACP) de la matrice de covariance construite à partir de l'ensemble des voisinages de l'image.
 La comparaison des patches se fait alors dans l'espace construit à partir des composantes présentant les valeurs propres les plus élevées. 
 Les résultats montrent une nette amélioration des performances du débruitage.
@@ -167,7 +167,7 @@ La nature de l'image à débruiter influe également sur l'efficacité de ce paramèt
 Notons l'article de \cite{Manjon:JMRI:2010} introduisant des patches adaptatifs de manière à débruiter une IRM présentant un bruit variable.
 L'article de \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
 Enfin, nous pouvons citer deux techniques utilisant la méthode SURE (\emph{Stein's unbiased risk estimate}) \cite{Stein:AS:1981} à partir de plusieurs exécutions des moyennes non-locales pour estimer l'image débruitée.
-La première est celle de \cite{VanDeVille:TIP:2011} qui exécute les moyennes non-locales avec plusieurs taille de patches et de zone de recherche, et effectue une combinaison de ces résultats afin d'obtenir l'estimation la plus robuste possible en chaque élément de l'image.
+La première est celle de \cite{VanDeVille:TIP:2011} qui exécute les moyennes non-locales avec plusieurs tailles de patches et de zones de recherche, et effectue une combinaison de ces résultats afin d'obtenir l'estimation la plus robuste possible en chaque élément de l'image.
 Par ailleurs, \cite{Deledalle:JMIV:2011} utilise des patches de formes diverses et agrège les différentes estimations localement. 
 De plus, ils utilisent une implémentation fondée sur la transformée de Fourrier rapide de manière à accélérer les traitements.
 Ses résultats montrent une nette diminution du halo de bruit que l'on peut observer avec l'algorithme des moyennes non-locales original.
@@ -178,18 +178,19 @@ Ses résultats montrent une nette diminution du halo de bruit que l'on peut obser
 
 \subsection{Usage des moyennes non-locales}
 
-Depuis son apparition en 2005, les moyennes non-locales ont été utilisées dans d'autres domaines que le débruitage d'images.
-Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de l'apport des moyennes non-locales.
+Depuis leur apparition en 2005, les moyennes non-locales ont été utilisées dans d'autres domaines que le débruitage d'images.
+Le domaine des problèmes inverses, par la nécessité d'une régularisation dans le cas de problèmes mal posés, a bénéficié de leur apport.
 Nous pouvons citer les travaux de \cite{Bougleux:ECCV:2008} sur cette thématique, ainsi que ceux de \cite{Mignotte:PRL:2008} en déconvolution et ceux de \cite{Rousseau:MIA:2010} en reconstruction de volumes 3D.
-En déconvolution, les moyennes non-locales sont utilisées de manière à favoriser les images présentant un haut niveau de redondance, soit dans l'idéal des images invariantes au filtre non-local.
+En déconvolution, les moyennes non-locales sont utilisées de manière à favoriser les images présentant un haut niveau de redondance.
+% soit dans l'idéal des images invariantes au filtre non-local ().
 
-Enfin, les moyennes non-locales ont également été appliqué à la segmentation d'images.
-Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'un opérateur gradient et et d'un opérateur divergence non-locaux de manière à étendre les techniques fondées sur des équations différentielles partielles (EDP) ou des approches variationnelles.
+Enfin, les moyennes non-locales ont également été appliquées à la segmentation d'images.
+Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'un opérateur de gradient et d'un opérateur de divergence non-locaux de manière à étendre les techniques fondées sur des équations aux dérivées partielles (EDP) ou des approches variationnelles.
 Les travaux de \cite{Bresson:2008} ont défini plusieurs fonctionnelles non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
-Les moyennes non-locales ont également été utilisées en propagation de labels à partir d'une base d'images dont la vérité terrain est connue. 
-L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patches similaires dans une base d'image, après une recalage affine et une égalisation d'histogramme.
+Les moyennes non-locales ont également été utilisées en propagation de labels à partir d'une base d'images dont la vérité-terrain est connue. 
+L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patches similaires dans une base d'images, après une recalage affine et une égalisation d'histogramme.
 Cette méthododologie a l'avantage de ne pas nécessiter de recalage non-linéaire, et base l'étape de fusion des labels sur les poids non-locaux calculés à travers la base.
-Les moyennes non-locales ont également été introduites dans les lignes de niveaux par~\cite{Jung:SSVM:2011} et ont permis la segmentation de structures dont l'intensité varie de façon lisse, ce qui peut se révélé intéréssant dans le cas ou un biais est présent.
+Les moyennes non-locales ont également été introduites dans les lignes de niveaux par~\cite{Jung:SSVM:2011} et ont permis la segmentation de structures dont l'intensité varie de façon lisse, ce qui peut se révéler intéréssant dans le cas ou un biais est présent.
 % Enfin, l'article de \cite{Wang:CMIG:2008} définit une première approche permettant de prendre en compte l'information non-locale dans FCM. 
 % Elle est décrite à la section suivante.
 
@@ -197,7 +198,7 @@ Les moyennes non-locales ont également été introduites dans les lignes de niveau
 % \subsection{Segmentation non-locale}
 
 Une première utilisation des moyennes non-locales dans l'algorithme FCM a été définie par~\cite{Wang:CMIG:2008} avec une application à la segmentation cérébrale.
-Cette méthodologie a été développée de manière indépendante de la notre.
+Cette méthodologie a été développée de manière indépendante de la nôtre.
 Les auteurs utilisent une pondération entre information locale et information non-locale en redéfinissant la distance entre l'intensité d'un voxel et le centroïde d'une classe de la façon suivante :
 \begin{equation}
 D^{2}(\mathbf{y}_{j}, \mathbf{v}_{k}) = (1-\lambda_{j}) d^{2}_{l}(\mathbf{y}_{j}, \mathbf{v}_{k}) + \lambda_{j} d^{2}_{nl}(\mathbf{y}_{j}, \mathbf{v}_{k}) \label{nlfcm:wang:distance},
@@ -222,7 +223,7 @@ où $\omega_{nl}(j,j')$ représente le poids non-local entre les voxels $j$ et $j'
 % En pratique, ce calcul de la distance non-locale est limité à une zone de recherche $\Omega^{R}_{j}$ centrée autour du voxel $j$.
 Le paramètre $\lambda_{j}$ est calculé automatiquement en tenant compte de la similarité globale du patch $P^{I}_{j}$ au sein de $\Omega^{R}_{j}$. 
 Plus il y a de voxels similaires au voxel central au sein de la zone de recherche $\Omega^R_j$, plus le poids de la distance non-locale dans le calcul de la distance générale sera important.
-L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de similaritée entre les voxels (par exemple, dans une IRM cérébrale, autour des sillons cérébraux) où il est plus efficace de prendre en compte une similarité entre les voxels directement plutôt qu'entre les patches.
+L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de similarités entre les voxels (par exemple, dans une IRM cérébrale, autour des sillons cérébraux) où il est plus efficace de prendre en compte une similarité entre les voxels directement plutôt qu'entre les patches.
 
 % Nous montrerons que la correction du bruit présent dans une image ne nécessite pas de définir une telle distance, mais qu'il suffit d'incorporer les moyennes non-locales au sein du terme de régularisation de FCM pour obtenir une correction efficace.
 
