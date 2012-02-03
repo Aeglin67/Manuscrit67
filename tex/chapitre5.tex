@@ -6,7 +6,20 @@
 \section*{Bilan}
 \addcontentsline{toc}{section}{Bilan}
 
-Résumé des travaux
+Ce travail de recherche a permis d'aborder la problématique de la segmentation des tissus cérébraux, aussi bien dans le cas adulte que dans le cas f\oe tale.
+Nous avons proposé dans un premier temps une méthode de segmentation fondée sur l'algorithme des C-moyennes floues, ce dernier consistant à minimiser une fonctionnelle se présentant comme la somme d'un terme d'attache-aux-données et d'un terme de régularisation prenant en compte la classification des voxels voisins.
+L'idée principale ayant guidé nos travaux est d'introduire le concept des moyennes non-locales, dont le principe est d'introduire une pondération entre les voxels d'une zone de l'image afin d'obtenir une estimation plus fiable du niveau de gris de son voxel central et qui ont fait leur preuve en débruitage d'image.
+Cette pondération s'effectue par le biais d'un paramètre non-local calculé en fonction de la similarité entre les patches (ou voisinage) des voxels de la zone et celui du voxel courant.
+Le couplage entre une évaluation locale des paramètres régissant le degré d'appartenance des voxels aux classes définies par les C-moyennes floues et l'introduction du paramètre non-local dans le terme d'attache-aux-données permet une prise en compte du biais en intensité pouvant affecter les images.
+Par ailleurs, l'introduction du paramètre non-local dans le terme de régularisation permet une meilleure prise en compte du bruit et permet d'éliminer différents artefacts de segmentations et d'obtenir une frontière plus précise entre les tissus.
+Les expériences menées ont démontré l'efficacité de cette approche dans le cadre des IRM adultes par des validations utilisant les bases BrainWeb et IBSR.
+
+Dans un deuxième temps, nous nous sommes intéressés à la segmentation des tissus cérébraux dans le cadre de l'IRM f\oe tale.
+Les caractéristiques de ces images étant différentes de celles du cas adulte, nous avons défini une méthodologie initiant l'extraction des différentes structures d'intérêt une à une, tout en ne tenant compte que des données de l'image.
+Ce manuscrit présente donc une méthode d'extraction du cortex cérébral, à partir d'un modèle topologique reposant sur trois sphères concentriques.
+Cette extraction se fait en deux étapes, qui sont tout d'abord la séparation du LCR et du cerveau, puis la segmentation du cortex proprement dite.
+Des validations ont été effectuées aussi bien sur des images non-reconstruites (c'est-à-dire présentant une forte anisotropie des voxels et donc un important volume partiel), que reconstruites (consistant en la construction d'un volume isotrope à partir d'images IRM acquises dans les directions axiale, coronale et sagitale).
+Elles illustrent la capacité de la méthodologie à fournir une bonne évaluation de la surface corticale, ainsi que de la surface entre le cortex et la matière blanche, permettant ainsi la construction de représentation en 3D de la surface corticale et l'observation du développement des différents sillons cérébraux.
 
 \section*{Verrous et perspectives}
 \addcontentsline{toc}{section}{Verrous et perspectives}
