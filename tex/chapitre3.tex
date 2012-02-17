@@ -14,9 +14,9 @@ Certaines méthodologies de types FCM ont inclu une prise en compte de la redonda
 Toutefois, les travaux sur les méthodes de débruitage par patches (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
 Un terme de régularisation non-local intègre don une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
-Concernant la prise en compte du biais, une méthodologie de type FCM a introduit une évaluation locale des centroïdes afin de ne pas avoir à évaluer le champ de biais directement (voir en Section~\ref{subsec:fcm:bias}).
-Cependant, la taille du voisinage utilisé pour estimer ces centroïdes locaux est difficile à fixer et peut amener une mauvaise estimation des centroïdes locaux, biaisant ainsi la classification des voxels.
-L'introduction des moyennes non-locales va donc permettre de prendre en compte l'estimation des centroïdes locaux voisins tout en introduisant une pondération appropriée et de rendre le processus de segmentation globalement plus robuste.
+Une évaluation locale des centroïdes de l'algorithme FCM permet une prise en compte du biais en intensité sans avoir à l'évaluer explicitement (voir en Section~\ref{subsec:fcm:bias}).
+Cependant, la taille des zones utilisées pour estimer ces centroïdes est difficile à fixer et peut amener une mauvaise estimation des paramètres du modèle, biaisant ainsi la classification des voxels (voir en Section~\ref{subsec:nl:dd}).
+L'introduction des moyennes non-locales va donc permettre de prendre en compte l'estimation des centroïdes locaux voisins par le biais d'une pondération calculée à partir des poids non-locaux entre les voxels et de rendre le processus de segmentation globalement plus robuste.
 
 La suite du chapitre s'organise de la façon suivante.
 Dans un premier temps, les moyennes non-locales sont définies et une synthèse des travaux les utilisant est présentée.

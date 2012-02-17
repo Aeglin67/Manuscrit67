@@ -42,7 +42,7 @@ Concernant les performances de l'algorithme, plusieurs voies peuvent être suivie
 L'utilisation de noyaux compacts permettrait, par exemple, d'éliminer l'influence des patches peu similaires à celui autour du voxel central dans le calcul des poids non-locaux.
 De plus, une étude plus poussée des interactions entre les termes d'attache aux données et de régularisation est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre une amélioration des performances de la segmentation.
 
-L'exemple issue de la segmentation d'images médicales montre qu'il nous est possible de construire des partitions homogènes selon le critère du niveau de gris de l'image tout en imposant une régularisation selon le critère du voisinage du voxel voisin.
+L'exemple issue de la segmentation d'images médicales montre qu'il nous est possible de construire des partitions homogènes selon le critère du niveau de gris de l'image tout en imposant une régularisation spatiale en fonction du voisinage du voxel voisin, que ce soit dans le terme d'attache aux données et dans le terme de régularisation.
 Ce principe peut être généralisable à d'autres critères et permettre l'utilisation de notre algorithme de C-moyennes floues non-locales dans d'autres domaines que la segmentation d'images.
 Par exemple, la segmentation d'images satellites (distinction entre zones urbaines, zones agricoles, zones forestières, \emph{etc.}) peut être envisagée avec notre algorithme.
 Il pourrait être également utilisé dans le but de segmenter une population selon différents critères (revenus, sexe, métier, \emph{etc.}) tout en régularisant cette classification en tenant compte d'autres aspects (origine sociale, lieu d'habitation, \emph{etc.}).
