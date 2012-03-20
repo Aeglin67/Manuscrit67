@@ -90,15 +90,15 @@ Chacune d'entre elles présente ses avantages et ses inconvénients en terme de te
 
 
 Dans le cadre de l'imagerie du f\oe tus, il a été mis en évidence que les temps d'acquisition des IRM (spin-écho ou fast-spin-écho) \cite{Studholme:ARBE:2011} étaient beaucoup trop longs et donc beaucoup trop sensibles aux mouvements des sujets.
-Néanmoins, des séquences reposant sur des échos de spin ultra-rapides développées il y'a plusieurs années \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006} ont montré leur utilité dans le cadre de l'imagerie cérébrale f\oe tale .
+Néanmoins, des séquences reposant sur des échos de spin ultra-rapides développées il y a plusieurs années \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006} ont montré leur utilité dans le cadre de l'imagerie cérébrale f\oe tale.
 Ces séquences, permettant d'acquérir une coupe en moins d'une seconde, apportent une réponse aux mouvements du f\oe tus et à la respiration de la mère (artéfacts de mouvement, \emph{etc.}) qui risquent de parasiter l'acquisition.
 Toutefois, les techniques d'acquisition 3D ne sont pas encore suffisamment performantes~\cite{Studholme:ARBE:2011}, conduisant à réaliser des acquisitions sous formes de piles de coupes 2D.
 L'épaisseur de ces coupes (en général d'environ 3 mm), nécessaire pour procurer une bonne résolution à la coupe acquise ainsi que pour bénéficier d'un bon rapport signal à bruit, empêche cependant de réaliser une réelle analyse 3D du cerveau (voir en Figure~\ref{FIG:INTRO:FOETUS}).
 De plus, l'acquisition sous forme de piles 2D ne garantit pas une cohérence anatomique entre les coupes.
-Trois séries d'acquisitions sont ainsi réalisées (dans les directions axiales, sagittales et coronales), de manière à obtenir une vision complémentaire du volume cérébrale du cas étudié.
+Trois séries d'acquisitions sont ainsi réalisées (dans les directions axiale, sagittale et coronale), de manière à obtenir une vision complémentaire du volume cérébrale du cas étudié.
 
-Malgré ces défauts, l'IRM cérébrale de f\oe tus s'est révélée comme un outil important dans certains cas cliniques.
-Elle a notamment été utilisée pour réaliser des études de populations, telle qu'une étude du volume cérébrale \cite{Grossman:NeuroImage:2006}, de l'évaluation de l'hypertrophie des ventricules \cite{Kazan-Tannus:AJR:2007}, de l'identification des malformations cérébrales \cite{Rolo:ArcPedObs:2011} ou encore des infections \cite{Barkovich:ChildNervousSys:2003}.
+Malgré ces défauts, l'IRM cérébrale de f\oe tus s'est révélée être un outil important dans certains cas cliniques.
+Elle a notamment été utilisée pour réaliser des études de populations, telle qu'une étude du volume cérébral \cite{Grossman:NeuroImage:2006}, de l'évaluation de l'hypertrophie des ventricules \cite{Kazan-Tannus:AJR:2007}, de l'identification des malformations cérébrales \cite{Rolo:ArcPedObs:2011} ou encore des infections \cite{Barkovich:ChildNervousSys:2003}.
 % Livre en ligne : \cite{Hornak:Online:1996}.
 
 \subsection{Caractéristiques}
@@ -109,7 +109,7 @@ Elle a notamment été utilisée pour réaliser des études de populations, telle qu'
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/ESC_Noise.eps}\label{FIG:INTRO:ARTEFACTS:NOISE}}
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/AYD_Bias.eps}\label{FIG:INTRO:ARTEFACTS:BIAS}}
 	\end{center}
-        \caption[Artéfacts de l'IRM]{\emph{Artéfacts de l'IRM. (a) Coupe axiale d'une IRM présentant un bruit. (b) Coupe axiale d'une IRM présentant un biais, caractérisé par une intensité des voxels de LCR moins élevés à gauche qu'à droite. }\label{FIG:INTRO:ARTEFACTS}}
+        \caption[Artéfacts de l'IRM]{\emph{Artéfacts de l'IRM. (a) Coupe axiale d'une IRM présentant un bruit. (b) Coupe axiale d'une IRM présentant un biais, caractérisé par une intensité des voxels de LCR moins élevée à gauche qu'à droite. }\label{FIG:INTRO:ARTEFACTS}}
 \end{figure}
 
 Cette section décrit les différents artéfacts rencontrés lors de l'exploitation des images issues d'une IRM.
@@ -143,7 +143,7 @@ Les conséquences du biais sur les méthodes de traitement des IRM (en particulier
 Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
 Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}).
 Cet effet se manifeste à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \emph{etc}.) ou lorsque certaines structures sont beaucoup trop fines pour être visibles par l'imageur (petits vaisseaux sanguins, couches du cortex, \emph{etc}.).
-Dans le cadre de certaines méthodes de classification des voxels en fonction de leur intensité, cet effet est pris en compte en considérant que l'intensité résultante du voxel est une combinaison généralement linéaire de plusieurs tissus comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
+Dans le cadre de certaines méthodes de classification des voxels en fonction de leur intensité, cet effet est pris en compte en considérant que l'intensité résultante du voxel est une combinaison généralement linéaire de l'intensité de plusieurs tissus comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
 
 \begin{figure}[!t]
 \begin{center}
@@ -152,7 +152,7 @@ Dans le cadre de certaines méthodes de classification des voxels en fonction de 
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Discretisation.eps}}
 \hspace{2mm}
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Final.eps}}
-\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM. (a) Illustration d'un frontière entre deux tissus. (b) Superposition de la frontière entre tissus et de la grille de l'image. (c) Résultat de l'échantillonnage réalisé pour l'acquisition de l'image : les voxels situés à la frontière des tissus ont une intensité équivalente à la combinaison des signaux des deux tissus.}}
+\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM. (a) Illustration d'une frontière entre deux tissus. (b) Superposition de la frontière entre tissus et de la grille de l'image. (c) Résultat de l'échantillonnage réalisé pour l'acquisition de l'image : les voxels situés à la frontière des tissus ont une intensité équivalente à la combinaison des signaux des deux tissus.}}
 \label{fig:intro:vp}
 \end{center}
 \end{figure}
@@ -161,7 +161,7 @@ Dans le cadre de certaines méthodes de classification des voxels en fonction de 
 
 % Nous pouvons encore signaler plusieurs types d'artéfacts.
 Les artéfacts de mouvement (spécialement problématiques dans le cas de l'IRM f\oe tale) sont dus aux mouvements du f\oe tus pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
-L'impact de ces artéfacts est variable selon le moment de l'acquisition, mais il se traduit généralement, soit par une image floue si les mouvements sont aléatoires, ou par l'apparition d'images fantômes si ils sont périodiques (respiration ou battements cardiaques par exemple).
+L'impact de ces artéfacts est variable selon le moment de l'acquisition, mais il se traduit généralement, soit par une image floue si les mouvements sont aléatoires, soit par l'apparition d'images fantômes si ils sont périodiques (respiration ou battements cardiaques par exemple).
 Ces artéfacts sont \og doubles \fg{} en IRM f\oe tale ou l'on doit tenir compte non seulement des mouvements du f\oe tus, mais également de la respiration de la mère.
 
 % \'Etant donné que les acquisitions actuelles sont anistropiques et présentent un volume partiel important, la reconstruction d'images isotropes est un préalable à une étude plus avancée des cas cliniques rencontrés.
@@ -180,7 +180,7 @@ Malgré les précautions que prennent les radiologues, l'image finale sera toujour
 
 %------------------------------------------------------------------------Anatomie et maturation cérébrale----------------------------------------------------------------------------------------
 
-\section{Anatomie et maturation cérébrale}
+\section{Anatomie et maturation cérébrales}
 
 Cette section présente succinctement quelques notions fondamentales d'anatomie cérébrale.
 Nous présentons tout d'abord les tissus cérébraux chez l'adulte, puis nous nous intéresserons au cas des f\oe tus.
@@ -193,7 +193,7 @@ Cette dernière partie décrira l'évolution du cerveau au cours de la grossesse.
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre1/Sillons_externe.eps}}
 \subfigure[]{\includegraphics[height=55mm]{eps/chapitre1/Gyrus_externe.eps}}
 \hspace{-5mm}
-\caption[Sillons et gyri cérébraux]{\emph{Principaux sillons (a) et gyri (b) cérébraux d'un cerveau adulte. Légende : lobe frontale (bleu), lobe pariétal (jaune), lobe temporal (vert), lobe occipital (rouge) (images issues de : \url{fr.wikipedia.org}).}}
+\caption[Sillons et gyri cérébraux]{\emph{Principaux sillons (a) et gyri (b) cérébraux d'un cerveau adulte. Légende : lobe frontal (bleu), lobe pariétal (jaune), lobe temporal (vert), lobe occipital (rouge) (images issues de : \url{fr.wikipedia.org}).}}
 \label{Intro:Brain:Adult}
 \end{center}
 \end{figure}
@@ -207,7 +207,7 @@ La matière grise est composée essentiellement des corps cellulaires et des dendr
 Cette matière grise est répartie dans deux grandes structures : les noyaux et le cortex.
 
 Le cortex est une couche de cellules de 1 à 4.5 mm d'épaisseur~\cite{Fischl:PNAS:2000}.
-Il est plissé par différents sillons formant les circonvolution cérébrales, ou \emph{gyri}.
+Il est plissé par différents sillons formant les circonvolutions cérébrales, ou \emph{gyri}.
 Les scissures les plus profondes délimitent plusieurs aires appelées des lobes (voir Figure~\ref{Intro:Brain:Adult}). 
 Les quatre grands lobes du cerveau sont les lobes : frontaux, pariétaux, temporaux et occipitaux.
 
@@ -217,8 +217,8 @@ Ceux du lobe pariétal sont le sillon postcentral et le sillon intrapariétal.
 
 Le sillon central marque la frontière entre les lobes frontal et pariétal et le sillon latéral celle entre les lobes frontal et temporal.
 Le repli de l'\emph{insula} est complètement recouvert par les lobes frontal et temporal.
-Ces sillons sont d'une importance notable car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié ainsi qu'une indication sur le bon déroulement de la masturbation cérébrale~\cite{Levine:Radiology:1999, Garel:AJNR:2001}.
-En effet, le développement des sillons permet une augmentation de la surface corticale et ils apparaissent en suivant un shéma temporel précis, ce dernier étant décrit plus loin.
+Ces sillons sont d'une importance notable car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié ainsi qu'une indication sur le bon déroulement de la maturation cérébrale~\cite{Levine:Radiology:1999, Garel:AJNR:2001}.
+En effet, le développement des sillons permet une augmentation de la surface corticale et ils apparaissent en suivant un schéma temporel précis, ce dernier étant décrit plus loin.
 Une importante variabilité par rapport à ce schéma peut alors apparaître comme un marqueur indiquant un problème dans le développement fonctionnel.
 
 \subsection{Maturation cérébrale}
@@ -238,7 +238,7 @@ La formation du système nerveux commence très tôt au cours de la grossesse, c'es
 \`A ce stade, la gastrulation de l'embryon (réorganisation des cellules après la nidation dans l'utérus) a déjà eu lieu et le système nerveux se présente sous la forme d'une couche aplatie de cellules appelée la plaque neurale.
 Cette plaque va tout d'abord se replier, formant ainsi la gouttière neurale (voir Figure~\ref{fig:intro:tube}).
 La fermeture de cette gouttière, tout d'abord par son milieu, puis dans sa partie antérieure et postérieure, constitue alors le tube neural dont la partie dorsale, la crête neurale, est à l'origine du système nerveux périphérique.
-\`A la fin de la quatrième semaine de grossesse, ce processus est achevé et deux processus vont avoir lieux en parallèle : l'histogénèse, c'est-à-dire la différenciation cellulaire à partir des cellules souches, et la formation des grandes régions du cerveau. 
+\`A la fin de la quatrième semaine de grossesse, ce processus est achevé et deux processus vont avoir lieu en parallèle : l'histogénèse, c'est-à-dire la différenciation cellulaire à partir des cellules souches, et la formation des grandes régions du cerveau. 
 
 \begin{figure}[!t]
 \begin{center}
@@ -286,7 +286,7 @@ Elles restent lisses jusqu'à environ 28 semaines, les opercules (surfaces du cer
 % Le gyrus insulaire droit se développe plus tôt que le gauche.
 
 Le lobe pariétal est une structure qui reste lisse jusqu'à 25 semaines d'aménorrhée à l'exception des sillons centraux et post-centraux.
-Le premier est une profonde fissure qui apparaît dès la vingtième semaine de grossesse avec quelques cas ou il apparaît dès la dix-septième semaine du côté droit.
+Le premier est une profonde fissure qui apparaît dès la vingtième semaine de grossesse avec quelques cas où il apparaît dès la dix-septième semaine du côté droit.
 Il commence au niveau de la fosse inter-hémisphérique et s'étend vers le bas jusqu'à l'insula pour former une fissure linéaire au bout de 22 à 23 semaines d'aménorrhée.
 Environ une semaine s'écoule entre l'apparition du sillon du côté droit et du côté gauche.
 Le sillon post-central suit durant la vingt-cinquième semaine.
@@ -303,12 +303,12 @@ Les sillons temporaux médians et inférieurs sont en général visibles à la trenti
 Le gyrus de Heschl, ou gyrus temporal transverse, situé sur la face supérieure du gyrus temporal supérieur, dans la profondeur du sillon latéral, présente une assymétrie marquée entre les hémisphères droit et gauche.
 Il apparaît d'abord du côté droit, et se développe vers la face antérieure, tandis qu'il se développe vers la face postérieure du côté gauche.
 Il y a également une différence en termes de taille et d'orientation de ce gyrus.
-Le côté gauche est moins haut et présente un angle plus obtu par rapport à l'axe antéropostérieur du cerveau.
-Ceci a pour effet de donner plus d'espace pour le développement de la face supérieur du \emph{gyrus} temporal supérieur (ou \emph{planum temporale}) gauche.
-Les \emph{gyri} secondaire des \emph{gyri} tranverses temporaux aparaissent à la trente-sixième semaine, le droit apparaissant plus plissé que le gauche.
+Le côté gauche est moins haut et présente un angle plus obtus par rapport à l'axe antéropostérieur du cerveau.
+Ceci a pour effet de donner plus d'espace pour le développement de la face supérieure du \emph{gyrus} temporal supérieur (ou \emph{planum temporale}) gauche.
+Les \emph{gyri} secondaires des \emph{gyri} tranverses temporaux aparaissent à la trente-sixième semaine, le droit apparaissant plus plissé que le gauche.
 
 L'aspect médian du lobe occipital est fixé dès la dix-huitième semaine de grossesse, tandis que les aspects latéral et supérieur le sont seulement à la vingt-septième.
-\`A ce moment, il est possible de distinguer le \emph{cuneus} (circonvolution de la partie supérieure de la face interne du lobe occipital) et le lobule lingual (limité par la scissure calcarine, qui le sépare du cuneus au dessus).
+\`A ce moment, il est possible de distinguer le \emph{cuneus} (circonvolution de la partie supérieure de la face interne du lobe occipital) et le lobule lingual (limité par la scissure calcarine, qui le sépare du cuneus au-dessus).
 En dessous du lobule lingual se forme le lobule fusiforme qui devient visible à la trentième semaine.
 Les \emph{gyri} secondaires de ces lobules apparaissent à partir de la trente-quatrième semaine et les sillons tertiaires entre les quarantième et quarante-deuxième semaines.
 
@@ -351,7 +351,7 @@ Insulaire & 34 & 34  (-) \\
 \caption[Apparition des sillons à l'IRM]{\emph{Comparaison entre l'apparition des sillons lors des études anatomiques et des études en IRM en semaines d'aménorrhée.}\label{TAB:INTRO:SULCI}}
 \end{table}
 
-Les progrès récents des IRM ont permis de conduire des études anatomiques exhaustives \emph{in vivo}, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence quelques variations du signal des images montrant la variation de la densité cellulaire et les progrès de la myélinisation).
+Les progrès récents des IRM ont permis de conduire des études anatomiques \emph{in vivo}, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence quelques variations du signal des images montrant la variation de la densité cellulaire et les progrès de la myélinisation).
 Plusieurs travaux se sont penchés sur l'évolution visible du cortex à partir de données IRM ~\cite{Levine:Radiology:1999, Garel:AJNR:2001, Prayer:PedRad:2006, Glenn:SePer:2009, Habas:SPIE:2011}.
 De manière générale, on observe un décalage entre le moment où un sillon est observable \emph{ex vivo} et \emph{in vivo} d'environ une semaine.
 
