@@ -32,7 +32,7 @@ Elles illustrent la capacité de la méthodologie à fournir une bonne évaluation d
 
 Les expériences portant sur l'utilisation conjointe des termes d'attache aux données et de régularisation non-locaux ont montré que la performance globale de l'algorithme n'augmente pas autant que le suggéraient les expériences portant sur les termes non-locaux séparément.
 De plus, l'algorithme de segmentation nécessite plusieurs heures de calculs, ceci étant dû aux importants voisinages utilisés pour le calcul des poids non-locaux.
-Enfin, les moyennes non-locales ont connus de nombreux développements ces dernières années, tel qu'illustré en Section~\ref{sec:nl:def}, dont l'efficacité a été démontré dans le cadre du débruitage.
+Enfin, les moyennes non-locales ont connu de nombreux développements ces dernières années, tel qu'illustré en Section~\ref{sec:nl:def}, dont l'efficacité a été démontrée dans le cadre du débruitage.
 
 Deux axes peuvent donc être suivis pour l'amélioration de cette méthodologie.
 Concernant la vitesse d'exécution, l'utilisation de l'analyse en composantes principales de l'ensemble des patches de l'image a montré son efficacité dans le cadre du débruitage, en plus d'améliorer les performances de l'algorithme. 
@@ -42,7 +42,7 @@ Concernant les performances de l'algorithme, plusieurs voies peuvent être suivie
 L'utilisation de noyaux compacts permettrait, par exemple, d'éliminer l'influence des patches peu similaires à celui autour du voxel central dans le calcul des poids non-locaux.
 De plus, une étude plus poussée des interactions entre les termes d'attache aux données et de régularisation est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre une amélioration des performances de la segmentation.
 
-L'exemple issue de la segmentation d'images médicales montre qu'il nous est possible de construire des partitions homogènes selon le critère du niveau de gris de l'image tout en imposant une régularisation spatiale en fonction du voisinage du voxel voisin, que ce soit dans le terme d'attache aux données et dans le terme de régularisation.
+L'exemple issu de la segmentation d'images médicales montre qu'il nous est possible de construire des partitions homogènes selon le critère du niveau de gris de l'image tout en imposant une régularisation spatiale en fonction du voisinage du voxel voisin, que ce soit dans le terme d'attache aux données et dans le terme de régularisation.
 Ce principe peut être généralisable à d'autres critères et permettre l'utilisation de notre algorithme de C-moyennes floues non-locales dans d'autres domaines que la segmentation d'images.
 Par exemple, la segmentation d'images satellites (distinction entre zones urbaines, zones agricoles, zones forestières, \emph{etc.}) peut être envisagée avec notre algorithme.
 Il pourrait être également utilisé dans le but de segmenter une population selon différents critères (revenus, sexe, métier, \emph{etc.}) tout en régularisant cette classification en tenant compte d'autres aspects (origine sociale, lieu d'habitation, \emph{etc.}).
@@ -54,11 +54,11 @@ L'utilisation des moyennes non-locales pourrait également être envisagée dans l'
 
 Deux axes importants peuvent être suivis pour la poursuite de ce travail de recherche.
 Le premier consiste à améliorer la segmentation du cortex.
-En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans la région au dessus du tronc cérébral.
-De plus, l'observation en détails de la segmentation montre que certains sillons, comme la sillon inter-hémisphérique, sont sous-dimensionnés par la segmentation.
+En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans la région au-dessus du tronc cérébral.
+De plus, l'observation en détails de la segmentation montre que certains sillons, comme le sillon inter-hémisphérique, sont sous-dimensionnés par la segmentation.
 L'introduction d'\emph{a priori} supplémentaires dans le processus de segmentation permettrait d'adapter les contraintes géométriques à certains endroits du cerveau et ainsi, d'éliminer les faux positifs.
 Pour affiner la segmentation des sillons, l'utilisation de modèles déformables non-locaux est une option envisageable.
-Une régularisation non-locale de la classification a été envisagée au cours de la thèse, mais les résultats non concluants nous ont conduits à abandonner cette idée (en effet, les coefficients Dice étant en moyenne inférieur de deux points).
+Une régularisation non-locale de la classification a été envisagée au cours de la thèse, mais les résultats non concluants nous ont conduits à abandonner cette idée (en effet, les coefficients Dice sont en moyenne inférieur de deux points).
 
 La deuxième axe pouvant être suivi est la segmentation des autres structures cérébrales.
 Notre méthodologie repose sur une segmentation préalable du volume intracrânien, ainsi que du cervelet et du tronc cérébral.
