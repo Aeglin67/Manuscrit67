@@ -6,13 +6,13 @@ Dans ce chapitre, une nouvelle méthode de segmentation basée sur FCM est définie
 Elle inclut l'approche des moyennes non-locales (en anglais, \emph{non-local means}) proposée en 2005.
 Issue de travaux dans le cadre du débruitage d'images, cette dernière a été spécifiée de manière indépendante par \cite{Buades:MMS:2005} et \cite{Awate:PAMI:2006}.
 L'idée générale est de profiter de la redondance de l'information au sein d'une image pour estimer la \og vraie \fg{} valeur de l'intensité en chaque voxel.
-La nécessité d'avoir une évaluation robuste de ces similarités entre voxels a nécessitée la prise en compte leur proche voisinage, conduisant à la définition d'une notion de patches.
+Le besoin d'avoir une évaluation robuste de ces similarités entre voxels a nécessité la prise en compte leur proche voisinage, conduisant à la définition d'une notion de patches.
 
 L'utilisation de la redondance de l'information de l'image est une option peu explorée en segmentation cérébrale.
 Comme nous l'avons vu précédemment, de nombreuses méthodes utilisent une modélisation spécifique d'un champ de biais pour la correction de l'inhomogénéité de l'intensité ou une approche prenant en compte la classification des voxels environnants pour la prise en compte du bruit.
-Certaines méthodologies de types FCM ont inclu une prise en compte de la redondance de l'information en favorisant les voxels dont l'intensité et les coordonnées spatiales sont les plus proches de celles du voxel courant (voir en Section~\ref{subsubsec:fcm:ponderation}).
+Certaines méthodologies de type FCM ont inclus une prise en compte de la redondance de l'information en favorisant les voxels dont l'intensité et les coordonnées spatiales sont les plus proches de celles du voxel courant (voir en Section~\ref{subsubsec:fcm:ponderation}).
 Toutefois, les travaux sur les méthodes de débruitage par patches (dont l'approche non-locale) ont montré que ces dernières étaient efficaces car elles offrent une estimation de la similarité plus fiable qu'une comparaison de la seule valeur des voxels~\cite{Salmon:2010}.
-Un terme de régularisation non-local intègre don une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
+Un terme de régularisation non-local intègre donc une meilleure prise en compte de l'environnement autour du voxel courant pour effectuer la régularisation.
 
 Une évaluation locale des centroïdes de l'algorithme FCM permet une prise en compte du biais en intensité sans avoir à l'évaluer explicitement (voir en Section~\ref{subsec:fcm:bias}).
 Cependant, la taille des zones utilisées pour estimer ces centroïdes est difficile à fixer et peut amener une mauvaise estimation des paramètres du modèle, biaisant ainsi la classification des voxels (voir en Section~\ref{subsec:nl:dd}).
@@ -78,17 +78,17 @@ Telle qu'elles sont définies, les moyennes non-locales ont montré une grande eff
 Plusieurs points de vue peuvent être adoptés pour l'interprétation des moyennes non-locales.
 Un premier lien a été établi avec les variations totales, où le débruitage d'une image consiste en la minimisation d'une fonctionnelle constituée de la somme d'un terme d'attache aux données (différence entre l'image estimée et l'image originale) et d'un terme de régularisation, pénalisant le bruit à haute-fréquence.
 Des termes non-locaux sont introduits dans cette fonctionnelle afin de favoriser les similarité de l'image \cite{Kindermann:MMS:2005, Gilboa:MMS:2008, Azzabou:CVPR:2007}.
-Dans ce cadre, les moyennes non-locales sont vues comme une étape d'une descente de gradient pour la minimisation de la fonctionelle .
+Dans ce cadre, les moyennes non-locales sont vues comme une étape d'une descente de gradient pour la minimisation de la fonctionelle.
 
-Les moyennes non-locales ont également été étudiées directement depuis l'espace des patch.
-Les travaux de \cite{Tschumperle:ICIP:2009} les interprètent comme une étape d'une équation de chaleur dans l'espace des patches et établissent des liens avec les algorithmes classiques de diffusion.
+Les moyennes non-locales ont également été étudiées directement depuis l'espace des patches.
+Les travaux~\cite{Tschumperle:ICIP:2009} les interprètent comme une étape d'une équation de chaleur dans l'espace des patches et établissent des liens avec les algorithmes classiques de diffusion.
 Ce point de vue est soutenu par l'article de \cite{Peyre:CVIU:2009} qui considère qu'une image repose sur une variété dans l'espace des patches, les moyennes non-locales consistant en une diffusion dans cette variété.
 Enfin, un lien avec les équations de Fokker-Planck est mis en évidence par \cite{Singer:SIAMJIS:2009}, rapprochant les moyennes non-locales des processus de Markov.
 
 D'autres auteurs adoptent un point de vue statistique pour interpréter les moyennes non-locales.
 Par exemple, \cite{Goossens:LNLA:2008} démontre un lien avec les estimateurs robustes (ou plutôt, la première itération d'un algorithme d'optimisation) et pose la question de l'utilisation du noyau gaussien si le bruit ne l'est pas.
 Par ailleurs, \cite{Deledalle:TIP:2009} propose un algorithme itératif fondé sur l'estimation du maximum de vraisemblance permettant de prendre en compte différents types de bruit.
-Enfin, \cite{Salmon:ICIP:2009} considère les moyennes non-locales comme une agrégation bayésienne d'estimateurs en chaque patches.
+Enfin, \cite{Salmon:ICIP:2009} considère les moyennes non-locales comme une agrégation bayésienne d'estimateurs en chaque patch.
 L'article de \cite{Katkovnik:IJCV:2010} assimile quant à lui la première version des moyennes non-locales à une régression linéaire d'ordre $0$ et l'étend à des niveaux supérieurs.
 
 De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tels que le filtre bilatéral, les filtres bayésiens, \emph{etc.}).
@@ -112,7 +112,7 @@ Il est cependant démontré \cite{Duval:2011} que ces hypothèses ont plusieurs con
  \item le filtre a un impact conséquent sur des images périodiques (par exemple des images alternant des bandes blanches et noires)
  \item la zone de recherche $\Omega^R_j$ a un impact sur la qualité visuelle du débruitage,
  \item un grand patch tend à rendre l'image floue,
- \item une perte de contraste dépendant du niveau d'occurence de chaque patch est observée,
+ \item une perte de contraste dépendant du niveau d'occurrence de chaque patch est observée,
  \item moins les détails sont contrastés, plus ils sont dégradés.
 \end{itemize}
 Le choix des paramètres se fera donc en tenant compte de ces propriétés.
@@ -145,9 +145,9 @@ L'article de Buades \cite{Buades:MMS:2005} utilise un noyau de type gaussien, qu
 Cependant, des travaux récents \cite{Goossens:LNLA:2008, Salmon:2010} ont montré qu'un noyau à support compact \cite{Remaki:TIP:2000} est préférable.
 En effet, le noyau gaussien a l'inconvénient de donner une valeur proche de zéro, mais non nulle, aux patches peu similaires à celui entourant le voxel central, ce qui tend à diminuer l'efficacité du débruitage. 
 Certains travaux tronquent le noyau gaussien pour éviter ce problème et pour accélérer les traitements \cite{Coupe:TMI:2008}.
-Cependant, l'utilisation de noyaux compacts apporte une réponse plus naturelle à ce problème en définissant l'influence des patches peu similaires au patch central comme nulle, tout en assurant la continuité de ces fonctionnelles. 
+Cependant, l'utilisation de noyaux compacts apporte une réponse plus naturelle à ce problème en définissant l'influence des patches peu similaires au patch central comme nulle, tout en assurant la continuité de ces fonctions. 
 Un noyau plat peut être employé afin de privilégier la vitesse de calcul (mais n'est pas continu), ainsi que des noyaux compacts polynomiaux de degré $4$ \cite{Goossens:LNLA:2008} ou de degré $6$ \cite{Duval:2010}.
-La figure~\ref{fig:nlm:kernels} illustrent cette problématique en comparant différents noyaux et démontre l'utilité d'un noyau compact polynomiale par rapport au noyau gaussien (en ne prenant en compte que les patches \og proches \fg{} du patch central) et par rapport au noyau plat (qui n'est pas une fonction continue et ne pondère pas les patches).
+La figure~\ref{fig:nlm:kernels} illustrent cette problématique en comparant différents noyaux et démontre l'utilité d'un noyau compact polynomial par rapport au noyau gaussien (en ne prenant en compte que les patches \og proches \fg{} du patch central) et par rapport au noyau plat (qui n'est pas une fonction continue et ne pondère pas les patches).
 
 Le choix de la norme est aussi un élément à prendre en compte.
 De manière générale, l'utilisation de la norme euclidienne pour le calcul de la similarité entre deux patches a peu été remis en cause \cite{Salmon:2010}.
@@ -165,11 +165,11 @@ De plus, le bruit peut ne pas être uniforme sur l'image et la taille du patch do
 Enfin, de larges patches sont peu adaptés dans les zones présentant de fortes variations , ayant pour conséquence un effacement des détails isolés et la présence d'un halo de bruit autour de ces détails à cause de la difficulté de trouver des patches similaires.
 La nature de l'image à débruiter influe également sur l'efficacité de ce paramètre, qui est donc à fixer en fonction de l'image.
 Notons l'article de \cite{Manjon:JMRI:2010} introduisant des patches adaptatifs de manière à débruiter une IRM présentant un bruit variable.
-L'article de \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
-Enfin, nous pouvons citer deux techniques utilisant la méthode SURE (\emph{Stein's unbiased risk estimate}) \cite{Stein:AS:1981} à partir de plusieurs exécutions des moyennes non-locales pour estimer l'image débruitée.
-La première est celle de \cite{VanDeVille:TIP:2011} qui exécute les moyennes non-locales avec plusieurs tailles de patches et de zones de recherche, et effectue une combinaison de ces résultats afin d'obtenir l'estimation la plus robuste possible en chaque élément de l'image.
+L'article \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
+Enfin, nous pouvons citer deux techniques utilisant la méthode SURE (\emph{Stein's unbiased risk estimate}) \cite{Stein:AS:1981} à partir de plusieurs exécutions de l'algorithmes des moyennes non-locales pour estimer l'image débruitée.
+La première est celle de \cite{VanDeVille:TIP:2011} qui exécute un filtrage par les moyennes non-locales avec plusieurs tailles de patches et de zones de recherche, et effectue une combinaison de ces résultats afin d'obtenir l'estimation la plus robuste possible en chaque élément de l'image.
 Par ailleurs, \cite{Deledalle:JMIV:2011} utilise des patches de formes diverses et agrège les différentes estimations localement. 
-De plus, ils utilisent une implémentation fondée sur la transformée de Fourrier rapide de manière à accélérer les traitements.
+De plus, ils utilisent une implémentation fondée sur la transformée de Fourier rapide de manière à accélérer les traitements.
 Ses résultats montrent une nette diminution du halo de bruit que l'on peut observer avec l'algorithme des moyennes non-locales original.
 % Une technique de patches adaptatifs a été implémentée par \cite{Kervrann:TIP:2006} dans l'
 
@@ -185,12 +185,12 @@ En déconvolution, les moyennes non-locales sont utilisées de manière à favoriser
 % soit dans l'idéal des images invariantes au filtre non-local ().
 
 Enfin, les moyennes non-locales ont également été appliquées à la segmentation d'images.
-Les travaux de \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'un opérateur de gradient et d'un opérateur de divergence non-locaux de manière à étendre les techniques fondées sur des équations aux dérivées partielles (EDP) ou des approches variationnelles.
-Les travaux de \cite{Bresson:2008} ont défini plusieurs fonctionnelles non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
+Les travaux \cite{Gilboa:MMS:2008} se sont focalisés sur la définition d'un opérateur de gradient et d'un opérateur de divergence non-locaux de manière à étendre les techniques fondées sur des équations aux dérivées partielles (EDP) ou des approches variationnelles.
+Les travaux \cite{Bresson:2008} ont défini plusieurs fonctions non-locales permettant une segmentation non-supervisée par contours actifs avec une approche variationnelle.
 Les moyennes non-locales ont également été utilisées en propagation de labels à partir d'une base d'images dont la vérité-terrain est connue. 
-L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patches similaires dans une base d'images, après une recalage affine et une égalisation d'histogramme.
+L'article de \cite{Rousseau:TMI:2011} décrit une méthodologie cherchant les patches similaires dans une base d'images, après un recalage affine et une égalisation d'histogramme.
 Cette méthododologie a l'avantage de ne pas nécessiter de recalage non-linéaire, et base l'étape de fusion des labels sur les poids non-locaux calculés à travers la base.
-Les moyennes non-locales ont également été introduites dans les lignes de niveaux par~\cite{Jung:SSVM:2011} et ont permis la segmentation de structures dont l'intensité varie de façon lisse, ce qui peut se révéler intéréssant dans le cas ou un biais est présent.
+Les moyennes non-locales ont également été introduites dans les lignes de niveaux par~\cite{Jung:SSVM:2011} et ont permis la segmentation de structures dont l'intensité varie de façon lisse, ce qui peut se révéler intéressant dans le cas où un biais est présent.
 % Enfin, l'article de \cite{Wang:CMIG:2008} définit une première approche permettant de prendre en compte l'information non-locale dans FCM. 
 % Elle est décrite à la section suivante.
 
@@ -227,7 +227,7 @@ L'idée sous-jacente est qu'il existe des parties de l'image présentant peu de si
 
 % Nous montrerons que la correction du bruit présent dans une image ne nécessite pas de définir une telle distance, mais qu'il suffit d'incorporer les moyennes non-locales au sein du terme de régularisation de FCM pour obtenir une correction efficace.
 
-\section{C-moyennes floues non-local}
+\section{C-moyennes floues non-locales}
 \label{sec:nlfcm}
 
 Nous présentons dans cette section une extension de l'algorithme FCM incluant les moyennes non-locales au sein du terme d'attache aux données de manière à améliorer la prise en compte du biais en intensité et au sein du terme de régularisation de manière à améliorer celle du bruit.
@@ -285,8 +285,8 @@ Un modèle étant défini pour chaque voxel de l'image, cette proportion est donc c
 \subsection{Terme de régularisation}
 \label{subsec:nl:reg}
 
-Comme vu dans la section~\ref{subsec:fcm:noise}, le terme de régularisation de la fonction d'énergie de FCM s'apparente la plupart du temps à l'expression d'un filtrage médian ou par moyenne pour lisser la segmentation, comme dans l'article de~\cite{Ahmed:TMI:2002}.
-L'article de~\cite{Pham:CVIU:2001} a une approche légèrement différente étant donné que le lissage ne se fait qu'en prenant en compte l'ensemble des classes exceptée la classe courante, ce qui permet de favoriser le terme d'attache aux données si la classe courante est bien représentée dans le voisinage. 
+Comme vu dans la section~\ref{subsec:fcm:noise}, le terme de régularisation de la fonction d'énergie de FCM s'apparente la plupart du temps à l'expression d'un filtrage médian ou par moyenne pour lisser la segmentation, comme dans l'article~\cite{Ahmed:TMI:2002}.
+L'article~\cite{Pham:CVIU:2001} a une approche légèrement différente étant donné que le lissage ne se fait qu'en prenant en compte l'ensemble des classes exceptée la classe courante, ce qui permet de favoriser le terme d'attache aux données si la classe courante est bien représentée dans le voisinage. 
 Plusieurs articles ont introduit différentes stratégies permettant de prendre en compte la similarité entre les voxels (introduisant ainsi une pondération entre les voxels d'un même voisinage), mais cette prise en compte nécessite le calcul de plusieurs variables additionnelles ou la définition d'une image intermédiaire (voir la sous-section \ref{subsec:fcm:noise}).
 
 Les moyennes non-locales sont particulièrement intéressantes dans cette situation, car elles fournissent les outils nécessaires à une pondération relativement aisée des voxels d'intérêt au sein de la zone de recherche.
@@ -362,7 +362,7 @@ NL-R-FCM & FCM avec attache aux données et régularisation non-locales \\
 \caption[Récapitulatif des acronymes utilisés pour FCM non-local]{\emph{Récapitulatif des acronymes utilisés pour les différentes versions du FCM non-local.}\label{fig:nlfcm:acronymes}}
 \end{center}
 \end{table}
-Le tableau~\ref{fig:nlfcm:acronymes} résume l'ensemble des terminologies utilisées pour désigner les différentes version de l'algorithme.
+Le tableau~\ref{fig:nlfcm:acronymes} résume l'ensemble des terminologies utilisées pour désigner les différentes versions de l'algorithme.
 
 
 \section{Validations}
@@ -440,7 +440,7 @@ Ceci, couplé à un voisinage $M_j$ trop important, rend le calcul des centroïdes 
 
 Les paramètres finaux choisis pour la suite des expérience sont un compromis entre la performance et le temps de calcul de l'algorithme.
 En effet, les deux voisinages $M_j$ et $N_j$ étant de taille importante, ils induisent des temps de calculs de l'ordre de plusieurs heures.
-Les paramètres $n_j$ et $m_j$ sont donc fixé à : $(n_j, m_j) = (8, 8)$ (voir la figure~\ref{FIG:PARAM:BRAINWEB:BIAS}) car le résultat de ce couple de valeur est proche du résultat optimal et permet la diminution du temps de calcul.
+Les paramètres $n_j$ et $m_j$ sont donc fixés à : $(n_j, m_j) = (8, 8)$ (voir la figure~\ref{FIG:PARAM:BRAINWEB:BIAS}) car le résultat de ce couple de valeurs est proche du résultat optimal et permet la diminution du temps de calcul.
 
 \paragraph*{Comparaison avec d'autres méthodologies}
 
@@ -512,7 +512,7 @@ La figure \ref{FIG:PARAM:BRAINWEB:NOISE} fournit une indication de l'influence d
 Le paramètre de lissage $\alpha$ a une forte influence sur la segmentation s'il est situé entre $0$ et $1.5$, puis un phénomène de convergence est observé. 
 Dans la suite du manuscrit, il sera fixé à $1.5$.
 Concernant la taille de la zone de recherche, la figure~\ref{FIG:PARAM:BRAINWEB:NOISE:HWVS} montre un maximum du taux de recouvrement avec un rayon de $2$ voxels pour la matière blanche et la matière grise, et un maximum avec un rayon de $3$ voxels pour le LCR.
-Le rayon de la zone de recherche $\Omega^{R_r}_{j}$ est donc fixée à $2$ pour la suite du manuscrit. 
+Le rayon de la zone de recherche $\Omega^{R_r}_{j}$ est donc fixé à $2$ pour la suite du manuscrit. 
 
 \paragraph*{Comparaison par rapport à d'autres méthodologies}
 
@@ -527,7 +527,7 @@ Le terme de régularisation non-local permet de remédier à cela grâce à la pondér
 
 De plus, le  tableau~\ref{TAB:DICE:BRAINWEB:NOISE} met en évidence une meilleure performance des algorithmes FCM que des algorithmes basés sur les champs et chaînes de Markov. 
 La figure~\ref{FIG:DICE:BRAINWEB:NOISE}, comparant les coefficients Dice obtenus par les algorithmes en fonction du niveau de bruit, confirme cette observation.
-Elle montre que le terme de régularisation non-local fournit une segmentation plus consistante à partir d'un niveau de bruit de $5$~\%.
+Elle montre que le terme de régularisation non-local fournit une segmentation plus cohérente à partir d'un niveau de bruit de $5$~\%.
 
 \begin{table}[!t]
 \begin{center}
@@ -589,7 +589,7 @@ Les paramètres considérés sont les suivants :
 
 Les résultats sont fournis par la figure~\ref{FIG:VIEW:BRAINWEB:ALL} et la table~\ref{TAB:DICE:BRAINWEB:ALL}.
 L'utilisation du terme d'attache aux données non-local permet d'améliorer largement les performances par comparaison avec l'algorithme FCM original.
-De plus, l'ajout du terme de régularisation non-local permet de combiner les avantages des deux termes et de fournir une segmentation consistante malgré la présence d'un biais en intensité et de bruit.
+De plus, l'ajout du terme de régularisation non-local permet de combiner les avantages des deux termes et de fournir une segmentation cohérente malgré la présence d'un biais en intensité et de bruit.
 % De plus, l'utilisation simultanée des termes non-locaux amène une amélioration conjointe des résultats et permet d'obtenir de meilleurs résultats finaux.
 
 \begin{figure}[!t]
@@ -712,7 +712,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 Le LCR n'est pas considéré dans cette étude car seuls les ventricules sont segmentés manuellement.
 La moyenne de différentes segmentations à travers la base est calculée, ainsi que l'écart-type pour la matière blanche et la matière grise sont présentés au tableau~\ref{TAB:DICE:IBSR}.
 Ces résultats montrent des performances similaires des différentes méthodologies concernant la segmentation de la matière blanche.
-La méthode HMC \cite{Bricq:MIA:2008} semble plus consistante car elle obtient la meilleure moyenne absolue, mais également la plus faible dispersion.
+La méthode HMC \cite{Bricq:MIA:2008} semble plus cohérente car elle obtient la meilleure moyenne absolue, mais également la plus faible dispersion.
 Cependant, les méthodes fondées sur les champs et chaînes de Markov sont moins efficaces concernant la segmentation de la matière grise.
 En effet, l'algorithme obtenant les meilleurs résultats pour ce tissu est R-FCM \cite{Pham:CVIU:2001}, et celui obtenant la plus faible dispersion est NL-R-FCM.
 Les deux méthodologies obtenant les meilleurs scores globaux sont R-FCM et NL-R-FCM. 
@@ -729,7 +729,7 @@ Néanmoins, nous pouvons signaler que la méthode NL-R-FCM, combinant donc régular
 Il faut cependant ajouter que ces résultats doivent être interprétés avec précaution.
 En effet, les segmentations manuelles fournies avec la base IBSR ne sont pas toujours optimales (par exemple autour des ventricules ou bien dans des régions très circonvoluées tels que les sillons) comme illustré à la figure~\ref{FIG:VIEW:IBSR}.
 L'analyse des résultats doit donc être complétée par une observation de la segmentation des différents cas pour en avoir une interprétation fiable.
-Un exemple est donné par le cas n\textdegree11 où il apparaît clairement que le matière grise est sur-segmentée, constituant ainsi un sur-ensemble de la matière grise réelle, expliquant les plus faibles scores obtenus pour ce cas que pour les autres.
+Un exemple est donné par le cas n\textdegree11 où il apparaît clairement que la matière grise est sur-segmentée, constituant ainsi un sur-ensemble de la matière grise réelle, expliquant les plus faibles scores obtenus pour ce cas que pour les autres.
 
 \section{Conclusion}
 
@@ -738,7 +738,7 @@ Nous avons développé un terme d'attache aux données et un terme de régularisatio
 Le premier permet la segmentation d'une image présentant une inhomogénéité en intensité sans avoir besoin de l'évaluer explicitement.
 Le second permet un lissage plus pertinent de la segmentation et accroît les performances de FCM dans un environnement bruité.
 
-Les résutats obtenus par le terme de régularisation non-locale démontrent que cette méthodologie est toute indiquée si un bruit corrompt l'image à segmenter.
+Les résutats obtenus par le terme de régularisation non-locale démontrent que cette méthodologie est tout indiquée si un bruit corrompt l'image à segmenter.
 Cependant, ceux du terme d'attache aux données méritent un approfondissement et une exploration plus avancée des différentes options offertes par les moyennes non-locales.
 L'utilisation d'un noyau à support compact peut par exemple être une alternative à tester afin d'éliminer l'influence des voxels peu similaires au voxel courant.
 
@@ -747,11 +747,11 @@ Ces deux ensembles de paramètres nécessitent la définition de deux larges voisin
 En effet, environ huit heures de calcul sur un PC standard sont nécessaires pour segmenter une image (logiciel programmé en C++).
 Différentes voies doivent être explorées afin de diminuer le temps d'exécution du logiciel.
 Une solution pourrait être la décomposition en composante principales de l'ensemble des patches de l'image, ce qui aurait pour effet d'accélérer le traitement mais également d'améliorer le résultat de la segmentation~\cite{VanDeVille:TIP:2011}.
-Une autre solution serait de décomposer l'image en sous-volumes disjoints, d'effectuer une évaluation locale du modèle dans ces sous-volumes puis d'effectuer une interpolation des huit modèles les plus proches en chaque voxels pour obtenir une estimation des centroïdes au voxel courant.
+Une autre solution serait de décomposer l'image en sous-volumes disjoints, d'effectuer une évaluation locale du modèle dans ces sous-volumes puis d'effectuer une interpolation des huit modèles les plus proches en chaque voxel pour obtenir une estimation des centroïdes au voxel courant.
 Le terme de régularisation ne nécessite au contraire que le calcul des poids non-locaux dans une zone de recherche plus réduite ($5\times5\times5$).
 Les temps de calcul sont alors réduits à une dizaine de minutes.
 
 Les expériences menées afin d'évaluer les deux termes de la fonction d'énergie de cette nouvelle version de FCM séparément ont montré qu'ils fournissaient de meilleurs résultats que les autres méthodologies testées.
-Cependant, l'utilisation conjointe de ces termes non-locaux ne semble pas apporté de gain significatif dans un environnement à la fois biaisé et bruité.
+Cependant, l'utilisation conjointe de ces termes non-locaux ne semble pas apporter de gain significatif dans un environnement à la fois biaisé et bruité.
 Une étude plus poussée des interactions entre ces deux termes est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre cette amélioration.
  \vspace*{15cm}
