@@ -45,7 +45,7 @@ La méthodologie conduisant à cette segmentation est décrite en section \ref{sec:
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre4/hist_foetus.eps}}
         \end{center}
 
-        \caption[Comparatif entre la distribution en intensité dans une image IRM pondérée en T1 adulte et une image IRM pondérée en T2 f\oe tale]{\emph{Comparatif entre la distribution en intensité dans une IRM T1 adulte (cas numéro 12 de la base IBSR) et une IRM T2 f\oe tale. Première ligne : image originale issue de IBSR (a), vérité-terrain correspondante (b) et distribution en intensité associée (c). Deuxième ligne : image originale d'une IRM f\oe tale (a), vérité-terrain associée (b) et distribution en intensité associée (c). Légende : LCR (rouge), matière grise (vert), matière blanche (bleu), tronc cérébral (jaune), cervelet (bleu ciel).}}
+        \caption[Comparatif entre les distributions en intensité dans une IRM T1 adulte et une image IRM T2 f\oe tale]{\emph{Comparatif entre les distributions en intensité dans une IRM T1 adulte (cas numéro 12 de la base IBSR) et une IRM T2 f\oe tale. Première ligne : image originale issue de IBSR (a), vérité-terrain correspondante (b) et distribution en intensité associée (c). Deuxième ligne : image originale d'une IRM f\oe tale (a), vérité-terrain associée (b) et distribution en intensité associée (c). Légende : LCR (rouge), matière grise (vert), matière blanche (bleu), tronc cérébral (jaune), cervelet (bleu ciel).}}
 
         \label{FIG:DISTRIB}
 
@@ -213,7 +213,7 @@ La deuxième étape est la segmentation proprement dite du cortex au sein de cette
 	\subfigure[]{\includegraphics[height=33mm]{eps/chapitre4/LCR_Init_Final.eps}\label{FIG:LCR:FINAL}}
         \end{center}
 
-        \caption[Segmentation LCR, Cerveau, Ventricules]{\emph{Séparation des ventricules et du LCR externe. (a) Schéma du processus. (b) Image originale. (c) Carte de distance du volume intracrânien. Les éléments en rouge sont les plus éloignés de la frontière du volume intracrânien. (d) Initialisation en fonction de la carte de distance. Le label LCR externe est initialisé comme une bande d'un voxel d'épaisseur à la frontière du volume intracrânien. Le label \og ventricules \fg{} est la région la plus au centre de ce volume et la limite est fixée à 80\% de la distance intracrânienne maximum. (e) Segmentation finale par le K-Moyennes topologique. Le label LCR s'est étendu jusqu'à la frontière avec le cortex. Légende (pour (d) et (e)) : LCR (bleu), cerveau (jaune), ventricules (rouge).}}
+        \caption[Segmentation en LCR, cerveau, ventricules]{\emph{Séparation des ventricules et du LCR externe. (a) Schéma du processus. (b) Image originale. (c) Carte de distance du volume intracrânien. Les éléments en rouge sont les plus éloignés de la frontière du volume intracrânien. (d) Initialisation en fonction de la carte de distance. Le label LCR externe est initialisé comme une bande d'un voxel d'épaisseur à la frontière du volume intracrânien. Le label \og ventricules \fg{} est la région la plus au centre de ce volume et la limite est fixée à 80\% de la distance intracrânienne maximum. (e) Segmentation finale par le K-Moyennes topologique. Le label LCR s'est étendu jusqu'à la frontière avec le cortex. Légende (pour (d) et (e)) : LCR (bleu), cerveau (jaune), ventricules (rouge).}}
 
         \label{FIG:LCR:STEPS}
 
@@ -432,7 +432,7 @@ Cas (SA) & Direction de l'acquisition & Dice 3D & Dice maximum \\
 \end{tabular}
 
 \end{center}
-\caption[Coefficients Dice issus de la segmentation du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité-terrain et les segmentations automatiques. Dice 3D : Coefficient global. Dice maximum : score maximum obtenu en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
+\caption[Coefficients Dice issus de segmentations du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité-terrain et les segmentations automatiques. Dice 3D : Coefficient global. Dice maximum : score maximum obtenu en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
 \end{table}
 
 Le tableau~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
@@ -669,7 +669,7 @@ $Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61 &  75.12 $\pm$ 1.93\\
 }
 \end{center}
 % \vspace{-2mm}
-\caption[Coefficients Dice entre les vérités-terrains et la segmentation automatique (images reconstruites)]{\emph{Coefficients Dice entre les vérités-terrains et la segmentation automatique des images reconstruites selon la méthode de \cite{Rousseau:AR:2006}. Une nette amélioration, tant au niveau des coefficients que de la dispersion des résultats, par rapport aux images non-reconstruites est observée.}\label{TAB:CORTEX:BUILD}}
+\caption[Coefficients Dice entre vérités-terrains et segmentations automatiques (images reconstruites)]{\emph{Coefficients Dice entre les vérités-terrains et la segmentation automatique des images reconstruites selon la méthode de \cite{Rousseau:AR:2006}. Une nette amélioration, tant au niveau des coefficients que de la dispersion des résultats, par rapport aux images non-reconstruites est observée.}\label{TAB:CORTEX:BUILD}}
 % \vspace{-10mm}
 \label{tab:coronal:overlap}
 
@@ -695,7 +695,7 @@ La nécessité d'utiliser une contrainte géométrique (revenant à dire que le corte
 % \vspace{-6mm}
 \end{figure}
 
-Cette section présente des résultats préliminaires issus de la segmentation de volumes reconstruits selon la méthode de \cite{Rousseau:MIA:2010} incluant une approche de super-résolution.
+Cette section présente des résultats préliminaires issus de la segmentation de volumes reconstruits selon une méthode de super-résolution \cite{Rousseau:MIA:2010}.
 Les images issues de cette approche se révèlent être plus facilement exploitables car l'effet de lissage de la précédente méthode de reconstruction est moins accentué et les contrastes entre les tissus sont plus importants, comme illustré en Figure~\ref{FIG:COMPARE:HR:SR}.
 Nous présentons une analyse qualitative des résultats ainsi qu'une étude succincte de l'apparition des différents sillons  cérébraux au cours de la grossesse.
 
@@ -746,8 +746,8 @@ Cet exemple montre que la super-résolution permet à l'algorithme de segmentation
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/TAB_Ar_02_3D.eps}\label{TAB02:3D}} 
 \subfigure[]{\includegraphics[height=39mm]{eps/chapitre4/HER_Au_3D.eps}\label{HER:3D}} 
 
-\caption[Evolution des sillons corticaux au cours de la grossesse]{
-\emph{Evolution des sillons corticaux au cours de la grossesse. Temps d'aménorrhée : (a) 26 semaines, (b) 27 semaines, (c) 28 semaines, (d) 30 semaines, (e) 32 semaines.}
+\caption[\'Evolution des sillons corticaux au cours de la grossesse]{
+\emph{\'Evolution des sillons corticaux au cours de la grossesse. Temps d'aménorrhée : (a) 26 semaines, (b) 27 semaines, (c) 28 semaines, (d) 30 semaines, (e) 32 semaines.}
 \label{FIG:TIME:3D}}
 % \vspace{-6mm}
 \end{figure}
@@ -789,4 +789,4 @@ Des méthodes formalisant les relations spatiales entre différents objets et expr
 Néanmoins, ce modèle semble suffisamment robuste pour pouvoir observer la surface du cortex ainsi que la surface de la matière blanche à la frontière du cortex et permet de suivre la formation des sillons corticaux, ce qui laisse penser qu'il est possible de mettre en \oe uvre un suivi automatique de leur formation et de leur développement au cours de la grossesse.
 
 De plus, cette méthodologie s'appuie sur une extraction préalable du volume intracrânien et sur la segmentation du cervelet et du tronc cérébral.
-La définition d'un outil d'extraction de ces structures est donc indispensable dans la perspective d'obtenir un processus de segmentation complet des structures cérébrales.
+La définition d'un outil d'extraction de ces structures est donc indispensable dans la perspective d'obtenir un processus automatique de segmentation complet des structures cérébrales.

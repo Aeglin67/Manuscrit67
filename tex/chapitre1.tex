@@ -2,15 +2,15 @@
 \label{chap:ImageEtAnatomie}
 \minitoc
 
-Ce chapitre présente le principe de l'IRM cérébrale et décrit l'anatomie d'un cerveau de f\oe tus et de quelles façons ces éléments ont orienté les travaux présentés dans ce manuscrit.
+Ce chapitre présente le principe de l'imagerie par résonance magnétique (IRM) cérébrale et décrit l'anatomie d'un cerveau de f\oe tus et de quelles façons ces éléments ont orienté les travaux présentés dans ce manuscrit.
 
 %------------------------------------------------------------------------IRM----------------------------------------------------------------------------------------
 
 \section{Imagerie par résonance magnétique}
 \label{intro:irm}
 
-L'imagerie par résonance magnétique (IRM) est une technique permettant d'obtenir des vues de l'intérieur du corps (en coupes 2D ou en 3D) de façon non invasive et non irradiante en exploitant le phénomène physique de la résonance nucléaire.
-Cette notion a été mise en évidence de façon expérimentale par deux équipes indépendantes en 1945 \cite{Bloch:PhyRev:1946, Purcell:PhyRev:1946}, ces études leur octroyant le prix Nobel de physique en 1952.
+L'IRM est une technique permettant d'obtenir des vues de l'intérieur du corps (en coupes 2D ou en 3D) de façon non invasive et non irradiante en exploitant le phénomène physique de la résonance nucléaire.
+Cette notion a été mise en évidence de façon expérimentale par deux équipes indépendantes en 1946 \cite{Bloch:PhyRev:1946, Purcell:PhyRev:1946}, ces études leur valant le prix Nobel de physique en 1952.
 Les premières images médicales obtenues par cette technique datent quant à elles de 1973 \cite{Lauterbur:Nature:1973, Mansfield:JPC:1973}, cette avancée étant récompensée par le prix de Nobel de médecine en 2003.
 Aujourd'hui, l'IRM est devenue un outil majeur de l'imagerie médicale moderne, permettant de réaliser des études importantes à l'échelle d'une population ou d'aider les médecins à établir un diagnostic.
 Cette section s'organise de la façon suivante.
@@ -50,9 +50,9 @@ L'aimantation globale $M$ bascule alors dans la direction de $B_1$, ce qui se tr
 
 La troisième étape est la relaxation (voir Figure~\ref{fig:intro:mag:relaxation}). 
 Une fois le signal RF interrompu, le système restitue l'énergie absorbée pour revenir à son état d'équilibre initial, entraînant un réalignement de l'aimantation $M$ sur $B_0$.
-La relaxation longitudinale croît exponentiellement selon une constante de relaxation \emph{spin-réseau} $T_1$ (représentant le temps nécessaire à la composante $M_z$ pour revenir à $63\mbox{ }\%$ de sa valeur finale).
+La composante longitudinale de $M$ croît exponentiellement selon une constante de relaxation \emph{spin-réseau} $T_1$ (représentant le temps nécessaire à la composante $M_z$ pour revenir à $63\mbox{ }\%$ de sa valeur finale).
 Elle correspond au transfert de l'énergie d'un \emph{spin} vers son environnement.
-La relaxation transversale décroît exponentiellement selon une constante de relaxation \emph{spin-spin} $T_2$ (représentant le temps nécessaire à la composante $M_{xy}$ pour revenir à $37\mbox{ }\%$ de sa valeur initiale).
+La composante transversale de $M$ décroît exponentiellement selon une constante de relaxation \emph{spin-spin} $T_2$ (représentant le temps nécessaire à la composante $M_{xy}$ pour revenir à $37\mbox{ }\%$ de sa valeur initiale).
 Elle correspond à des transferts d'énergie entre \emph{spins}.
 
 La dernière étape, à savoir la lecture du signal, correspond à la captation par des récepteurs appropriés du signal RF émis lors de la restitution d'énergie (appelés signaux de précession libre).
@@ -85,7 +85,7 @@ Chacune d'entre elles présente ses avantages et ses inconvénients en terme de te
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/TAB_Ar_02_coronal.eps}}
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/TAB_Ar_02_sagital.eps}}
         \end{center}
-        \caption[IRM d'un cerveau de f\oe tus]{\emph{IRM d'un cerveau de f\oe tus, illustrant l'acquisition coupe à coupe, ici dans la direction axiale. (a) Vue axiale, (b) vue coronale, (c) vue sagitale. Il est important de noter la faible résolution des directions coronale et sagitale.}\label{FIG:INTRO:FOETUS}}
+        \caption[IRM d'un cerveau de f\oe tus]{\emph{IRM d'un cerveau de f\oe tus, illustrant l'acquisition coupe à coupe, ici dans la direction axiale. (a) Vue axiale, (b) vue coronale, (c) vue sagitale. Il est important de noter l'anisotropie de la résolution de ces images.}\label{FIG:INTRO:FOETUS}}
 \end{figure}
 
 
@@ -93,9 +93,9 @@ Dans le cadre de l'imagerie du f\oe tus, il a été mis en évidence que les temps 
 Néanmoins, des séquences reposant sur des échos de spin ultra-rapides développées il y a plusieurs années \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006} ont montré leur utilité dans le cadre de l'imagerie cérébrale f\oe tale.
 Ces séquences, permettant d'acquérir une coupe en moins d'une seconde, apportent une réponse aux mouvements du f\oe tus et à la respiration de la mère (artéfacts de mouvement, \emph{etc.}) qui risquent de parasiter l'acquisition.
 Toutefois, les techniques d'acquisition 3D ne sont pas encore suffisamment performantes~\cite{Studholme:ARBE:2011}, conduisant à réaliser des acquisitions sous formes de piles de coupes 2D.
-L'épaisseur de ces coupes (en général d'environ 3 mm), nécessaire pour procurer une bonne résolution à la coupe acquise ainsi que pour bénéficier d'un bon rapport signal à bruit, empêche cependant de réaliser une réelle analyse 3D du cerveau (voir en Figure~\ref{FIG:INTRO:FOETUS}).
+L'épaisseur de ces coupes (en général d'environ 3 mm), nécessaire pour bénéficier d'un bon rapport signal à bruit, empêche cependant de réaliser une réelle analyse 3D du cerveau (voir en Figure~\ref{FIG:INTRO:FOETUS}).
 De plus, l'acquisition sous forme de piles 2D ne garantit pas une cohérence anatomique entre les coupes.
-Trois séries d'acquisitions sont ainsi réalisées (dans les directions axiale, sagittale et coronale), de manière à obtenir une vision complémentaire du volume cérébrale du cas étudié.
+Plusieurs séries d'acquisitions sont ainsi réalisées (dans les directions axiale, sagittale et coronale), de manière à obtenir une vision complémentaire du volume cérébrale du cas étudié.
 
 Malgré ces défauts, l'IRM cérébrale de f\oe tus s'est révélée être un outil important dans certains cas cliniques.
 Elle a notamment été utilisée pour réaliser des études de populations, telle qu'une étude du volume cérébral \cite{Grossman:NeuroImage:2006}, de l'évaluation de l'hypertrophie des ventricules \cite{Kazan-Tannus:AJR:2007}, de l'identification des malformations cérébrales \cite{Rolo:ArcPedObs:2011} ou encore des infections \cite{Barkovich:ChildNervousSys:2003}.
@@ -109,7 +109,7 @@ Elle a notamment été utilisée pour réaliser des études de populations, telle qu'
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/ESC_Noise.eps}\label{FIG:INTRO:ARTEFACTS:NOISE}}
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/AYD_Bias.eps}\label{FIG:INTRO:ARTEFACTS:BIAS}}
 	\end{center}
-        \caption[Artéfacts de l'IRM]{\emph{Artéfacts de l'IRM. (a) Coupe axiale d'une IRM présentant un bruit. (b) Coupe axiale d'une IRM présentant un biais, caractérisé par une intensité des voxels de LCR moins élevée à gauche qu'à droite. }\label{FIG:INTRO:ARTEFACTS}}
+        \caption[Artéfacts en IRM]{\emph{Artéfacts de l'IRM. (a) Coupe axiale bruitée. (b) Coupe axiale présentant un biais en intensité, caractérisé par une intensité des voxels de LCR moins élevée à gauche qu'à droite. }\label{FIG:INTRO:ARTEFACTS}}
 \end{figure}
 
 Cette section décrit les différents artéfacts rencontrés lors de l'exploitation des images issues d'une IRM.
@@ -130,7 +130,7 @@ Les méthodes de classification des voxels en fonction de leur intensité prennent
 \subsubsection{Biais en intensité}
 
 Cet artéfact se manifeste par une hétérogénéité en intensité pour un même tissu cérébral (voir Figure~\ref{FIG:INTRO:ARTEFACTS:BIAS}).
-Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu en fonction de sa localisation.
+Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu selon la position spatiale considérée dans le volume intracrânien.
 Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
 
 Ce biais représente une difficulté pour toute méthode de classification des voxels reposant sur leur intensité et supposant que l'intensité d'une classe est constante sur l'ensemble de l'image.
@@ -142,7 +142,7 @@ Les conséquences du biais sur les méthodes de traitement des IRM (en particulier
 
 Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
 Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}).
-Cet effet se manifeste à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \emph{etc}.) ou lorsque certaines structures sont beaucoup trop fines pour être visibles par l'imageur (petits vaisseaux sanguins, couches du cortex, \emph{etc}.).
+Cet effet se manifeste à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \emph{etc}.) ou lorsque certaines structures sont beaucoup trop fines pour être observables par l'imageur (petits vaisseaux sanguins, couches du cortex, \emph{etc}.).
 Dans le cadre de certaines méthodes de classification des voxels en fonction de leur intensité, cet effet est pris en compte en considérant que l'intensité résultante du voxel est une combinaison généralement linéaire de l'intensité de plusieurs tissus comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
 
 \begin{figure}[!t]
@@ -152,7 +152,7 @@ Dans le cadre de certaines méthodes de classification des voxels en fonction de 
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Discretisation.eps}}
 \hspace{2mm}
 \subfigure[]{\includegraphics[height=25mm]{eps/chapitre1/Vol_Partiel_Final.eps}}
-\caption[Volume Partiel en IRM]{\emph{Volume partiel en IRM. (a) Illustration d'une frontière entre deux tissus. (b) Superposition de la frontière entre tissus et de la grille de l'image. (c) Résultat de l'échantillonnage réalisé pour l'acquisition de l'image : les voxels situés à la frontière des tissus ont une intensité équivalente à la combinaison des signaux des deux tissus.}}
+\caption[Volume partiel en IRM]{\emph{Volume partiel en IRM. (a) Illustration d'une frontière entre deux tissus. (b) Superposition de la frontière entre tissus et de la grille de l'image. (c) Résultat de l'échantillonnage réalisé pour l'acquisition de l'image : les voxels situés à la frontière des tissus ont une intensité équivalente à la combinaison des signaux des deux tissus.}}
 \label{fig:intro:vp}
 \end{center}
 \end{figure}
@@ -170,10 +170,10 @@ Ces artéfacts sont \og doubles \fg{} en IRM f\oe tale ou l'on doit tenir compte 
 \subsubsection{Correction des artéfacts}
 
 Différentes techniques permettent de réduire l'influence de ces artéfacts.
-Par exemple, l'introduction de bobines de shim permet d'assurer l'homogénéité du champs $B_0$, ou la mise en \oe uvre d'une acquisition de calibrage pour le réglage manuel de ces bobines.
+Par exemple, l'introduction de bobines de correction du champs magnétique (\emph{shim} en anglais) permet d'assurer l'homogénéité de $B_0$, ou la mise en \oe uvre d'une acquisition de calibrage pour le réglage manuel de ces bobines.
 Le choix des paramètres de la séquence d'acquisition ainsi que celui de l'antenne influencent aussi le niveau du bruit.
 
-Les artéfacts de mouvement peuvent être diminués par une apnée de la mère durant l'acquisition, ainsi qu'une sédation du f\oe tus (autorisée en France, mais pas aux \'Etats-Unis par exemple).
+Les artéfacts de mouvement peuvent être diminués par une apnée de la mère durant l'acquisition, ainsi qu'une sédation du f\oe tus.
 Cependant, ces artéfacts peuvent rester importants et les méthodes de reconstruction d'un volume 3D à partir des acquisitions basses-résolutions doivent en tenir compte pour obtenir un volume cohérent.
 
 Malgré les précautions que prennent les radiologues, l'image finale sera toujours perturbée par un certain nombre d'artéfacts (tels que le bruit ou le biais), et les méthodes de classification des éléments de l'image doivent en conséquence en tenir compte.
@@ -199,7 +199,7 @@ Cette dernière partie décrira l'évolution du cerveau au cours de la grossesse.
 \end{figure}
 
 L'encéphale est constitué du cerveau, du cervelet et du tronc cérébral.
-Le cerveau lui-même est composé de trois matières principales que sont : la matière grise (MG), la matière blanche (MB) et le liquide céphalo-rachidien (LCR).
+Le cerveau lui-même est composé de trois matières principales que sont : la matière grise, la matière blanche et le liquide céphalo-rachidien.
 Le LCR se situe tout autour du cerveau et remplit le système ventriculaire.
 Il permet d'amortir les chocs et les mouvements qui pourraient endommager le cerveau.
 La matière blanche est constituée des axones myélinisés des neurones, permettant la transmission de l'information à travers le cerveau.
@@ -244,7 +244,7 @@ La fermeture de cette gouttière, tout d'abord par son milieu, puis dans sa parti
 \begin{center}
 \includegraphics[height=98mm]{eps/chapitre1/vesicules.eps}
 \hspace{-5mm}
-\caption[Formation des grandes régions du cerveau]{\emph{Formation des grandes régions du cerveau (image issue de : \url{http://lecerveau.mcgill.ca}).}}
+\caption[Formation des principales régions du cerveau]{\emph{Formation des grandes régions du cerveau (image issue de : \url{http://lecerveau.mcgill.ca}).}}
 \label{fig:intro:vesicules}
 \end{center}
 \end{figure}
@@ -275,7 +275,7 @@ Cette migration se poursuit jusqu'à 20 semaines et peut s'étendre jusqu'à 24 sem
 \end{center}
 \end{figure}
 
-Cette partie est issue de plusieurs études anatomiques (par exemple celle de \cite{Chi:AnnNeuro:1977}), qui ont étudié plusieurs centaines de cas de manière à dégager un schéma de développement global du cortex humain et ont établi quelques propriétés notables comme l'assymétrie du lobe temporal gauche à 31 semaines (plus riche en sillons secondaires et tertiaires) (observation semblant confirmer la dominance de l'hémisphère gauche dans la gestion du langage et de la parole~\cite{Chi:ArNeuro:1977, Josse:BRR:2004}).
+Cette partie est issue de plusieurs études anatomiques (par exemple celle de \cite{Chi:AnnNeuro:1977,O'Rahilly:1999}), qui ont étudié plusieurs centaines de cas de manière à dégager un schéma de développement global du cortex humain et ont établi quelques propriétés notables comme l'assymétrie du lobe temporal gauche à 31 semaines (plus riche en sillons secondaires et tertiaires) (observation semblant confirmer la dominance de l'hémisphère gauche dans la gestion du langage et de la parole~\cite{Chi:ArNeuro:1977, Josse:BRR:2004}).
 % L'étude de ce développement est très importante car l'observation de l'état du cortex \emph{in utero} par un imageur IRM est un bon indicateur de la maturation cérébrale d'un patient \cite{Levine:Radiology:1999}.
 
 Très rapidement, les premières fissures cérébrales apparaissent.
@@ -321,53 +321,54 @@ Le dernier trimestre de la grossesse est alors marqué par un accroissement du vo
 \begin{table}[!t]
 \begin{center}
 
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-Sillons & \multicolumn{2}{c|}{\'Etudes} \\
-\cline{2-3}
- & Anatomique \cite{Chi:AnnNeuro:1977} & IRM \cite{Garel:AJNR:2001}\\
+Sillons & \multicolumn{3}{c|}{\'Etudes} \\
+\cline{2-4}
+ & Anatomique \cite{Chi:AnnNeuro:1977} & IRM \cite{Garel:AJNR:2001} & \cite{Habas:SPIE:2011}\\
 \hline
-Central & 20 & 27 (+7) \\
+Central & 20 & 27 (+7) & 23 (+3)\\
 \hline
-Précentral & 24 & 27 (+3) \\
+Précentral & 24 & 27 (+3) & 25 (+1)\\
 \hline
-Post-central & 25 & 28 (+3) \\
+Post-central & 25 & 28 (+3) & 24 (-1)\\
 \hline
-Frontal supérieur & 25 & 29 (+4) \\
+Frontal supérieur & 25 & 29 (+4) & 24 (-1)\\
 \hline
-Frontal inférieur & 28 & 29  (+1) \\
+Frontal inférieur & 28 & 29 (+1) & 24 (-4)\\
 \hline
-Temporal supérieur & 23 & 27 (+4) \\
+Temporal supérieur & 23 & 27 (+4) & 24 (+1)\\
 \hline
-Temporal inférieur & 30 & 33 (+3) \\
+Temporal inférieur & 30 & 33 (+3) & -\\
 \hline
-Intrapariétal & 26 & 28 (+2) \\
+Intrapariétal & 26 & 28 (+2) & -\\
 \hline
-Insulaire & 34 & 34  (-) \\
+Insulaire & 34 & 34  (-) & -\\
 \hline
 \end{tabular}
 
 \end{center}
-\caption[Apparition des sillons à l'IRM]{\emph{Comparaison entre l'apparition des sillons lors des études anatomiques et des études en IRM en semaines d'aménorrhée.}\label{TAB:INTRO:SULCI}}
+\caption[Apparition des sillons en IRM]{\emph{Comparaison entre l'apparition des sillons lors des études anatomiques et des études en IRM en semaines d'aménorrhée. L'étude \cite{Habas:SPIE:2011} s'appuie }\label{TAB:INTRO:SULCI}}
 \end{table}
 
-Les progrès récents des IRM ont permis de conduire des études anatomiques \emph{in vivo}, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence quelques variations du signal des images montrant la variation de la densité cellulaire et les progrès de la myélinisation).
+Les progrès récents des IRM ont permis de conduire des études anatomiques \emph{in vivo}, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence la variation de la densité cellulaire et les progrès de la myélinisation).
 Plusieurs travaux se sont penchés sur l'évolution visible du cortex à partir de données IRM ~\cite{Levine:Radiology:1999, Garel:AJNR:2001, Prayer:PedRad:2006, Glenn:SePer:2009, Habas:SPIE:2011}.
 De manière générale, on observe un décalage entre le moment où un sillon est observable \emph{ex vivo} et \emph{in vivo} d'environ une semaine.
 
-\`A la vingt-cinquième semaine, il possible d'observer le sillon inter-hémisphérique, ainsi que les sillons centraux sur certains cas.
+\`A la vingt-cinquième semaine, il possible d'observer le sillon interhémisphérique, ainsi que les sillons centraux sur certains cas.
 Ces derniers ne sont systématiquement présents qu'à partir de la vingt-septième semaine.
 De même, le sillon post-central n'est systématiquement présent qu'à partir de la vingt-huitième semaine, et le sillon précentral à partir de la vingt-septième.
 D'autres exemples sont donnés par la table~\ref{TAB:INTRO:SULCI}.
-Les équipes expliquent ce décalage par l'épaisseur des coupes et la faible résolution des IRM, l'effet de volume partiel tendant à masquer de nombreux détails anatomiques, surtout sur des structures aussi petites.
+Ce décalage est expliqué par l'épaisseur des coupes et la faible résolution des IRM, l'effet de volume partiel tendant à masquer de nombreux détails anatomiques, surtout sur des structures aussi petites.
 
 L'ensemble de ces études tend à démontrer que l'IRM est un outil pertinent quant au suivi de la maturation cérébrale au cours de la grossesse, tout ceci sans danger avéré pour le f\oe tus~\cite{Kok:MRI:2004}.
 De plus, cette modalité peut être utilisée pour réaliser des études cliniques, telles que celle de \cite{Batchelor:TMI:2002} qui, à partir d'une segmentation manuelle du cortex, a testé différentes mesures de la courbure du cortex en chaque point, de manière à suivre plus précisément l'évolution des sillons et des \emph{gyri}.
 Cependant, la segmentation manuelle des tissus prend énormément de temps, et motive ainsi le développement d'algorithmes rapides et robustes pour automatiser ce genre de tâche.
+L'étude~\cite{Habas:SPIE:2011} reposant sur une segmentation automatique est à ce titre intéressante et montre également que l'étude de la courbure du cortex permet de détecter de façon plus précoce l'apparition des sillons que par une simple observation.
 
 \section{Bilan}
 
 La maturation cérébrale est un domaine étudié depuis quelques décennies, mais dont l'essentiel des connaissances reposait sur des études anatomiques post-mortem.
 L'arrivée de séquences IRM ultra-rapides a permis d'étudier cette maturation directement durant la grossesse et de poser des marqueurs fiables relativement au développement cérébral normal (tel que l'apparition des sillons).
-La connaissance de ces marqueurs permet d'envisager la construction d'outils de diagnostic et de suivi automatique, nécessitant de traiter les images de manière à en extraire l'information pertinente.
+La connaissance de ces marqueurs permet d'envisager la construction d'outils de diagnostic et de suivi automatique, nécessitant de traiter les images pour en extraire l'information pertinente.
 Le suivi automatique des sillons doit notamment être précédé d'une étape de segmentation (ou labélisation) des tissus, qui constitue le sujet de cette thèse.

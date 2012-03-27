@@ -55,14 +55,14 @@ L'utilisation des moyennes non-locales pourrait également être envisagée dans l'
 Deux axes importants peuvent être suivis pour la poursuite de ce travail de recherche.
 Le premier consiste à améliorer la segmentation du cortex.
 En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans la région au-dessus du tronc cérébral.
-De plus, l'observation en détails de la segmentation montre que certains sillons, comme le sillon inter-hémisphérique, sont sous-dimensionnés par la segmentation.
+De plus, l'observation en détails de la segmentation montre que certains sillons, comme le sillon inter-hémisphérique, sont moins profonds qu'attendu.
 L'introduction d'\emph{a priori} supplémentaires dans le processus de segmentation permettrait d'adapter les contraintes géométriques à certains endroits du cerveau et ainsi, d'éliminer les faux positifs.
 Pour affiner la segmentation des sillons, l'utilisation de modèles déformables non-locaux est une option envisageable.
-Une régularisation non-locale de la classification a été envisagée au cours de la thèse, mais les résultats non concluants nous ont conduits à abandonner cette idée (en effet, les coefficients Dice sont en moyenne inférieur de deux points).
+Une régularisation non-locale de la classification a été étudiée au cours de la thèse, mais les résultats non concluants nous ont conduits à abandonner cette idée.
 
 La deuxième axe pouvant être suivi est la segmentation des autres structures cérébrales.
 Notre méthodologie repose sur une segmentation préalable du volume intracrânien, ainsi que du cervelet et du tronc cérébral.
-Nous avons vu au chapitre \ref{chap:art} qu'il existe une méthode d'extraction du volume intracrânien dans la littérature, mais la segmentation des deux autres structures reste un problème ouvert.
+Nous avons vu au chapitre \ref{chap:art} qu'il existe des méthodes d'extraction du volume intracrânien dans la littérature, mais la segmentation des deux autres structures reste un problème ouvert.
 La matrice germinale est également à prendre en compte, sa segmentation étant possible à partir de celle des ventricules.
 L'utilisation d'\emph{a priori} concernant la position relative des structures cérébrales les unes par rapport aux autres semble être dans la continuité des travaux exposés dans ce manuscrit et devrait permettre la segmentation complète des images IRM f\oe tales.
 
