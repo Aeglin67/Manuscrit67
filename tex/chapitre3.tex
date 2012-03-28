@@ -89,7 +89,7 @@ D'autres auteurs adoptent un point de vue statistique pour interpréter les moyen
 Par exemple, \cite{Goossens:LNLA:2008} démontre un lien avec les estimateurs robustes (ou plutôt, la première itération d'un algorithme d'optimisation) et pose la question de l'utilisation du noyau gaussien si le bruit ne l'est pas.
 Par ailleurs, \cite{Deledalle:TIP:2009} propose un algorithme itératif fondé sur l'estimation du maximum de vraisemblance permettant de prendre en compte différents types de bruit.
 Enfin, \cite{Salmon:ICIP:2009} considère les moyennes non-locales comme une agrégation bayésienne d'estimateurs en chaque patch.
-La revue de \cite{Katkovnik:IJCV:2010} montre quant à elle que les moyennes non-locales sont un cas particulier de régression non-paramétrique pouvant être généralisée.
+La revue de \cite{Katkovnik:IJCV:2010} montre quant à elle que les moyennes non-locales sont un cas particulier de régression non paramétrique pouvant être généralisée.
 % la première version des moyennes non-locales à une régression linéaire d'ordre $0$ et l'étend à des niveaux supérieurs.
 
 De plus, certains travaux ont permis d'établir un lien entre le filtre non-local et les différents filtres déjà existants (tels que le filtre bilatéral, les filtres bayésiens, \emph{etc.}).
@@ -413,12 +413,13 @@ Le bruit est de type ricien d'un niveau allant de $0$ à $9$~\% (c'est-à-dire la 
 \begin{figure}[!t]
 
         \begin{center}
+	\subfigure[]{\includegraphics[height=45mm,angle=180]{eps/chapitre3/atlas_brainweb.eps}}
 	\subfigure[]{\includegraphics[height=45mm,angle=180]{eps/chapitre3/atlas_csf.eps}}
 	\subfigure[]{\includegraphics[height=45mm,angle=180]{eps/chapitre3/atlas_grey.eps}}
 	\subfigure[]{\includegraphics[height=45mm,angle=180]{eps/chapitre3/atlas_wm.eps}}
         \end{center}
         
-        \caption[Atlas utilisé pour initialiser certaines versions du FCM non-local]{\emph{Atlas ICBM utilisé pour initialiser certaines versions du FCM non-local. (a) Atlas du LCR, (b) atlas de la matière grise, (c) atlas de la matière blanche.}}
+        \caption[Atlas utilisé pour initialiser certaines versions du FCM non-local]{\emph{Atlas ICBM utilisé pour initialiser certaines versions du FCM non-local. (a) Image de la base BrainWeb non bruitée et non biaisée. (b) Atlas du LCR. (c) Atlas de la matière grise. (d) Atlas de la matière blanche.}}
         
         \label{FIG:ICBM}
 

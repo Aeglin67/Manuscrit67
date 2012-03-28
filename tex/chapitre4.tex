@@ -166,7 +166,7 @@ Ils sont calculés de la façon suivante (voir Figure \ref{FIG:KMEANS:BIAS}) :
 \begin{enumerate}
 \item le domaine de l'image $\Omega$ est divisé en sous-volumes $r$,
 \item pour chaque sous-volume $r$ et pour chaque classe $k$, une moyenne $\mathbf{v}_{rk}$ est calculée,
-\item chaque moyenne locale $\mathbf{v}_{jk}$ résulte d'une interpolation des 4 (2D) ou 8 (3D) moyennes des régions les plus proches (selon que l'image traitée soit reconstruite ou non), pondération calculée en fonction de la distance du centre des sous-volumes $r$ voisins par rapport au voxel courant. 
+\item chaque moyenne locale $\mathbf{v}_{jk}$ résulte d'une interpolation linéaire des 4 (2D) ou 8 (3D) moyennes des régions les plus proches (selon que l'image traitée soit reconstruite ou non), chaque moyenne étant pondérée par l'inverse de la distance du centre des sous-volumes $r$ voisins par rapport au voxel courant. 
 \end{enumerate}
 En résumé, l'algorithme présenté ici suit le schéma d'optimisation suivant : 
 \begin{enumerate}

@@ -1,13 +1,14 @@
 \chapter*{Introduction générale}
 \label{chap:introgenerale}
 \addstarredchapter{Introduction générale}
+\markboth{Introduction générale}{Introduction générale} 
 \minitoc
 % \addcontentsline{toc}{chapter}{\protect\numberline{}Introduction générale}
 
 \section*{Contexte}
 \addcontentsline{toc}{section}{Contexte}
 
-Le suivi médical d'une grossesse dans les pays industrialisés est l'un des facteurs ayant favorisé l'amélioration des conditions de santé publique par la réduction des risques prénataux, aussi bien pour la mère que pour le f\oe tus.
+Le suivi médical de la grossesse dans les pays industrialisés est l'un des facteurs ayant favorisé l'amélioration des conditions de santé publique par la prévention des risques prénataux, aussi bien pour la mère que pour le f\oe tus.
 Ce suivi permet également le contrôle du bon développement du futur enfant au cours de cette période (par exemple, par la détection des battements cardiaques à la vingtième semaine d'aménorrhée, par le suivi de la croissance normale des membres antérieurs et postérieurs, \emph{etc.}), l'examen privilégié étant jusqu'à présent l'échographie (une échographie par trimestre est réalisée en France en plus des diverses consultations de suivi).
 
 Cependant, cet examen échographique ne permet pas une exploration avancée du cerveau des f\oe tus, et ne donne en particulier que quelques indices concernant les malformations pouvant survenir (ventrico-mégalie, retard du développement, \emph{etc.}).
@@ -37,25 +38,25 @@ Dans le cas de la prise en compte du bruit, la plupart des méthodes de classific
 Cependant, ces techniques ne prennent en compte que le voisinage immédiat du voxel traité.
 Le premier objectif de cette thèse est donc de définir une méthode de segmentation permettant, d'une part de ne pas avoir à formuler d'hypothèses sur la nature du biais en intensité, d'autre part une correction plus fine des effets du bruit sur la segmentation par une prise en compte d'une quantité plus importante d'information et la sélection de l'information la plus pertinente. 
 
-L'objectif majeur de notre travail a été la segmentation des structures cérébrales en IRM f\oe tale, le but à long terme étant d'être en mesure de conduire des études sur l'évolution des différentes structures cérébrales.
+Le deuxième objectif, majeur, de notre travail a été la segmentation des structures cérébrales en IRM f\oe tale, le but à long terme étant d'être en mesure de conduire des études sur l'évolution des différentes structures cérébrales.
 Au cours des cinq dernières années, quelques méthodes de segmentation des tissus f\oe taux sont apparues, s'appuyant sur des \emph{a priori} spatiaux fournis par des atlas ou sur des connaissances anatomiques appliquées \emph{a posteriori}, c'est-à-dire après une première phase de classification.
-Afin d'éviter la construction d'un atlas, le deuxième objectif de la thèse a été ici de définir une méthode de segmentation où les connaissances anatomiques permettent de guider le processus de segmentation.
+Afin d'éviter la construction d'un atlas, l'objectif de la thèse a été ici de définir une méthode de segmentation où les connaissances anatomiques permettent de guider le processus de segmentation.
 Les structures cérébrales sont alors extraites les unes après les autres en s'appuyant sur des informations génériques de localisation des tissus les uns par rapport aux autres.
 Les travaux se sont concentrés sur la segmentation du cortex, l'évolution de son plissement constituant un marqueur fiable du bon déroulement de la maturation cérébrale \cite{Levine:Radiology:1999}.
 
 \section*{Contributions}
 \addcontentsline{toc}{section}{Contributions}
 
-Les principales contributions de cette thèse ont été : 
+Les principales contributions de cette thèse sont : 
 \begin{itemize}
-\item l'utilisation de modèles locaux pour la segmentation des tissus cérébraux, avec l'introduction d'une pondération entre ces différents modèles via la technique des moyennes non-locales ; cette pondération permet de prendre en compte l'état des modèles limitrophes de manière à corriger les éventuelles erreurs d'estimation des modèles locaux ;
+\item l'utilisation de modèles locaux pour la segmentation des tissus cérébraux, avec l'introduction d'une pondération entre ces différents modèles via la technique des moyennes non-locales ; cette pondération permet de prendre en compte les modèles voisins de manière à corriger les éventuelles erreurs d'estimation du modèle local courant ;
 \item une meilleure prise en compte du bruit présent dans les images par l'exploitation de la redondance de l'information dans l'image ; ceci se fait également par l'utilisation des moyennes non-locales ;
 \item la définition d'une approche \emph{données} pour la segmentation du cortex en IRM f\oe tale, par l'utilisation d'\emph{a priori} anatomiques et l'emploi d'opérateurs structurels issus de la morphologie mathématique.
 \end{itemize}
 
 Les résultats obtenus avec cette nouvelle méthode de segmentation basée sur les moyennes non-locales ont été comparés à ceux obtenus avec les méthodes SPM5 \cite{Ashburner:NeuroImage:2005} (Statistical Parametric Mapping), EMS (Expectation-Maximization Segmentation) \cite{VanLeemput1:TMI:1999} et HMC (Hidden Markov Chains) \cite{Bricq:MIA:2008}, ainsi qu'à des segmentations manuelles réalisées par des experts.
 Ceux obtenus dans le cadre de la segmentation du cortex en IRM f\oe tale ont été comparés à des segmentations réalisées par des experts. 
-Les validations ont été conduites aussi bien dans le cadre d'images brutes, que dans le cadre de volumes reconstruits par des techniques dédiées.
+Les validations ont été conduites aussi bien dans le cadre d'images brutes, que dans le cadre de volumes reconstruits par des techniques dédiées (reconstructions de volumes 3D isotropes à partir de plusieurs séries d'acquisition 2D dans les trois directions spatiales).
 
 \section*{Organisation du manuscrit}
 \addcontentsline{toc}{section}{Organisation du manuscrit}
@@ -63,7 +64,7 @@ Les validations ont été conduites aussi bien dans le cadre d'images brutes, que 
 Le manuscrit est organisé en cinq chapitres présentant les contributions essentielles de la thèse, ainsi que leur positionnement par rapport aux autres travaux réalisés sur le sujet.
 
 Le chapitre \ref{chap:ImageEtAnatomie} présente les principes fondamentaux de l'IRM, tout en précisant les spécificités des séquences d'acquisition dans le cas d'IRM f\oe tales.
-Les différents tissus cérébraux (une plus grande attention étant porté au cortex) ainsi que les différentes étapes de la maturation cérébrale sont également décrits.
+Les différents tissus cérébraux (une plus grande attention étant portée au cortex) ainsi que les différentes étapes de la maturation cérébrale sont également décrits.
 
 Le chapitre \ref{chap:art} rappelle les grandes familles de méthodes de segmentation.
 Une présentation plus complète de l'algorithme FCM et de ses extensions est également réalisée dans le but de mettre en valeur les axes de recherche développés autour de cette méthode.

@@ -2,20 +2,21 @@
 \label{chap:ImageEtAnatomie}
 \minitoc
 
-Ce chapitre présente le principe de l'imagerie par résonance magnétique (IRM) cérébrale et décrit l'anatomie d'un cerveau de f\oe tus et de quelles façons ces éléments ont orienté les travaux présentés dans ce manuscrit.
+Ce chapitre présente le principe de l'imagerie par résonance magnétique (IRM) cérébrale et décrit l'anatomie d'un cerveau de f\oe tus.
+La façon dont ces éléments ont orienté les travaux y est également exposée.
 
 %------------------------------------------------------------------------IRM----------------------------------------------------------------------------------------
 
 \section{Imagerie par résonance magnétique}
 \label{intro:irm}
 
-L'IRM est une technique permettant d'obtenir des vues de l'intérieur du corps (en coupes 2D ou en 3D) de façon non invasive et non irradiante en exploitant le phénomène physique de la résonance nucléaire.
+L'IRM\footnote{Pour plus d'informations, le lecteur est invité à consulter le site : \url{http://www.imaios.com/fr/e-Cours/e-MRI}.} est une technique permettant d'obtenir des vues de l'intérieur du corps (en coupes 2D ou en 3D) de façon non invasive et non irradiante en exploitant le phénomène physique de la résonance nucléaire.
 Cette notion a été mise en évidence de façon expérimentale par deux équipes indépendantes en 1946 \cite{Bloch:PhyRev:1946, Purcell:PhyRev:1946}, ces études leur valant le prix Nobel de physique en 1952.
 Les premières images médicales obtenues par cette technique datent quant à elles de 1973 \cite{Lauterbur:Nature:1973, Mansfield:JPC:1973}, cette avancée étant récompensée par le prix de Nobel de médecine en 2003.
 Aujourd'hui, l'IRM est devenue un outil majeur de l'imagerie médicale moderne, permettant de réaliser des études importantes à l'échelle d'une population ou d'aider les médecins à établir un diagnostic.
 Cette section s'organise de la façon suivante.
 Tout d'abord, le principe de la résonance magnétique nucléaire (RMN) est exposé, puis son utilisation pour la formation d'images médicales est présentée.
-Enfin, nous nous pencherons sur les différents artéfacts présents dans une IRM et dont nous devrons tenir compte pour l'interprétation de ces images.
+Enfin, nous nous pencherons sur les différents artéfacts présents dans une IRM, dont nous devrons tenir compte pour l'interprétation de ces images.
 
 \subsection{Principe de la résonance magnétique nucléaire}
 
@@ -85,11 +86,11 @@ Chacune d'entre elles présente ses avantages et ses inconvénients en terme de te
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/TAB_Ar_02_coronal.eps}}
 	\subfigure[]{\includegraphics[height=41mm]{eps/chapitre1/TAB_Ar_02_sagital.eps}}
         \end{center}
-        \caption[IRM d'un cerveau de f\oe tus]{\emph{IRM d'un cerveau de f\oe tus, illustrant l'acquisition coupe à coupe, ici dans la direction axiale. (a) Vue axiale, (b) vue coronale, (c) vue sagitale. Il est important de noter l'anisotropie de la résolution de ces images.}\label{FIG:INTRO:FOETUS}}
+        \caption[IRM d'un cerveau de f\oe tus]{\emph{IRM d'un cerveau de f\oe tus, illustrant l'acquisition coupe à coupe, ici dans la direction axiale. (a) Vue axiale, (b) vue coronale, (c) vue sagittale. Il est important de noter l'anisotropie de la résolution de ces images.}\label{FIG:INTRO:FOETUS}}
 \end{figure}
 
 
-Dans le cadre de l'imagerie du f\oe tus, il a été mis en évidence que les temps d'acquisition des IRM (spin-écho ou fast-spin-écho) \cite{Studholme:ARBE:2011} étaient beaucoup trop longs et donc beaucoup trop sensibles aux mouvements des sujets.
+Dans le cadre de l'imagerie du f\oe tus, il a été mis en évidence que les temps d'acquisition des IRM (\emph{spin-echo} ou \emph{fast-spin-echo}) \cite{Studholme:ARBE:2011} étaient beaucoup trop longs et donc beaucoup trop sensibles aux mouvements des sujets.
 Néanmoins, des séquences reposant sur des échos de spin ultra-rapides développées il y a plusieurs années \cite{Yamashita:AJR:1997, Hubbard:SemPer:1999, Glenn:AJNR:2006} ont montré leur utilité dans le cadre de l'imagerie cérébrale f\oe tale.
 Ces séquences, permettant d'acquérir une coupe en moins d'une seconde, apportent une réponse aux mouvements du f\oe tus et à la respiration de la mère (artéfacts de mouvement, \emph{etc.}) qui risquent de parasiter l'acquisition.
 Toutefois, les techniques d'acquisition 3D ne sont pas encore suffisamment performantes~\cite{Studholme:ARBE:2011}, conduisant à réaliser des acquisitions sous formes de piles de coupes 2D.
@@ -118,7 +119,7 @@ De tels artéfacts peuvent être corrigés en post-traitement et la connaissance de
 \subsubsection{Bruit}
 
 L'IRM étant un dispositif de mesure physique, le signal capté est entaché de bruit provenant aussi bien du patient (agitation thermique des protons à l'origine d'émissions parasites) que de la chaîne de mesure (bruit \og{} électronique \fg) (voir Figure~\ref{FIG:INTRO:ARTEFACTS:NOISE}).
-Le rapport signal à bruit (SNR) caractérise l'amplitude du bruit par rapport à l'amplitude du signal.
+Le rapport signal à bruit (en anglais : \emph{signal to noise ratio} ou SNR) caractérise l'amplitude du bruit par rapport à l'amplitude du signal.
 Il dépend de plusieurs facteurs, certains non modifiables (intensité du champ, séquence d'onde RF, caractéristiques des tissus), d'autres modifiables (choix de l'antenne) et des paramètres de la séquence (taille des voxels, nombre d'excitations, bande passante de réception).
 
 De manière générale, le bruit présent dans les IRM suit une distribution de Rice \cite{Sijbers:TMI:1998}, qui peut cependant être approximée par une distribution gaussienne dans les zones où l'intensité n'est pas proche de zéro et avec un SNR supérieur à $3$.
@@ -130,8 +131,8 @@ Les méthodes de classification des voxels en fonction de leur intensité prennent
 \subsubsection{Biais en intensité}
 
 Cet artéfact se manifeste par une hétérogénéité en intensité pour un même tissu cérébral (voir Figure~\ref{FIG:INTRO:ARTEFACTS:BIAS}).
-Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu selon la position spatiale considérée dans le volume intracrânien.
-Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
+Elle s'explique par l'inhomogénéité des champs $B_0$ et $B_1$, la qualité de l'antenne de réception, ou encore par une composition histologique différente d'un même tissu selon la position spatiale considérée dans le volume intracrânien~\cite{Wansapura:JMRI:1999}.
+% Les effets de susceptibilité magnétique jouent également un rôle dans la formation de l'inhomogénéité en intensité.
 
 Ce biais représente une difficulté pour toute méthode de classification des voxels reposant sur leur intensité et supposant que l'intensité d'une classe est constante sur l'ensemble de l'image.
 La plupart de ces méthodes l'éliminent par un pré-traitement, ou le prennent directement en compte dans la classification.
@@ -141,7 +142,7 @@ Les conséquences du biais sur les méthodes de traitement des IRM (en particulier
 \subsubsection{Volume partiel}
 
 Du fait de la discrétisation de l'espace, plusieurs objets peuvent se retrouver dans un même voxel.
-Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}).
+Les signaux issus de ces objets se mélangent alors, contribuant à fournir un signal intermédiaire pour le voxel considéré (voir Figures~\ref{fig:intro:vp} et \ref{FIG:INTRO:FOETUS}, cette dernière montrant l'effet de volume partiel important causé par l'anisotropie des voxels).
 Cet effet se manifeste à la frontière entre les tissus (LCR - matière grise, matière grise - matière blanche, \emph{etc}.) ou lorsque certaines structures sont beaucoup trop fines pour être observables par l'imageur (petits vaisseaux sanguins, couches du cortex, \emph{etc}.).
 Dans le cadre de certaines méthodes de classification des voxels en fonction de leur intensité, cet effet est pris en compte en considérant que l'intensité résultante du voxel est une combinaison généralement linéaire de l'intensité de plusieurs tissus comme nous le verrons en sections~\ref{subsubsec:gaussianMix} et \ref{sec:fcm}.
 
@@ -162,7 +163,7 @@ Dans le cadre de certaines méthodes de classification des voxels en fonction de 
 % Nous pouvons encore signaler plusieurs types d'artéfacts.
 Les artéfacts de mouvement (spécialement problématiques dans le cas de l'IRM f\oe tale) sont dus aux mouvements du f\oe tus pendant l'examen, ainsi qu'aux mouvements physiologiques (respiration, flux sanguin).
 L'impact de ces artéfacts est variable selon le moment de l'acquisition, mais il se traduit généralement, soit par une image floue si les mouvements sont aléatoires, soit par l'apparition d'images fantômes si ils sont périodiques (respiration ou battements cardiaques par exemple).
-Ces artéfacts sont \og doubles \fg{} en IRM f\oe tale ou l'on doit tenir compte non seulement des mouvements du f\oe tus, mais également de la respiration de la mère.
+Ces artéfacts sont \og doubles \fg{} en IRM f\oe tale où l'on doit tenir compte non seulement des mouvements du f\oe tus, mais également de la respiration de la mère.
 
 % \'Etant donné que les acquisitions actuelles sont anistropiques et présentent un volume partiel important, la reconstruction d'images isotropes est un préalable à une étude plus avancée des cas cliniques rencontrés.
 % Cette reconstruction d'un réel volume 3D est effectuée à partir de trois acquisitions dans trois directions différentes (axiale, coronale et sagittale).
@@ -217,8 +218,8 @@ Ceux du lobe pariétal sont le sillon postcentral et le sillon intrapariétal.
 
 Le sillon central marque la frontière entre les lobes frontal et pariétal et le sillon latéral celle entre les lobes frontal et temporal.
 Le repli de l'\emph{insula} est complètement recouvert par les lobes frontal et temporal.
-Ces sillons sont d'une importance notable car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié ainsi qu'une indication sur le bon déroulement de la maturation cérébrale~\cite{Levine:Radiology:1999, Garel:AJNR:2001}.
-En effet, le développement des sillons permet une augmentation de la surface corticale et ils apparaissent en suivant un schéma temporel précis, ce dernier étant décrit plus loin.
+Ces sillons sont d'une importance notable car leur apparition au cours de la grossesse permet de déterminer le degré de maturité du cerveau étudié et de donner une indication sur le bon déroulement de la maturation cérébrale~\cite{Levine:Radiology:1999, Garel:AJNR:2001}.
+En effet, le développement des sillons permet une augmentation de la surface corticale et leur apparition suit un schéma temporel précis, ce dernier étant décrit plus loin.
 Une importante variabilité par rapport à ce schéma peut alors apparaître comme un marqueur indiquant un problème dans le développement fonctionnel.
 
 \subsection{Maturation cérébrale}
@@ -285,12 +286,12 @@ A partir de la quatorzième semaine d'aménorrhée, les sillons latéraux sont visib
 Elles restent lisses jusqu'à environ 28 semaines, les opercules (surfaces du cerveau bordant les sillons latéraux) frontaux, temporaux et pariétaux commençant à les recouvrir.
 % Le gyrus insulaire droit se développe plus tôt que le gauche.
 
-Le lobe pariétal est une structure qui reste lisse jusqu'à 25 semaines d'aménorrhée à l'exception des sillons centraux et post-centraux.
+Le lobe pariétal est une structure qui reste lisse jusqu'à 25 semaines d'aménorrhée à l'exception des sillons central et post-central.
 Le premier est une profonde fissure qui apparaît dès la vingtième semaine de grossesse avec quelques cas où il apparaît dès la dix-septième semaine du côté droit.
 Il commence au niveau de la fosse inter-hémisphérique et s'étend vers le bas jusqu'à l'insula pour former une fissure linéaire au bout de 22 à 23 semaines d'aménorrhée.
 Environ une semaine s'écoule entre l'apparition du sillon du côté droit et du côté gauche.
 Le sillon post-central suit durant la vingt-cinquième semaine.
-Le sillon interpariétal apparait durant le vingt-sixième semaine, permettant la distinction entre les \emph{gyri} angulaires et supramarginaux après 28 semaines.
+Le sillon interpariétal apparait durant la vingt-sixième semaine, permettant la distinction entre les \emph{gyri} angulaire et supramarginal après 28 semaines.
 \`A partir de la trente-troisième semaine, les sillons secondaires sont observables, suivis des sillons tertiaires après 39 semaines.
 
 La gyration du lobe frontal suit le schéma suivant.
@@ -299,20 +300,20 @@ Le sillon frontal inférieur peut être identifié à 28 semaines et délimite les \e
 La trente-deuxième semaine est caractérisée par l'apparition de sillons secondaires au niveau des gyri médians et inférieurs, suivi de sillons tertiaires autour de la quarantième semaine.
 
 Au niveau du lobe temporal, le premier sillon (sillon temporal supérieur) apparaît au bout de 23 semaines d'aménorrhée avec encore une fois un décalage entre le côté droit et le côté gauche.
-Les sillons temporaux médians et inférieurs sont en général visibles à la trentième semaine.
+Les sillons temporaux médian et inférieur sont en général visibles à la trentième semaine.
 Le gyrus de Heschl, ou gyrus temporal transverse, situé sur la face supérieure du gyrus temporal supérieur, dans la profondeur du sillon latéral, présente une assymétrie marquée entre les hémisphères droit et gauche.
 Il apparaît d'abord du côté droit, et se développe vers la face antérieure, tandis qu'il se développe vers la face postérieure du côté gauche.
 Il y a également une différence en termes de taille et d'orientation de ce gyrus.
 Le côté gauche est moins haut et présente un angle plus obtus par rapport à l'axe antéropostérieur du cerveau.
 Ceci a pour effet de donner plus d'espace pour le développement de la face supérieure du \emph{gyrus} temporal supérieur (ou \emph{planum temporale}) gauche.
-Les \emph{gyri} secondaires des \emph{gyri} tranverses temporaux aparaissent à la trente-sixième semaine, le droit apparaissant plus plissé que le gauche.
+Les \emph{gyri} secondaires des \emph{gyri} transverses temporaux apparaissent à la trente-sixième semaine, le droit apparaissant plus plissé que le gauche.
 
 L'aspect médian du lobe occipital est fixé dès la dix-huitième semaine de grossesse, tandis que les aspects latéral et supérieur le sont seulement à la vingt-septième.
 \`A ce moment, il est possible de distinguer le \emph{cuneus} (circonvolution de la partie supérieure de la face interne du lobe occipital) et le lobule lingual (limité par la scissure calcarine, qui le sépare du cuneus au-dessus).
 En dessous du lobule lingual se forme le lobule fusiforme qui devient visible à la trentième semaine.
 Les \emph{gyri} secondaires de ces lobules apparaissent à partir de la trente-quatrième semaine et les sillons tertiaires entre les quarantième et quarante-deuxième semaines.
 
-De manière général, on observe un décalage de deux semaines entre la première apparition d'un sillon dans une population et le moment où il est visible dans 75 à 80\% des cas.
+De manière générale, on observe un décalage de deux semaines entre la première apparition d'un sillon dans une population et le moment où il est visible dans 75 à 80\% des cas.
 On peut observer que la plupart des sillons et \emph{gyri} sont observables entre 26 et 28 semaines d'aménorrhée.
 Le dernier trimestre de la grossesse est alors marqué par un accroissement du volume cérébral (le cerveau passe de 60 ml à 160 ml), un approfondissement des sillons déjà formés et le développement de sillons secondaires, voire tertiaires entre 40 et 44 semaines de grossesse.
 
@@ -348,10 +349,10 @@ Insulaire & 34 & 34  (-) & -\\
 \end{tabular}
 
 \end{center}
-\caption[Apparition des sillons en IRM]{\emph{Comparaison entre l'apparition des sillons lors des études anatomiques et des études en IRM en semaines d'aménorrhée. L'étude \cite{Habas:SPIE:2011} s'appuie }\label{TAB:INTRO:SULCI}}
+\caption[Apparition des sillons en IRM]{\emph{Comparaison entre l'apparition des sillons lors des études anatomiques (\emph{ex vivo}) et des études en IRM en semaines d'aménorrhée. L'étude \cite{Habas:SPIE:2011} s'appuie }\label{TAB:INTRO:SULCI}}
 \end{table}
 
-Les progrès récents des IRM ont permis de conduire des études anatomiques \emph{in vivo}, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence la variation de la densité cellulaire et les progrès de la myélinisation).
+Les progrès récents des IRM ont permis de conduire des études anatomiques \emph{in vivo} approfondies, même si quelques études ont pu être menées avant l'arrivée des séquences ultra-rapides (par exemple celle de~\cite{Girard:AJN:1995} qui a mis en évidence la variation de la densité cellulaire et les progrès de la myélinisation).
 Plusieurs travaux se sont penchés sur l'évolution visible du cortex à partir de données IRM ~\cite{Levine:Radiology:1999, Garel:AJNR:2001, Prayer:PedRad:2006, Glenn:SePer:2009, Habas:SPIE:2011}.
 De manière générale, on observe un décalage entre le moment où un sillon est observable \emph{ex vivo} et \emph{in vivo} d'environ une semaine.
 
