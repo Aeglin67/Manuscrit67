@@ -272,10 +272,10 @@ Ainsi, une classe est caractérisée par un vecteur de centroïdes $\mathbf{v}_{k}$
 \label{sec:foetus:validation}
 
 % Les validations de cette méthodes de segmentation sont menées sur une base de 8 cas et son comportement est étudié aussi bien dans le cas d'image reconstruites que non-reconstruites.
-La validation est menée dans un premier temps sur des images \og brutes \fg{} (c'est-à-dire non reconstruites), puis sur des volumes reconstruits à partir de trois acquisitions de faible résolution effectuée dans les directions axiale, sagittale et coronale.
+La validation est menée dans un premier temps sur des images \og brutes \fg{} (c'est-à-dire non reconstruites), puis sur des volumes reconstruits à partir de trois acquisitions de faible résolution effectuées dans les directions axiale, sagittale et coronale.
 Deux méthodes de reconstruction sont utilisées au cours de cette validation.
-La première est celle de ~\cite{Rousseau:AR:2006}, qui reconstruit la valeur d'un voxel de l'image haute-résolution comme une interpolation des valeurs des voxels des images basse-résolution.
-La deuxième est celle de ~\cite{Rousseau:MIA:2010}, incluant une approche de super-résolution tenant compte d'un modèle physique de l'acquisition de l'image.
+La première est celle présentée dans~\cite{Rousseau:AR:2006}, qui reconstruit la valeur d'un voxel de l'image haute-résolution comme une interpolation des valeurs des voxels des images basse-résolution.
+La deuxième est celle présentée dans~\cite{Rousseau:MIA:2010}, incluant une approche de super-résolution tenant compte d'un modèle physique de l'acquisition de l'image.
 % L'extension de la méthodologie des données 2D à 3D est immédiate.
 
 \subsection{Images non reconstruites}
@@ -283,7 +283,7 @@ La deuxième est celle de ~\cite{Rousseau:MIA:2010}, incluant une approche de sup
 \subsubsection{Caractéristiques et paramètres}
 \label{subsubsec:foetus:param}
 
-Les expériences sont menées sur huit cas acquis avec un imageur IRM de 1.5 Tesla (Magnetom Avento, Siemens, Allemagne Erlangen) utilisant des séquences d'écho de spins ultra-rapides.
+Les expériences sont menées sur huit cas acquis avec un imageur IRM de 1.5 Tesla (Magnetom Avento, Siemens, Erlangen, Allemagne) utilisant des séquences d'écho de spins ultra-rapides.
 Chaque cas présente un ensemble de trois acquisitions correspondant respectivement aux images axiale, coronale et sagittale.
 L'âge des différents f\oe tus s'étend de 27 à 34 semaines d'aménorrhée (SA). 
 Le tableau~\ref{TAB:UNBUILD:CHARAC} résume les caractéristiques des images.
@@ -432,7 +432,7 @@ Cas (SA) & Direction de l'acquisition & Dice 3D & Dice maximum \\
 \end{tabular}
 
 \end{center}
-\caption[Coefficients Dice issus de segmentations du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité-terrain et les segmentations automatiques. Dice 3D : Coefficient global. Dice maximum : score maximum obtenu en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
+\caption[Coefficients Dice issus de segmentations du cortex (images non reconstruites)]{\emph{Coefficients Dice illustrant le recouvrement entre la vérité-terrain et les segmentations automatiques. Dice 3D : coefficient global. Dice maximum : score maximum obtenu en effectuant une analyse coupe à coupe.}\label{TAB:DICE:UNBUILD}}
 \end{table}
 
 Le tableau~\ref{TAB:DICE:UNBUILD} fournit les résultats quantitatifs des différentes segmentations.
@@ -487,7 +487,7 @@ Elle confirme la pertinence du modèle proposé malgré une sous-segmentation dans 
 De manière générale, de moins bons résultats sont observés au niveau de la segmentation des coupes sagittales, comme attendu au vu des résultats quantitatifs.
 La sous-segmentation est observée dans des zones où le contraste entre le cortex et les tissus environnants est la moins prononcée, conduisant à une moins bonne efficacité du filtre \emph{Top Hat} pour révéler le cortex.
 
-Dans le cas des images orientées dans la direction axiale, l'observation des résultats coupe à coupe montre une bonne adéquation du modèle à l'anatomie cérébrale dans la partie supérieure du cerveau, c'est-à-dire au dessus des troisième et quatrième ventricules.
+Dans le cas des images orientées dans la direction axiale, l'observation des résultats coupe à coupe montre une bonne adéquation du modèle à l'anatomie cérébrale dans la partie supérieure du cerveau, c'est-à-dire au-dessus des troisième et quatrième ventricules.
 En effet, ces ventricules sont reliés au LCR externe, introduisant une ambiguïté quant à la localisation de la limite entre ventricules et LCR externe.
 Les coupes supérieures permettent de distinguer nettement les ventricules du LCR externe, ce qui est compatible avec le modèle présenté.
 
@@ -582,7 +582,7 @@ Cependant, l'effet de volume partiel ainsi que la faible dissociabilité des tiss
 
 L'intérêt d'utiliser des images reconstruites est d'obtenir des segmentations de meilleure qualité et plus précises de manière à permettre une étude plus avancée des propriétés des tissus cérébraux chez le f\oe tus.
 Ces images sont isotropes, permettant de réaliser une réelle segmentation en 3D et non coupe à coupe comme dans la section précédente, ouvrant la voie à des mesures anatomiques, telles que le volume des différents tissus ou l'épaisseur corticale.
-Elles sont reconstruites en suivant la méthode de~\cite{Rousseau:AR:2006} à partir de trois acquisitions respectivement axiale, coronale et sagittale.
+Elles sont reconstruites en suivant la méthode issue de~\cite{Rousseau:AR:2006} à partir de trois acquisitions respectivement axiale, coronale et sagittale.
 
 \subsubsection{Caractéristiques et paramètres}
 
@@ -669,7 +669,7 @@ $Dice$ & 72.42 & 73.03 & 77.57 & 74.51 & 76.60 & 76.61 &  75.12 $\pm$ 1.93\\
 }
 \end{center}
 % \vspace{-2mm}
-\caption[Coefficients Dice entre vérités-terrains et segmentations automatiques (images reconstruites)]{\emph{Coefficients Dice entre les vérités-terrains et la segmentation automatique des images reconstruites selon la méthode de \cite{Rousseau:AR:2006}. Une nette amélioration, tant au niveau des coefficients que de la dispersion des résultats, par rapport aux images non-reconstruites est observée.}\label{TAB:CORTEX:BUILD}}
+\caption[Coefficients Dice entre vérités-terrains et segmentations automatiques (images reconstruites)]{\emph{Coefficients Dice entre les vérités-terrains et la segmentation automatique des images reconstruites selon la méthode issue de \cite{Rousseau:AR:2006}. Une nette amélioration, tant au niveau des coefficients que de la dispersion des résultats, par rapport aux images non-reconstruites est observée.}\label{TAB:CORTEX:BUILD}}
 % \vspace{-10mm}
 \label{tab:coronal:overlap}
 
@@ -782,7 +782,7 @@ La meilleure netteté de la frontière entre le cortex et la matière blanche dans 
 
 Cependant, les contraintes géométriques du modèle, malgré leur apport dans la correction du volume partiel, introduisent des faux positifs dans la détection du cortex, notamment autour du tronc cérébral.
 Le processus nécessite donc d'être fiabilisé en étant mieux guidé \emph{via} l'introduction d'\emph{a priori} supplémentaires.
-Une piste de réfléxion pourrait être de préciser qu'il n'y a pas de cortex au-dessus du tronc cérébral, ni autour des ventricules, permettant ainsi une adaptation des contraintes géométriques autour de ces structures.
+Une piste de réflexion pourrait être de préciser qu'il n'y a pas de cortex au-dessus du tronc cérébral, ni autour des ventricules, permettant ainsi une adaptation des contraintes géométriques autour de ces structures.
 Des méthodes formalisant les relations spatiales entre différents objets et exprimant leur position relative de façon floue existent~\cite{Bloch:IVC:2005} et semblent pouvoir être introduites dans le processus de segmentation.
 % plusieurs limitations ne permettent pas d'utiliser cet algorithme en routine clinique ou pour des études de population.
 % En effet, les coefficients de similarité obtenus, malgré leurs valeurs encourageantes, ne sont pas encore suffisamment élevés pour que la méthodologie présentée dans ce manuscrit puisse être utilisée de manière systématique.
