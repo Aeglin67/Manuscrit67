@@ -7,23 +7,23 @@
 \section*{Bilan}
 \addcontentsline{toc}{section}{Bilan}
 
-Ce travail de recherche s'est divisé en deux problématiques distinctes.
+Ce travail de recherche s'est divisé en deux parties distinctes.
 La première correspond à un apport méthodologique à l'algorithme des C-moyennes floues et la deuxième introduit un nouvel axe de développement pour la segmentation des tissus cérébraux en IRM f\oe tale.
 
 Nous avons proposé dans un premier temps une méthode de segmentation fondée sur l'algorithme des C-moyennes floues, ce dernier consistant à minimiser une fonctionnelle se présentant comme la somme d'un terme d'attache aux données et d'un terme de régularisation prenant en compte la classification des voxels voisins.
 L'idée principale ayant guidé nos travaux est d'introduire le concept des moyennes non-locales dans le processus de segmentation, concept issu du débruitage, dont le principe est de profiter de la redondance de l'information au sein de l'image de manière à effectuer un débruitage plus fiable.
-Cette redondance est exploitée par le biais d'une pondération, qui s'effectue par le biais d'un paramètre non-local calculé en fonction de la similarité entre les patches (ou voisinage) des voxels de l'image et celui du voxel courant.
+Cette redondance est exploitée \emph{via} une pondération, qui s'effectue par le biais d'un paramètre non-local calculé en fonction de la similarité entre les patches (ou voisinage) des voxels de l'image et celui du voxel courant.
 Le couplage entre une évaluation locale des paramètres régissant le degré d'appartenance des voxels aux classes définies par les C-moyennes floues et l'introduction du paramètre non-local dans le terme d'attache aux données permet une prise en compte du biais en intensité pouvant affecter les images.
-Par ailleurs, l'introduction du paramètre non-local dans le terme de régularisation permet une meilleure prise en compte du bruit et permet d'éliminer différents artefacts de segmentation et d'obtenir une frontière plus précise entre les tissus.
+Par ailleurs, l'introduction du paramètre non-local dans le terme de régularisation offre une meilleure prise en compte du bruit, élimine différents artéfacts de segmentation et obtient une frontière plus précise entre les tissus.
 Les expériences menées ont démontré l'efficacité de cette approche dans le cadre des IRM adultes par des validations utilisant les bases BrainWeb et IBSR.
 
 Dans un second temps, nous nous sommes intéressés à la segmentation des tissus cérébraux dans le cadre de l'IRM f\oe tale.
 Les caractéristiques de ces images étant différentes de celles du cas adulte, nous avons défini une méthodologie initiant l'extraction des différentes structures d'intérêt une à une, tout en ne tenant compte que des données de l'image.
 La principale innovation de notre approche est de rester au plus prêt des données de l'image sans l'aide d'un atlas tout en introduisant des contraintes topologiques de manière à guider la segmentation.
-Ce manuscrit présente donc une méthode d'extraction du cortex cérébral à partir d'un modèle topologique reposant sur trois sphères concentriques.
+Nous avons donc présenté une méthode d'extraction du cortex cérébral à partir d'un modèle topologique reposant sur trois sphères concentriques.
 Cette extraction se fait en deux étapes, qui sont tout d'abord la séparation du LCR et du cerveau, puis la segmentation du cortex proprement dit.
 Des validations ont été effectuées aussi bien sur des images non-reconstruites (c'est-à-dire présentant une forte anisotropie des voxels et donc un important volume partiel), que reconstruites (consistant en la construction d'un volume isotrope à partir d'images IRM acquises dans les directions axiale, coronale et sagittale).
-Elles illustrent la capacité de la méthodologie à fournir une bonne évaluation de la surface corticale, ainsi que de la surface entre le cortex et la matière blanche, permettant ainsi la construction de représentations en 3D de la surface corticale et l'observation du développement des différents sillons cérébraux.
+Elles illustrent la capacité de la méthodologie à fournir une bonne évaluation de la surface corticale et de la surface entre le cortex et la matière blanche, permettant ainsi la construction de représentations en 3D de la surface corticale et l'observation du développement des différents sillons corticaux.
 
 \section*{Verrous et perspectives}
 \addcontentsline{toc}{section}{Verrous et perspectives}
@@ -35,7 +35,7 @@ Les expériences portant sur l'utilisation conjointe des termes d'attache aux don
 De plus, l'algorithme de segmentation nécessite plusieurs heures de calculs, ceci étant dû aux importants voisinages utilisés pour le calcul des poids non-locaux.
 Enfin, les moyennes non-locales ont connu de nombreux développements ces dernières années, tel qu'illustré en Section~\ref{sec:nl:def}, dont l'efficacité a été démontrée dans le cadre du débruitage.
 
-Deux axes peuvent donc être suivis pour l'amélioration de cette méthodologie.
+Deux axes peuvent être suivis pour l'amélioration de cette méthodologie.
 Concernant la vitesse d'exécution, l'utilisation de l'analyse en composantes principales de l'ensemble des patches de l'image a montré son efficacité dans le cadre du débruitage, en plus d'améliorer les performances de l'algorithme. 
 Une telle approche serait donc tout à fait appropriée dans le cadre de la segmentation.
 
@@ -44,10 +44,11 @@ L'utilisation de noyaux compacts permettrait, par exemple, d'éliminer l'influenc
 De plus, une étude plus poussée des interactions entre les termes d'attache aux données et de régularisation est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre une amélioration des performances de la segmentation.
 
 L'exemple issu de la segmentation d'images médicales montre qu'il nous est possible de construire des partitions homogènes selon le critère du niveau de gris de l'image tout en imposant une régularisation spatiale en fonction du voisinage du voxel voisin, que ce soit dans le terme d'attache aux données et dans le terme de régularisation.
-Ce principe peut être généralisable à d'autres critères et permettre l'utilisation de notre algorithme de C-moyennes floues non-locales dans d'autres domaines que la segmentation d'images.
-Par exemple, la segmentation d'images satellites (distinction entre zones urbaines, zones agricoles, zones forestières, \emph{etc.}) peut être envisagée avec notre algorithme.
-Il pourrait être également utilisé dans le but de segmenter une population selon différents critères (revenus, sexe, métier, \emph{etc.}) tout en régularisant cette classification en tenant compte d'autres aspects (origine sociale, lieu d'habitation, \emph{etc.}).
-L'utilisation des moyennes non-locales pourrait également être envisagée dans l'algorithme des C-moyennes possibles (\emph{possibility C-means}), la théorie des possibilités étant une alternative à la théorie des probabilités.
+Ce principe peut être généralisable à d'autres critères et permettre l'utilisation de notre algorithme de C-moyennes floues non-locales dans d'autres domaines que la segmentation d'images médicales.
+Par exemple, la segmentation d'images satellitaires (distinction entre zones urbaines, zones agricoles, zones forestières, \emph{etc.}) pourrait être envisagée avec notre algorithme.
+% Il pourrait être également utilisé dans le but de segmenter une population selon différents critères (revenus, sexe, métier, \emph{etc.}) tout en régularisant cette classification en tenant compte d'autres aspects (origine sociale, lieu d'habitation, \emph{etc.}).
+% L'utilisation des moyennes non-locales pourrait également être envisagée dans l'algorithme des C-moyennes possibles (\emph{possibility C-means}), la théorie des possibilités étant une alternative à la théorie des probabilités.
+% En effet, cette théorie
 
 
 \subsection*{Segmentation des images IRM f\oe tales}
@@ -55,8 +56,8 @@ L'utilisation des moyennes non-locales pourrait également être envisagée dans l'
 
 Deux axes importants peuvent être suivis pour la poursuite de ce travail de recherche.
 Le premier consiste à améliorer la segmentation du cortex.
-En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans la région au-dessus du tronc cérébral.
-De plus, l'observation en détails de la segmentation montre que certains sillons, comme le sillon inter-hémisphérique, sont moins profonds qu'attendu.
+En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans les régions du thalamus et de l'hypothamalus.
+De plus, une observation exhaustive des différentes segmentations montre que certains sillons, comme le sillon inter-hémisphérique, sont moins profonds qu'attendu.
 L'introduction d'\emph{a priori} supplémentaires dans le processus de segmentation permettrait d'adapter les contraintes géométriques à certains endroits du cerveau et ainsi, d'éliminer les faux positifs.
 Pour affiner la segmentation des sillons, l'utilisation de modèles déformables non-locaux est une option envisageable.
 Une régularisation non-locale de la classification a été étudiée au cours de la thèse, mais les résultats non concluants nous ont conduits à abandonner cette idée.
@@ -70,4 +71,4 @@ L'utilisation d'\emph{a priori} concernant la position relative des structures c
 Plusieurs études cliniques peuvent être envisagées à partir de cette segmentation.
 La détection et le suivi automatique du développement des sillons cérébraux est intéressante dans la mesure où elle permet de contrôler le bon développement du f\oe tus et d'alerter en cas d'écart trop important avec le schéma de développement normal.
 Une étude volumétrique des différents tissus est également importante, ainsi que celle de l'épaisseur corticale.
-Tout ceci, en plus de travaux menés en IRM de diffusion, en neurologie, \emph{etc.} permettra sans doute de faire émerger une meilleure compréhension des phénomènes cérébraux et d'appréhender le fonctionnement du cerveau dans toute sa complexité.
+Tout ceci, en plus de travaux menés en IRM de diffusion, en neurologie, \emph{etc.} permettra sans doute d'aboutir à une meilleure compréhension des phénomènes cérébraux et d'appréhender le fonctionnement du cerveau dans toute sa complexité.

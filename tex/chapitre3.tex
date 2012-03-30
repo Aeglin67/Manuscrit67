@@ -41,7 +41,7 @@ L'estimation non-locale de l'intensité corrigée au voxel $j$ est donnée par :
 \mathbf{\hat{y}}_{j} = \frac{\sum_{j'=1}^{N} K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert^{2}}{h} \right) \cdotp \mathbf{y}_{j} }{\sum_{j'=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{j'} \rVert^{2}}{h} \right)} \label{nlfcm:estimateur:complet},
 \end{equation}
 où $K(\cdotp)$ est un noyau, c'est-à-dire une fonction de pondération de $\mathbb{R}$ dans $\mathbb{R}$.
-L'expression $\lVert P^{I}_{j} - P^{I}_{j'} \rVert^{2}$ représente l'estimation de la similarité entre les patches $P^{I}_{j}$ et $P^{I}_{j'}$, le choix de la norme aparaissant comme un critère important pour cette estimation.
+L'expression $\lVert P^{I}_{j} - P^{I}_{j'} \rVert^{2}$ représente l'estimation de la similarité entre les patches $P^{I}_{j}$ et $P^{I}_{j'}$, le choix de la norme apparaissant comme un critère important pour cette estimation.
 Le paramètre $h$ régit le degré de lissage du filtrage non-local.
 Cette formulation correspond à une moyenne pondérée des voxels sur l'ensemble du support de l'image.
 
@@ -52,7 +52,7 @@ Cela nous permet de réécrire la formule \ref{nlfcm:estimateur:complet} sous la f
 où $\omega_{nl}(j,j')$ est le poids non-local attribué au voxel $j'$ pour l'estimation de $\mathbf{\hat{y}}_{j}$. 
 Ce terme est défini par :
 \begin{equation}
-\omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert}{h} \right)}{\sum_{i=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{i} \rVert}{h} \right)} \label{nlfcm:poids:definition},
+\omega_{nl}(j,j') = \frac{K \left( \frac{\lVert P^{I}_{j} - P^{I}_{j'} \rVert^{2}}{h} \right)}{\sum_{i=1}^{N} K \left(\frac{ \lVert P^{I}_{j} - P^{I}_{i} \rVert^{2}}{h} \right)} \label{nlfcm:poids:definition},
 \end{equation}
 avec $\sum_{j'=1}^{N} \omega_{nl}(j,j') = 1$.
 Les paramètres régissant le comportement des moyennes non-locales sont donc : la fenêtre $h$, la taille et la forme du patch, la norme utilisée pour le calcul de la différence entre les patches et le noyau $K$.
@@ -79,7 +79,7 @@ Telle qu'elles sont définies, les moyennes non-locales ont montré une grande eff
 Plusieurs points de vue peuvent être adoptés pour l'interprétation des moyennes non-locales.
 Un premier lien a été établi avec les approches par variation totale, où le débruitage d'une image consiste en la minimisation d'une fonctionnelle constituée de la somme d'un terme d'attache aux données (différence entre l'image estimée et l'image originale) et d'un terme de régularisation, pénalisant le bruit à haute-fréquence.
 Des termes non-locaux sont introduits dans cette fonctionnelle afin de favoriser les similarités de l'image \cite{Kindermann:MMS:2005, Gilboa:MMS:2008, Azzabou:CVPR:2007}.
-Dans ce cadre, les moyennes non-locales sont vues comme une étape d'une descente de gradient pour la minimisation de la fonctionelle.
+Dans ce cadre, les moyennes non-locales sont vues comme une étape d'une descente de gradient pour la minimisation de la fonctionnelle.
 
 Les moyennes non-locales ont également été étudiées directement depuis l'espace des patches.
 Les travaux issus de~\cite{Tschumperle:ICIP:2009} les interprètent comme la diffusion d'une équation de chaleur dans l'espace des patches et établissent des liens avec les algorithmes classiques de diffusion.
@@ -168,7 +168,7 @@ Enfin, de larges patches sont peu adaptés dans les zones présentant de fortes va
 La nature de l'image à débruiter influe également sur l'efficacité de ce paramètre, qui est donc à fixer en fonction de l'image.
 Notons l'article \cite{Manjon:JMRI:2010} introduisant des patches adaptatifs de manière à débruiter une IRM présentant un bruit variable.
 L'article \cite{Kervrann:IJCV:2008} peut également être mentionné pour l'utilisation de cette technique.
-Enfin, nous pouvons citer deux techniques utilisant la méthode SURE (\emph{Stein's unbiased risk estimate}) \cite{Stein:AS:1981} à partir de plusieurs exécutions de l'algorithmes des moyennes non-locales pour estimer l'image débruitée.
+Enfin, nous pouvons citer deux techniques utilisant la méthode SURE (\emph{Stein's unbiased risk estimate}) \cite{Stein:AS:1981} à partir de plusieurs exécutions de l'algorithme des moyennes non-locales pour estimer l'image débruitée.
 La première est celle présentée dans \cite{VanDeVille:TIP:2011} qui exécute un filtrage par les moyennes non-locales avec plusieurs tailles de patches et de zones de recherche, et effectue une combinaison de ces résultats afin d'obtenir l'estimation la plus robuste possible en chaque élément de l'image.
 Par ailleurs, l'article~\cite{Deledalle:JMIV:2011} utilise des patches de formes diverses et agrège les différentes estimations localement. 
 De plus, ils utilisent une implémentation fondée sur la transformée de Fourier rapide de manière à accélérer les traitements.
@@ -248,7 +248,7 @@ Cependant, de nombreuses hypothèses doivent être faites pour pouvoir estimer ce 
 \subfigure[]{\includegraphics[height=42mm]{eps/chapitre3/BigBox.eps}\label{fig:nlm:seglocale:a}}
 \subfigure[]{\includegraphics[height=42mm]{eps/chapitre3/LittleBox.eps}\label{fig:nlm:seglocale:b}}
 \end{center}
-\caption[Modélisation locale pour la segmentation]{\emph{Modélisation locale de l'image. (a) Deux sous-volumes distincts présentent deux histogrammes différents conduisant à classer une même intensité (marquée par la barre verticale) dans deux classes différentes. (b) Illustration d'une mauvaise estimation issue de la définition de sous-volumes trop petits, la distribution en intensité ne permettant pas de discrimier trois classes. Images issues de~\cite{Scherrer:2008}.}}
+\caption[Modélisation locale pour la segmentation]{\emph{Modélisation locale de l'image. (a) Deux sous-volumes distincts présentent deux histogrammes différents conduisant à classer une même intensité (marquée par la barre verticale) dans deux classes différentes. (b) Illustration d'une mauvaise estimation issue de la définition de sous-volumes trop petits, la distribution en intensité ne permettant pas de discriminer trois classes. Images issues de~\cite{Scherrer:2008}.}}
 \label{fig:nlm:seglocale}
 \end{figure}
 
@@ -442,7 +442,7 @@ On pose $n_j$ et $m_j$ tels que $\lvert \Omega^{R_{d}}_{j} \rvert = (2 \cdot n_j
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/Brainweb_Bias_Couple_WM.eps}}
         \end{center}
 
-        \caption[Influence des paramètres du terme d'attache aux données non-local]{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluations du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. $n_j = 4$ : $+$, $n_j = 5$ : $\diamond$, $n_j = 6$ : $\circ$, $n_j = 7$ : $\times$, $n_j = 8$ : $\bigtriangledown$, $n_j = 9$ : $\star$.}}
+        \caption[Influence des paramètres du terme d'attache aux données non-local]{\emph{Influence des paramètres $M_j$ et $\Omega^{R_d}_j$ du terme d'attache aux données non-locale. L'accroissement de la zone de recherche $\Omega^{R_d}_{j}$ permet de compenser les éventuelles mauvaises évaluations du modèle dues à des sous-volumes $M_j$ trop réduits. (a) Coefficient Dice pour la matière grise. (b) Coefficient Dice pour la matière blanche. Légende : $n_j = 4$ ($+$), $n_j = 5$ ($\diamond$), $n_j = 6$ ($\circ$), $n_j = 7$ ($\times$), $n_j = 8$ ($\bigtriangledown$), $n_j = 9$ ($\star$).}}
 
         \label{FIG:PARAM:BRAINWEB:BIAS}
 
@@ -492,7 +492,7 @@ La figure~\ref{FIG:VIEW:BRAINWEB:BIAS} illustre les performances du terme d'atta
 	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_Bias_nlfcm.eps}}
         \end{center}
 
-        \caption[Résultats de segmentation d'une image T1 présentant un biais en intensité]{\emph{Résultats de la segmentation d'une image T1 présentant un biais en intensité. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par FCM non-local.}}
+        \caption[Résultats de segmentation d'une image T1 présentant un biais en intensité]{\emph{Résultats de la segmentation d'une image T1 présentant un biais en intensité. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par FCM non-local. Légende : LCR (rouge), matière grise (vert), matière blanche (bleu).}}
 
         \label{FIG:VIEW:BRAINWEB:BIAS}
 
@@ -518,7 +518,7 @@ Enfin, différentes segmentations sont réalisées avec les paramètres optimaux obt
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/nlreg_Dice_HWVS.eps}\label{FIG:PARAM:BRAINWEB:NOISE:HWVS}}
         \end{center}
         
-        \caption[Influence du paramètre de lissage et du rayon de la zone de recherche]{\emph{(a) Coefficient Dice en fonction du paramètre de lissage $\alpha$. (b) Coefficient Dice en fonction du rayon de la zone de recherche $\Omega^{R_{r}}_{j}$. LCR : $\bigtriangledown$, matière grise : $\times$, matière blanche : $\circ$.}}
+        \caption[Influence du paramètre de lissage et du rayon de la zone de recherche]{\emph{(a) Coefficient Dice en fonction du paramètre de lissage $\alpha$. (b) Coefficient Dice en fonction du rayon de la zone de recherche $\Omega^{R_{r}}_{j}$. Légende : LCR ($\bigtriangledown$), matière grise ($\times$), matière blanche ($\circ$).}}
         
         \label{FIG:PARAM:BRAINWEB:NOISE}
 
@@ -577,7 +577,7 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 \subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_truth_zoom.eps}\label{NLREG:ZOOM:TRUTH}}  
 \subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_rfcm_zoom.eps}\label{NLREG:ZOOM:RFCM}}  
 \subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_Noise_nlregfcm_zoom.eps}\label{NLREG:ZOOM:NLREG}}\\
-\caption[Différentes segmentations d'une image T1 avec un bruit ricien de $5$~\%]{\emph{(a) Coupe axiale d'une image pondérée en T1 avec un bruit ricien de $5$~\%. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM~\cite{Pham:CVIU:2001}. (e) Segmentation par NL-Reg. (f) Zoom sur la vérité terrain. (g) Zoom sur la segmentation par RFCM. (h) Zoom sur la segmentation par NL-Reg.}\label{FIG:VIEW:BRAINWEB:NOISE}}
+\caption[Différentes segmentations d'une image T1 avec un bruit ricien de $5$~\%]{\emph{(a) Coupe axiale d'une image pondérée en T1 avec un bruit ricien de $5$~\%. (b) Vérité terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM~\cite{Pham:CVIU:2001}. (e) Segmentation par NL-Reg. (f) Zoom sur la vérité terrain. (g) Zoom sur la segmentation par RFCM. (h) Zoom sur la segmentation par NL-Reg. Légende : LCR (rouge), matière grise (vert), matière blanche (bleu).} \label{FIG:VIEW:BRAINWEB:NOISE}}
 \end{center}
 \end{figure}
 
@@ -585,7 +585,7 @@ Elle montre que le terme de régularisation non-local fournit une segmentation pl
 \begin{center}
 \subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/GM_Noise_Dice_Brainweb.eps}}  
 \subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/WM_Noise_Dice_Brainweb.eps}}  
-\caption[Coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{\'Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, FCM : $\diamond$, RFCM : $\bigtriangledown$, NL-Reg : $\star$.}\label{FIG:DICE:BRAINWEB:NOISE}}
+\caption[Coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{\'Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 ($\circ$), EMS ($\times$), HMC ($+$), FCM ($\diamond$), RFCM ($\bigtriangledown$), NL-Reg ($\star$).}\label{FIG:DICE:BRAINWEB:NOISE}}
 \end{center}
 \end{figure}
 
@@ -612,14 +612,14 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_T1.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_Truth.eps}}\\
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLReg.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/Brainweb_All_NLRFCM.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_All_T1.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_All_Truth.eps}}\\
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_All_NLReg.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_All_NLFCM.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/Brainweb_All_NLRFCM.eps}}
         \end{center}
 
-        \caption[Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%]{\emph{Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par NL-Reg. (d) Segmentation par NL-FCM. (e) Segmentation par NL-R-FCM.}}
+        \caption[Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%]{\emph{Résultats de la segmentation d'une image T1 présentant une inhomogénéité en intensité et un bruit ricien de $9$~\%. (a) Coupe d'une image T1. (b) Vérité terrain. (c) Segmentation par NL-Reg. (d) Segmentation par NL-FCM. (e) Segmentation par NL-R-FCM. Légende : LCR (rouge), matière grise (vert), matière blanche (bleu).}}
 
         \label{FIG:VIEW:BRAINWEB:ALL}
 
@@ -653,7 +653,7 @@ De plus, l'ajout du terme de régularisation non-local permet de combiner les ava
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/Brainweb_All_WM.eps}}\\
         \end{center}
 
-        \caption[Coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{\'Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 : $\circ$, EMS : $\times$, HMC : $+$, NL-Reg : $\diamond$, NL-FCM : $\bigtriangledown$, NL-R-FCM : $\star$ (coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).}}
+        \caption[Coefficient Dice en fonction du bruit pour différentes méthodologies]{\emph{\'Evolution du coefficient Dice en fonction du bruit pour différentes méthodologies. (a) Matière grise. (b) Matière blanche. Légende : SPM5 ($\circ$), EMS ($\times$), HMC ($+$), NL-Reg ($\diamond$), NL-FCM ($\bigtriangledown$), NL-R-FCM ($\star$) (coefficients Dice pour SPM5, EMS et HMC issus de \cite{Bricq:MIA:2008}).}}
 
         \label{FIG:DICE:BRAINWEB:ALL}
 
@@ -698,16 +698,16 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 \begin{figure}[!t]
 
         \begin{center}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_T1.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_Truth.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_ClassicFCM.eps}}\\
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_RFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLFCM.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLReg.eps}}
-	\subfigure[]{\includegraphics[height=41mm, angle=180]{eps/chapitre3/IBSR_11_NLAll.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_T1.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_Truth.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_ClassicFCM.eps}}\\
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_RFCM.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_NLFCM.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_NLReg.eps}}
+	\subfigure[]{\includegraphics[height=45mm, angle=180]{eps/chapitre3/IBSR_11_NLAll.eps}}
         \end{center}
 
-        \caption[Résultats de la segmentation d'un cas de la base IBSR]{\emph{Résultats de la segmentation du cas n\textdegree11 de la base IBSR. (a) Coupe d'une image T1. (b) Vérité-terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM. (e) Segmentation par NL-FCM. (f) Segmentation par NL-Reg. (g) Segmentation par NL-R-FCM.}}
+        \caption[Résultats de la segmentation d'un cas de la base IBSR]{\emph{Résultats de la segmentation du cas n\textdegree11 de la base IBSR. (a) Coupe d'une image T1. (b) Vérité-terrain. (c) Segmentation par FCM classique. (d) Segmentation par RFCM. (e) Segmentation par NL-FCM. (f) Segmentation par NL-Reg. (g) Segmentation par NL-R-FCM. Légende : LCR (rouge), matière grise (vert), matière blanche (bleu).}}
 
         \label{FIG:VIEW:IBSR}
 
@@ -720,7 +720,7 @@ La taille de ces volumes est $128\times256\times256$ et chaque image dispose d'u
 	\subfigure[]{\includegraphics[height=38mm]{eps/chapitre3/IBSR_WM.eps}}
         \end{center}
 
-        \caption[Coefficients Dice issus de la segmentation de la base IBSR]{\emph{Coefficients Dice issus de la segmentation de la base IBSR. (a) Matière grise. (b) Matière blanche. Légende : FCM : $+$, RFCM : $\diamond$, NL-Reg : $\times$, NL-FCM : $\circ$, NL-R-FCM : $\bigtriangledown$}}
+        \caption[Coefficients Dice issus de la segmentation de la base IBSR]{\emph{Coefficients Dice issus de la segmentation de la base IBSR. (a) Matière grise. (b) Matière blanche. Légende : FCM ($+$), RFCM ($\diamond$), NL-Reg ($\times$), NL-FCM ($\circ$), NL-R-FCM ($\bigtriangledown$)}}
 
         \label{FIG:DICE:IBSR}
 
@@ -756,7 +756,7 @@ Nous avons développé un terme d'attache aux données et un terme de régularisatio
 Le premier permet la segmentation d'une image présentant une inhomogénéité en intensité sans avoir besoin de l'évaluer explicitement.
 Le second permet un lissage plus pertinent de la segmentation et accroît les performances de FCM dans un environnement bruité.
 
-Les résutats obtenus par le terme de régularisation non-locale démontrent que cette méthodologie est tout indiquée si un bruit corrompt l'image à segmenter.
+Les résultats obtenus par le terme de régularisation non-locale démontrent que cette méthodologie est tout indiquée si un bruit corrompt l'image à segmenter.
 Cependant, ceux du terme d'attache aux données méritent un approfondissement et une exploration plus avancée des différentes options offertes par les moyennes non-locales.
 L'utilisation d'un noyau à support compact peut par exemple être une alternative à tester afin d'éliminer l'influence des voxels peu similaires au voxel courant.
 
@@ -772,4 +772,4 @@ Les temps de calcul sont alors réduits à une dizaine de minutes.
 Les expériences menées afin d'évaluer les deux termes de la fonction d'énergie de cette nouvelle version de FCM séparément ont montré qu'ils fournissaient de meilleurs résultats que les autres méthodologies testées.
 Cependant, l'utilisation conjointe de ces termes non-locaux ne semble pas apporter de gain significatif dans un environnement à la fois biaisé et bruité.
 Une étude plus poussée des interactions entre ces deux termes est nécessaire afin de comprendre la façon dont ils fonctionnent ensemble et permettre cette amélioration.
- \vspace*{15cm}
+%  \vspace*{15cm}

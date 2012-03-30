@@ -428,7 +428,7 @@ La question de la métrique sera discutée ultérieurement (section \ref{subsec:fcm
 
 L'hypothèse fondamentale faite lors de l'utilisation de l'algorithme FCM en segmentation anatomique est que chaque tissu peut être représenté par une unique valeur $\mathbf{v}_k$, qui serait pertinente sur l'ensemble du domaine de l'image.
 Les variations de cette \og vraie \fg{} valeur sont alors attribuées au biais de l'image, au bruit et à l'effet de volume partiel (mélange de plusieurs tissus au sein d'un même voxel dont les proportions déterminent l'intensité du voxel).
-Dans le cas de la segmentation anatomique adulte, cette hypothèse de stationarité est suffisante pour effectuer la segmentation d'une image IRM, mais nécessite l'intégration de modélisations complémentaires de manière à prendre en compte le biais (voir Figure~\ref{FIG:EX:FCM:BIAS}) et le bruit (voir Figure~\ref{FIG:EX:FCM:NOISE}).
+Dans le cas de la segmentation anatomique adulte, cette hypothèse de stationnarité est suffisante pour effectuer la segmentation d'une image IRM, mais nécessite l'intégration de modélisations complémentaires de manière à prendre en compte le biais (voir Figure~\ref{FIG:EX:FCM:BIAS}) et le bruit (voir Figure~\ref{FIG:EX:FCM:NOISE}).
 
 \subsection{Définition de la distance}
 \label{subsec:fcm:dd}
@@ -492,7 +492,7 @@ $$
 S_k = \frac{\sum_{j \in \Omega}u_{jk}^{q}(\mathbf{y}_j - \mathbf{v}_k)(\mathbf{y}_j - \mathbf{v}_k)^T}{\sum_{j \in \Omega}u_{jk}^{q}}.
 $$
 La matrice $T_k$ est déduite de $S_k$ selon : $T_k = \sqrt{\lvert S_k \rvert} S_{k}^{-1}$, $\lvert S_k \rvert$ étant le discriminant de la matrice.
-Cette formulation a l'avantage de tenir compte de la corélation entre les données et le modèle, représenté par les centroïdes des différentes classes cherchées par FCM.
+Cette formulation a l'avantage de tenir compte de la corrélation entre les données et le modèle, représenté par les centroïdes des différentes classes cherchées par FCM.
 
 \subsubsection{Autres méthodes}
 
@@ -610,7 +610,7 @@ Les avantages de cette méthodologie sont donc un traitement accéléré et une proc
 De plus, il est démontré que cet algorithme converge plus vite que la version MFCM.
 
 Toujours en suivant l'idée d'accélérer l'exécution d'un algorithme FCM ayant un terme de régularisation, les travaux présentés dans~\cite{Chen:TSMC:2004} introduisent la moyenne ou la médiane du voisinage plutôt que le calcul d'une image complète pour se ramener au cas de l'algorithme FCM classique.
-De plus, ils ajoutent l'utilisation d'un noyau gaussien de manière à ajouter une robustesse au bruit et aux points abérrants.
+De plus, ils ajoutent l'utilisation d'un noyau gaussien de manière à ajouter une robustesse au bruit et aux points aberrants.
 Cet algorithme est appelé FCM \og kernelisé \fg{} contraint spatialement (en anglais \emph{kernalised FCM with spatial constraints} ou KFCM\_S) et la fonction d'énergie à minimiser devient : 
 \begin{equation}
 J_{KFCM\_S} = \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{y}_j, \mathbf{v}_k)) + \beta \sum_{j \in \Omega} \sum_{k=1}^{C} u^{q}_{jk} (1 - K(\mathbf{\overline{y}}_j, \mathbf{v}_k)),
@@ -720,7 +720,7 @@ Une première étude utilisant une approche bayésienne avec régularisation par cha
 Il s'agit d'une étude volumétrique cherchant à différencier le LCR, la matière grise et la matière blanche.
 Cependant, cette étude ne prend pas en compte la myélinisation de la matière blanche au cours du temps.
 
-L'étude présentée dans~\cite{Xue:NeuroImage:2007}, par l'utilisation d'IRM de prématurés, a pour objectif d'étudier l'évolution de la courbure du cortex au cours de la grossesse, ainsi que l'évolution de l'épaisseur corticale.
+L'étude présentée dans~\cite{Xue:NeuroImage:2007}, par l'utilisation d'IRM de prématurés, a pour objectif d'étudier l'évolution de la courbure du cortex en fonction de la date d'accouchement, ainsi que l'évolution de son épaisseur corticale.
 Pour atteindre cet objectif, une phase de segmentation des tissus, suivie d'une phase de reconstruction 3D du cortex est réalisée.
 La phase de segmentation présente également plusieurs étapes.
 Une première étape élimine les tissus non-pertinents (tronc cérébral, cervelet, noyaux gris et corps calleux) dont l'intensité est trop proche de celle du cortex.
@@ -765,7 +765,7 @@ Cependant, cette méthode dépend largement de la détection des noyaux gris, renda
 
 Les images acquises \emph{in utero} présentent des difficultés supplémentaires, dues aux temps d'acquisition plus faibles et aux conditions d'acquisition particulières (impossibilité d'immobiliser le patient, signal perturbé par les différents tissus de la mère, \emph{etc}.).
 Cependant, l'étude de la maturation cérébrale \emph{in vivo} ainsi que la définition d'outils diagnostiques prénataux ont conduit à la mise en place de méthodes permettant de traiter automatiquement ces images~\cite{Studholme:ARBE:2011}.
-Des méthodes de reconstruction de volume ont également été définies afin d'obtenir des images isotropes à partir d'images de plus faibles résolutions et anisotropes~\cite{Rousseau:AR:2006, Jiang:TMI:2007, Kim:TMI:2010, Rousseau:MICCAI:2010}.
+Des méthodes de reconstruction de volumes ont également été définies afin d'obtenir des images isotropes à partir d'images de plus faibles résolutions et anisotropes~\cite{Rousseau:AR:2006, Jiang:TMI:2007, Kim:TMI:2010, Rousseau:MICCAI:2010}.
 
 Les deux familles de méthodologies utilisées pour effectuer une segmentation du cerveau \emph{in vivo} sont les approches structurelles et les approches par mélanges de gaussiennes.
 Les approches structurelles ont surtout été employées pour la segmentation du volume intracrânien ou du cerveau.
@@ -802,7 +802,7 @@ Une autre méthode comprenant une phase de segmentation par mélange de gaussienne
 Le but est cette fois de segmenter l'ensemble des tissus cérébraux en distinguant les noyaux gris du cortex.
 La première étape consiste en un algorithme EM divisant les voxels en huit classes (quatre classes de tissus purs et quatre classes de transition modélisant le volume partiel).
 Le modèle de Markov mis en \oe uvre est similaire à celui de l'article~\cite{Ferrario:ESPC:2008} et est appliqué trois fois successivement.
-La première application permet de labéliser tous les voxels voisins du fond de l'image comme du LCR, la deuxième permet de segmenter le cortex en imposant un critère d'épaisseur tandis que la troisième permet de séparer les noyaux gris du cortex et de classer les voxels de transition encore présents.
+La première application permet de d'étiqueter tous les voxels voisins du fond de l'image comme du LCR, la deuxième permet de segmenter le cortex en imposant un critère d'épaisseur tandis que la troisième permet de séparer les noyaux gris du cortex et de classer les voxels de transition encore présents.
 Cette méthode se distingue par l'introduction de contraintes anatomiques, telles que l'épaisseur du cortex et le positionnement des tissus les uns par rapport aux autres.
 Cependant la phase de régularisation déconnectée des données peut poser quelques problèmes car rien ne garantit que la segmentation reste cohérente si elle n'est pas guidée par les données de l'image.
 
