@@ -54,7 +54,7 @@ Par exemple, la segmentation d'images satellitaires (distinction entre zones urb
 \subsection*{Segmentation des images IRM f\oe tales}
 \addcontentsline{toc}{subsection}{Segmentation des images IRM f\oe tales}
 
-Deux axes importants peuvent être suivis pour la poursuite de ce travail de recherche.
+Trois axes importants peuvent être suivis pour la poursuite de ce travail de recherche.
 Le premier consiste à améliorer la segmentation du cortex.
 En effet, les contraintes topologiques introduites afin d'effectuer la segmentation des tissus cérébraux semblent être trop rigides par endroits, ce qui se traduit par l'apparition de faux positifs dans la segmentation, notamment dans les régions du thalamus et de l'hypothamalus.
 De plus, une observation exhaustive des différentes segmentations montre que certains sillons, comme le sillon inter-hémisphérique, sont moins profonds qu'attendu.
@@ -67,6 +67,12 @@ Notre méthodologie repose sur une segmentation préalable du volume intracrânien,
 Nous avons vu au chapitre \ref{chap:art} qu'il existe des méthodes d'extraction du volume intracrânien dans la littérature, mais la segmentation des deux autres structures reste un problème ouvert.
 La matrice germinale est également à prendre en compte, sa segmentation étant possible à partir de celle des ventricules.
 L'utilisation d'\emph{a priori} concernant la position relative des structures cérébrales les unes par rapport aux autres semble être dans la continuité des travaux exposés dans ce manuscrit et devrait permettre la segmentation complète des images IRM f\oe tales.
+
+Le troisième axe est plus théorique.
+Nous avons vu qu'il était plus naturel à l'heure actuelle d'utiliser la minimisation de la fonction d'énergie des K-moyennes pour effectuer la segmentation.
+Cependant, il serait intéressant de définir une approche reposant sur FCM, ce qui permettrait de bénéficier de l'ensemble des extensions développées pour cet algorithme ces quinze dernière années.
+Une solution serait par exemple de définir des lignes de niveaux à partir des cartes de probabilités des différents tissus et d'effectuer les échanges de voxels à partir de ces lignes.
+La définition d'une topologie floue serait également une aide importante pour la suite de ces travaux.
 
 Plusieurs études cliniques peuvent être envisagées à partir de cette segmentation.
 La détection et le suivi automatique du développement des sillons cérébraux est intéressante dans la mesure où elle permet de contrôler le bon développement du f\oe tus et d'alerter en cas d'écart trop important avec le schéma de développement normal.

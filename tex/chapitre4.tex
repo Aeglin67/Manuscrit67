@@ -33,6 +33,8 @@ La méthodologie conduisant à cette segmentation est décrite en section \ref{sec:
 
 \subsection{Motivations}
 
+\subsubsection{Problème posé par les données}
+
 \begin{figure}[!t]
 
         \begin{center}
@@ -84,10 +86,51 @@ Une analyse de différentes zones d'intérêt construites autour du cortex révèle d
 Cependant, le recouvrement de ces distributions reste important (voir Figure~\ref{FIG:DISTRIB:CORTEX}), laissant penser que l'information d'intensité seule n'est pas suffisante, et le problème posé par l'effet de volume partiel (apparition de voxels classés comme matière blanche entre le LCR et le cortex) n'est pas résolu.
 L'introduction de contraintes géométriques est alors nécessaire pour guider l'évolution du processus et obtenir une segmentation finale anatomiquement cohérente.
 
-Le principe de la méthode définie par la suite est le suivant.
-Dans un premier temps, l'objectif est de construire une zone d'intérêt incluant le cortex.
-Cette zone est obtenue à partir de la frontière entre le LCR et le cerveau, cette dernière étant mise en évidence par une séparation du LCR externe et des ventricules.
+\subsubsection{Quelle méthodologie ?}
+
+Plusieurs approches peuvent être envisagées pour effectuer une segmentation du cortex.
+Le cortex se présentant sous la forme d'une mince bande sombre entre le LCR externe et la matière blanche, une approche par ligne de partage des eaux semble tout à fait pertinente pour réaliser cette segmentation.
+Cependant, nous observons une connexion entre la matrice germinale et le cortex au niveau des ventricules, impliquant l'appartenance de ces deux structures aux mêmes bassins.
+De plus, le gradient d'intensité entre le cortex et le LCR est beaucoup plus important que celui entre le cortex et la matière blanche, rendant délicat le réglage d'une telle méthodologie.
+
+Les approches par contours actifs sont, nous l'avons vu, assez délicates à mettre en \oe uvre et nécessitent des \emph{a priori} pour guider la segmentation.
+De plus, elles se limitent à l'évolution d'un seul label.
+Nous avons ainsi fait le choix de conserver une approche par classification.
+
+Cependant, l'ajout de contraintes topologiques et/ou géométriques dans un environnement flou pose plusieurs problème.
+Tout d'abord, la segmentation de plusieurs tissus cérébraux simultanés implique l'utilisation d'une topologie multi-labels, domaine où de nombreuses recherches théoriques sont en cours \cite{Mazo:2011}.
+La principale difficulté n'est pas tellement la prise en compte individuelle des labels un à un (chacun peut être considérée individuellement comme relevant de la topologie classique), mais la prise en compte de leurs relations de voisinage.
+Il faut donc s'assurer que la transformation effectuée conserve la topologie de l'image dans toute sa richesse.
+
+% Il n'existe à l'heure actuelle pas de méthode de classification permettant de prendre en compte les contraintes topologiques de façon satisfaisante.
+Quelques méthodes de classification tenant compte des contraintes topologiques ont été proposées, notamment celle de \cite{Bazin:MIA:2008} décrite en section \ref{subsec:topologie}.
+Cet algorithme de segmentation permet la prise en compte de contraintes topologiques dans un environnement multi-labels par l'introduction d'\emph{homéomorphisme digitaux} étendant la notion de points simples.
+Non seulement la topologie de l'objet traité ne doit pas changer, mais la topologie de l'union de cet objet avec un ou deux voisins ne doit également pas varié.
+Cependant, ces travaux s'appuient également sur un atlas topologique des structures cérébrales, imposant un recalage préservant la topologie de cet atlas sur le cas étudié.
+De plus, on observe que l'évaluation des paramètres de FCM (fonctions d'appartenance et centroïdes) est complètement décorrélée de la phase de classification des tissus, reposant elle sur l'alternance entre squelettisation et dilation des différentes étiquettes, rendue possible par l'utilisation de l'atlas topologique.
+Cette méthode de segmentation repose donc essentiellement sur l'introduction d'un modèle topologique du cerveau.
+
+Un autre aspect de la topologie est la rigidité introduite en imposant aux étiquettes le même nombre de composantes connexes et en interdisant l'ajout de cavité ou de tunnels au sein de ces composantes.
+Cette rigidité peut cependant être contre-productive.
+Par exemple, une segmentation en 2D des ventricules dans le cas de l'IRM peut conduire à des abération dans le sens où selon le plan de coupe, cette structures peut être divisée en plusieurs composantes.
+Les travaux de \cite{Segonne:2005} introduisent une extension des points simples par la définition de points multi-simples.
+Cette extension permet, dans un environnement ne comportant qu'un seul label, la division ou la réunion de composantes connexes et par dualité, l'apparition ou le comblement de cavités dans une composante connexe.
+% En conclusion, nous observons qu'il n'existe à l'heure actuelle pas de méthodologie fondée sur FCM permettant un partitionnement de l'image sans bénéficier d'un modèle topologique complexe et rigide du cerveau.
+
+\subsubsection{Processus de segmentation proposé}
+
+Notre méthodologie reprends les idées de \cite{Segonne:2005} de manière à bénéficier d'une plus grande fléxibilité du processus de segmentation. 
+Cependant, nous l'adaptons de manière pouvoir l'utiliser dans un environnement multi-labels.
+Plutôt que de proposer un modèle topologique complet du cerveau, nous nous fondons sur l'organisation en couche du cerveau f\oe tal \cite{Habas:SPIE:2009} pour définir un modèle reposant sur trois sphères (2D et 3D et au sens topologique) concentriques.
+
+Il est important de noter qu'autoriser la partition des composantes connexes ne permet plus l'alternance entre squelettisation et dilatation des labels comme dans \cite{Bazin:MIA:2008}.
+Dans ce cas, l'approche la plus naturelle est l'échange de voxels entre les différentes composantes et il n'existe à l'heure actuelle pas de méthodes permettant la prise en compte simultanée du flou et des contraintes topologiques.
+L'optimisation de la segmentation sera donc fondée sur la minimisation de la fonction d'énergie de l'algorithme des K-moyennes.
+
+L'application de ce modèle à deux reprises nous permettra d'effectuer une segmentation séquentielle du cortex.
+Dans un premier temps, l'objectif est séparer les ventricules du LCR externe de manière à construire une zone d'intêret contenant le cortex à partir de la frontière entre le LCR externe et le cerveau.
 Dans un deuxième temps, le cortex est segmenté dans la zone d'intérêt à partir de l'intensité des voxels et d'une information structurelle fournie par un filtre morphologique.
+
 
 \subsection{K-moyennes topologiques}
 \label{sec:kmeans:topo}
@@ -131,7 +174,7 @@ Rappelons tout d'abord que la segmentation par l'algorithme des K-moyennes est é
 \begin{equation}
 J_{K\mbox{-}moyennes} = \sum_{k=0}^{K} \sum_{\mathbf{y}_{j} \in S_k} \Vert \mathbf{y}_{j} - \mathbf{v}_{k} \Vert_2^{2},
 \end{equation}
-où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centroïde de la classe $k$, $S_k$ est l'ensemble des voxels inclus dans la classe $k$ et $K$ est le nombre de classes recherchées (voir la section~\ref{subsubsec:kMeans}).
+où $\mathbf{y}_{j}$ est l'intensité au voxel $j$, $\mathbf{v}_{k}$ est le centroïde de la classe $k$, $S_k$ est l'ensemble des voxels inclus dans la classe $k$ et $K$ est le nombre de classes recherchées (voir en section~\ref{subsubsec:kMeans}).
 Dans ce cas précis, la prise en compte de contraintes géométriques ne permet pas de suivre le schéma classique de minimisation de la fonction d'énergie alternant évaluation des centroïdes des classes et classification des éléments de l'image en fonction de la distance par rapport aux centroïdes.
 L'optimisation se fait selon un échange de voxels à la frontière des étiquettes, imposant un basculement d'un élément d'une classe $k$ vers une autre classe $k'$ s'il respecte les critères suivants : 
 \[
@@ -152,13 +195,12 @@ Les contraintes géométriques sont ainsi préservées.
 De la même manière, la deuxième condition rend impossible le changement de label des voxels voisins du fond de l'image.
 La troisième condition permet la minimisation de la fonction d'énergie.
 
-La formulation des contraintes géométriques ne correspond pas à celle des points simples car elle ne conserve pas la topologie des composantes connexes.
-En effet, des expériences, non présentées ici, ont révélé que les points simples imposent une trop grande rigidité lors du processus de segmentation, bloquant l'évolution des différents labels.
-Ces contraintes géométriques sont donc conçues de manière à permettre la division d'un label en plusieurs composantes (voir Figure~\ref{FIG:KMEAN:ALLOWED}), afin de respecter la réalité anatomique des structures que l'on cherche à segmenter (par exemple les ventricules dans le cas d'une segmentation 2D qui peuvent apparaître disjoints dans certaines coupes) et gagner ainsi en flexibilité.
+La formulation des contraintes géométriques correspond à celle des points multi-simples de \cite{Segonne:2005} car elle permettent la division d'un label en plusieurs composantes connexes (voir Figure~\ref{FIG:KMEAN:ALLOWED}), afin de respecter la réalité anatomique des structures que l'on cherche à segmenter (par exemple les ventricules dans le cas d'une segmentation 2D qui peuvent apparaître disjoints dans certaines coupes) et gagner ainsi en flexibilité.
+% Ces contraintes géométriques sont donc conçues de manière à permettre la division d'un label en plusieurs composantes 
 De la même façon, la fusion de deux composantes est autorisée, comportement interdit par les points simples.
-Néanmoins, les contraintes géométriques présentées ci-dessus sont conservées (par exemple, un label complètement inclus dans un autre le restera même s'il est divisé en plusieurs composantes).
-\`A noter que ces contraintes interdisent l'introduction de nouvelles cavités ou de nouveaux tunnels, sauf en cas de division ou de fusion du label inclus dans le label courant. 
-% (comportement proche des points multisimples de~\cite{Segonne:2005}).
+Par dualité, celà permet l'apparition de cavités dans un label.
+Les contraintes géométriques présentées ci-dessus sont ainsi conservées (par exemple, un label complètement inclus dans un autre le restera même s'il est divisé en plusieurs composantes).
+Il est important de noter que la sphère la plus externe ne sera toujours composé que d'une seule composante connexe.
 
 Tout comme l'algorithme FCM, les K-moyennes ne prennent pas en compte le biais en intensité présent dans les IRM.
 Ce biais est supposé être une variation lente de l'intensité dans l'image et des centroïdes locaux $\mathbf{v}_{jk}$ sont donc introduits afin de prendre en compte cette réalité sans pour autant nécessiter d'autres connaissances particulières sur ce biais.
@@ -776,6 +818,7 @@ De manière générale, l'observation de l'apparition des sillons est conforme aux 
 
 Ce chapitre a présenté une méthode de segmentation du cortex en IRM f\oe tale.
 Le principe est d'utiliser des \emph{a priori} anatomiques génériques sous forme de contraintes géométriques et de s'appuyer exclusivement sur les données de l'image pour obtenir la segmentation finale.
+Pour celà, le modèle proposé reprend l'idée des points multi-simples de \cite{Segonne:2005} dans un contexte multi-labels permettant la séparation et la réunion de composantes connexes d'un même label.
 Les résultats obtenus montrent la pertinence de cette approche, notamment dans le cadre de cas bénéficiant de la reconstruction d'un volume 3D à partir des acquisitions originales.
 Ils ouvrent la voie à des étapes additionnelles pour la segmentation des tissus cérébraux telles que la détection des résidus de la matrice germinale, l'affinement de la frontière entre le cortex et le LCR ou de celle entre le cortex et la matière blanche.
 La meilleure netteté de la frontière entre le cortex et la matière blanche dans le cas d'images reconstruites par la méthode de super-résolution permet d'envisager l'étude de l'évolution de l'épaisseur corticale au cours de la grossesse.
